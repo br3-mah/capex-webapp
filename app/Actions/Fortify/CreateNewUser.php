@@ -30,12 +30,12 @@ class CreateNewUser implements CreatesNewUsers
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['required', 'accepted'] : '',
             'phone' => [
                 'required', // Enforce presence
-                'regex:/^[0-9+\-., ]{10,10}$/', 
+                'regex:/^[0-9+\-., ]{10,10}$/',
                 'min:10', // Enforce minimum length (adjust as needed)
                 'max:10', // Enforce maximum length (adjust as needed)
             ],
         ])->validate();
-        
+
 
 
             try {
@@ -47,11 +47,8 @@ class CreateNewUser implements CreatesNewUsers
                     'password' => Hash::make($input['password']),
                 ]);
                 $user->assignRole('user');
-        
-                // // Get my applications & wallet
-                // Application::where('email', $input['email'])
-                //                 ->update(['user_id' => $user->id]);
 
+                // Get my applications & wallet
                 Wallet::create([
                     'email' => $user->email,
                     'user_id' => $user->id,
