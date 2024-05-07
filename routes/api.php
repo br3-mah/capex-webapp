@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\LoanRequestController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\SupportController;
 use App\Http\Controllers\Api\UserAuthenticationController;
@@ -28,38 +29,37 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
 
-//Mobile App Api
+//Mobile External Api ---------------------------------------
 Route::apiResource('apply-loan', LoanRequestController::class);
 
-// ----- onboarding ------
+// --- onboarding ---
 Route::post('register', [UserAuthenticationController::class, 'register']);
 Route::post('login', [UserAuthenticationController::class, 'login']);
 Route::get('request-otp', [OTPController::class, 'requestOTP']);
 Route::post('verify-otp', [OTPController::class, 'verifyOTP']);
 
-// ----- Forgot Password ---
+// --- Forgot Password ---
 Route::post('forgot-password', [UserAuthenticationController::class, 'forgot']);
 Route::post('change-password', [UserController::class, 'updatePassword']);
 Route::post('reset-password', [UserAuthenticationController::class, 'passwordResetLink']);
 
-// ----- KYC ---------
+// --- KYC ---
 Route::post('update-profile', [UserController::class, 'updateProfile']);
 Route::post('upload-loan-files', [UserController::class, 'uploadFiles']);
 Route::post('upload-my-files', [UserController::class, 'uploadNRCs']);
 Route::post('support', [SupportController::class, 'logTicket']);
 
-// --- My Wallet -----
+// --- My Wallet ---
 Route::get('my-wallet/{id}', [WalletController::class, 'getMyWallet']);
 
-// --- My Loans ------
+// --- My Loans ---
 Route::post('request-for-loan', [LoanApplicationController::class, 'store']);
 Route::post('apply-for-loan', [LoanApplicationController::class, 'new_loan']);
 Route::get('get-my-loans/{id}', [LoanRequestController::class, 'getMyLoans']);
+Route::get('notifications/{id}', [NotificationController::class, 'myNotifications']);
 
 
-
-// =========================================================================================================
-// Internal Api
+// Internal Api ---------------------------------------------
 Route::get('get-my-loan-balance/{loan_id}', [LoanRequestController::class, 'loanBalance']);
 Route::get('get-my-balance/{user_id}', [LoanRequestController::class, 'customerBalance']);
 

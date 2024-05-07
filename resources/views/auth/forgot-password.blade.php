@@ -100,9 +100,9 @@
                                             Link</button>
                                     </div>
                                 </form>
-                                <div class="new-account mt-3">
-                                    <p>Didn't get code? <a class="text-primary" href="otp-1.html">Resend</a></p>
-                                </div>
+                                {{-- <div class="new-account mt-3">
+                                    <p>Didn't get code? <a class="text-primary" href="">Resend</a></p>
+                                </div> --}}
                             </div>
                         </div>
                     </div>

@@ -18,12 +18,17 @@ class LoanRequestController extends Controller
     use EmailTrait, WalletTrait, LoanTrait;
 
     public function getMyLoans($id){
-        $data = Application::with('loan')
-        ->where('user_id', $id)
-        ->orderBy('created_at', 'desc')
-        ->get();
 
-        return response()->json(['data' => $data]);
+        try {
+            $data = Application::with('loan_product')
+            ->where('user_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+            return response()->json(['data' => $data]);
+        } catch (\Throwable $th) {
+            dd($th);
+        }
     }
 
     public function makeWithdrawalRequest(Request $request){
