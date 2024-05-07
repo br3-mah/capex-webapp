@@ -35,28 +35,25 @@ class CreateNewUser implements CreatesNewUsers
                 'max:10', // Enforce maximum length (adjust as needed)
             ],
         ])->validate();
+        try {
+            $user = User::create([
+                'fname' => $input['fname'],
+                'lname' => $input['lname'],
+                'email' => $input['email'],
+                'phone' => $input['phone'],
+                'password' => Hash::make($input['password']),
+            ]);
+            $user->assignRole('user');
 
-
-
-            try {
-                $user = User::create([
-                    'fname' => $input['fname'],
-                    'lname' => $input['lname'],
-                    'email' => $input['email'],
-                    'phone' => $input['phone'],
-                    'password' => Hash::make($input['password']),
-                ]);
-                $user->assignRole('user');
-
-                // Get my applications & wallet
-                Wallet::create([
-                    'email' => $user->email,
-                    'user_id' => $user->id,
-                    'phone' => $input['phone']
-                ]);
-                return $user;
-            } catch (\Throwable $th) {
-                dd($th->getMessage());
-            }
+            // Get my applications & wallet
+            Wallet::create([
+                'email' => $user->email,
+                'user_id' => $user->id,
+                'phone' => $input['phone']
+            ]);
+            return $user;
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+        }
     }
 }

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password; // Import the Password Facade
 use Illuminate\Support\Facades\Validator;
 
 class UserAuthenticationController extends Controller
@@ -96,4 +97,20 @@ class UserAuthenticationController extends Controller
     }
 
 
+    public function passwordResetLink(Request $request){
+        // Validate the email field
+        $request->validate(['email' => 'required|email']);
+
+        // Send the password reset link
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        // Check if the link was sent successfully
+        if ($status === Password::RESET_LINK_SENT) {
+            return response()->json(['status' => __($status)]);
+        } else {
+            return response()->json(['email' => __($status)], 400);
+        }
+    }
 }
