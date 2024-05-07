@@ -140,7 +140,7 @@
                   </p>
 
                   <p style="margin: 0; font-size: 0.75rem; line-height: 1.5em; text-align: center;">
-                    MightyFinance, Stand B19 CBU, Jambo Drive, Riverside, Lusaka.
+                    Plot no 13 Chikuni Road, Off Makishi Rd, Lusaka.
                     <br>
                     @isset($actionText)
                       @slot('subcopy')

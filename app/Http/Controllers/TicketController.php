@@ -39,45 +39,45 @@ class TicketController extends Controller
     {
         try {
             $user = auth()->user();
-    
+
             $ticket = Ticket::create([
                 'user_id' => $user->id,
                 'message' => $request->input('message'),
                 'status' => 0,
             ]);
-        
+
             $data = [
                 'user' => $user->fname . ' ' . $user->lname,
                 'type' => 'user',
                 'id' => $ticket->id,
                 'message' => $ticket->message,
             ];
-        
+
             // Send Email to User
             Mail::to($user->email)->send(new TicketCreated($data));
-        
+
             $data2 = [
                 'user' => $user->fname . ' ' . $user->lname,
                 'type' => 'admin',
                 'id' => $ticket->id,
                 'message' => $ticket->message,
             ];
-        
+
             // Send Email to MightyFinance
-            Mail::to('procoding94@gmail.com')->send(new TicketCreated($data2));
-        
+            Mail::to('test@mightyfinance.co.zm')->send(new TicketCreated($data2));
+
             // Flash session message
             session()->flash('success', 'Ticket submitted successfully! Our team will get back to you soon.');
-        
+
             return redirect()->back();
         } catch (\Throwable $th) {
             // Flash session message
             session()->flash('error', 'Ticket could not be submitted.'.$th->getMessage());
-        
+
             return redirect()->back();
         }
     }
-    
+
 
     /**
      * Display the specified resource.

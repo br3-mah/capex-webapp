@@ -133,7 +133,7 @@
                   </a>
                 </p>
                 <p style="margin:0;font-size:.75rem;line-height:1.5em;text-align: center;">
-                    MightyFinance, Stand B19 CBU, Jambo Drive, Riverside, Lusaka.
+                Plot no 13 Chikuni Road, Off Makishi Rd, Lusaka.
                   <br>
                   <a class="unsub" href="http://dopplerhealth.com/" style="color:#384049;text-decoration:underline;">Unsubscribe</a>
                 </p>

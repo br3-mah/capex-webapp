@@ -45,6 +45,7 @@ Route::post('reset-password', [UserAuthenticationController::class, 'passwordRes
 Route::post('update-profile', [UserController::class, 'updateProfile']);
 Route::post('upload-loan-files', [UserController::class, 'uploadFiles']);
 Route::post('upload-my-files', [UserController::class, 'uploadNRCs']);
+Route::post('support', [UserController::class, 'logTicket']);
 
 // --- My Wallet -----
 Route::get('my-wallet/{id}', [WalletController::class, 'getMyWallet']);
