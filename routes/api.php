@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\LoanRequestController;
 use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\SupportController;
 use App\Http\Controllers\Api\UserAuthenticationController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WalletController;
@@ -45,7 +46,7 @@ Route::post('reset-password', [UserAuthenticationController::class, 'passwordRes
 Route::post('update-profile', [UserController::class, 'updateProfile']);
 Route::post('upload-loan-files', [UserController::class, 'uploadFiles']);
 Route::post('upload-my-files', [UserController::class, 'uploadNRCs']);
-Route::post('support', [UserController::class, 'logTicket']);
+Route::post('support', [SupportController::class, 'logTicket']);
 
 // --- My Wallet -----
 Route::get('my-wallet/{id}', [WalletController::class, 'getMyWallet']);
