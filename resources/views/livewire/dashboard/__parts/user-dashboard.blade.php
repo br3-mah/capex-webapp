@@ -322,7 +322,7 @@
                                                 </span>
                                                 <span>Wallet</span>
                                             </div>
-                                            <h5>K 0.00</h5>
+                                            <h5>K {{ $this->getUserWallet(auth()->user()->id)->balance }}</h5>
                                         </div>
                                         {{-- <div id="chart"></div> --}}
                                     </a>
@@ -345,7 +345,7 @@
                                                 </span>
                                                 <span>Withdrawals</span>
                                             </div>
-                                            <h5>K 0.0</h5>
+                                            <h5>K {{ $this->getUserWallet(auth()->user()->id)->withdraw }}</h5>
                                         </div>
                                         {{-- <div id="chart2"></div> --}}
                                     </a>
@@ -368,7 +368,7 @@
                                                 </span>
                                                 <span>Deposits</span>
                                             </div>
-                                            <h5>K 0.00</h5>
+                                            <h5>K {{ $this->getUserWallet(auth()->user()->id)->deposit }}</h5>
                                         </div>
                                         {{-- <div id="chart3"></div> --}}
                                     </a>

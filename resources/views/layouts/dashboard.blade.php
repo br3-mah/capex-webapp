@@ -164,7 +164,7 @@
 
     <div @if (request()->routeIs('dashboard')) style="margin-top:0px" @endif id="main-wrapper">
 
-       
+
        @include('livewire.dashboard.__parts.header_content')
         <div class="sidebar" style="background-image: linear-gradient(to right, #792db8, #792db8); color:#fff;">
             <div class="brand-logo">
@@ -338,31 +338,6 @@
 
         // Extract the route name from the URL
         var route = currentUrl.split('/').pop();
-
-        // Check if the route starts with "dashboard"
-        // if (route.startsWith('dashboard') && kyc === '0' ) {
-        //     // alert('Current route starts with "dashboard"');
-        //     introJs().setOptions({
-        //         steps: [{
-        //             element: document.querySelector('.tour-kyc-1'),
-        //             intro: "Click here to complete your KYC profile information!",
-        //             position: 'left'
-        //         }]
-        //     }).start();
-        //     introJs().addHints();
-        // } else {
-        //     // alert('Current route does not start with "dashboard"');
-        // }
-    </script>
-
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script>
-        // let table = new DataTable('#default_loan_list', {
-        //     responsive: true
-        // });
-        $(document).ready(function() {
-            $('#default_loan_list').DataTable();
-        });
     </script>
 </body>
 

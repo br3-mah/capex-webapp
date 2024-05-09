@@ -14,10 +14,27 @@ class Wallet extends Model
         'withdraw',
         'user_id',
         'email',
-        'phone'
+        'phone',
     ];
 
+    protected $appends = [
+        'balance'
+    ];
+    /**
+     * Get the user that owns the wallet.
+     */
     public function user(){
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    /**
+     * Get the balance attribute.
+     *
+     * @return float
+     */
+    public function getBalanceAttribute()
+    {
+        return $this->deposit - $this->withdraw;
+    }
 }
+

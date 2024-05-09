@@ -192,21 +192,26 @@ class Application extends Model
 
     // !important
     public static function paybackInstallment($principal, $duration, $product_id = null){
-        $product = LoanProduct::where('id', $product_id)->with([
-            'disbursed_by.disbursed_by',
-            'interest_methods.interest_method',
-            'interest_types.interest_type',
-            'loan_accounts.account_payment',
-            'loan_status.status',
-            'loan_decimal_places',
-            'service_fees.service_charge'
-            ])->first();
 
-        $rate = (float)$product->def_loan_interest / 100;
-        $interest = ($principal * $rate * $duration);
-        $payback = $principal + $interest;
-        $inst = $payback / $duration;
-        return number_format($inst, 2, '.', '');
+         try {
+            $product = LoanProduct::where('id', $product_id)->with([
+                'disbursed_by.disbursed_by',
+                'interest_methods.interest_method',
+                'interest_types.interest_type',
+                'loan_accounts.account_payment',
+                'loan_status.status',
+                'loan_decimal_places',
+                'service_fees.service_charge'
+                ])->first();
+
+            $rate = (float)$product->def_loan_interest / 100;
+            $interest = ($principal * $rate * $duration);
+            $payback = $principal + $interest;
+            $inst = $payback / $duration;
+            return number_format($inst, 2, '.', '');
+         } catch (\Throwable $th) {
+            return 0;
+         }
     }
 
     public static function paybackNextDate($application){

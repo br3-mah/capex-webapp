@@ -25,7 +25,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-xl-8 col-lg-8">
-                            <p><b style="color: #792db8">{{ $my_loan->type }} Repayment</b></p>
+                            <p><b style="color: #792db8">{{ $my_loan->loan_product->name }} Repayment</b></p>
                             <h3> <strong><b>K{{ App\Models\Loans::loan_balance($my_loan->id) }}</b></strong> </h3>
                             <small>
                                 @if ($my_loan->status == 1)

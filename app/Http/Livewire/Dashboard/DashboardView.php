@@ -23,12 +23,12 @@ class DashboardView extends Component
     {
         $this->isKYCComplete();
         $this->my_loan = $this->getCurrentLoan();
-        $this->wallet = $this->getWalletBalance(auth()->user());
         $this->stage = $this->get_current_loan_status();
-        // dd($this->stage);
+
         if (auth()->user()->hasRole('user')) {
             $this->VerifyOTP();
             $this->all_loan_requests = Application::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->take(5)->get();
+           
             return view('livewire.dashboard.dashboard-view')
             ->layout('layouts.dashboard');
         }
@@ -80,7 +80,7 @@ class DashboardView extends Component
             $x = Application::find($id);
             $x->status = 2;
             $x->save();
-            
+
             $mail = [
                 'user_id' => '',
                 'application_id' => $x->id,
@@ -104,7 +104,7 @@ class DashboardView extends Component
             $x = Application::find($id);
             $x->status = 3;
             $x->save();
-            
+
             $mail = [
                 'user_id' => '',
                 'application_id' => $x->id,
