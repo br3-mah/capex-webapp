@@ -805,7 +805,7 @@
                                 <small class="text-danger" id="loanProdValidText"></small>
 
                                 <div id="loan_products" class="row row-cols-2 row-cols-lg-2 g-4">
-                                    
+
                                     @forelse ($products as $item)
                                     <div class="col">
                                         <label onclick="selectCard(this)" class="card h-70 py-2 custom-radio {{ $item->status == 0 ? 'disabled-card' : '' }}">
@@ -815,7 +815,7 @@
                                                 <div class="content">
                                                     <div class="mb-2 text-xs" style="width: 5px; height: 5px;">
                                                         {{-- {!! $item->icon !!} --}}
-                                                    </div>                                                    
+                                                    </div>
                                                     <h2>{{ ucwords($item->description) }}</h2>
                                                     <p class="skill">{{ $item->description }} {{ $item->status == 1 ? '(Available)' : '(coming soon)' }} </p>
                                                     <span class="check-icon">
@@ -847,7 +847,7 @@
                                             </div>
                                         </label>
                                     </div> --}}
-                                    
+
                                 </div>
 
                             </div>
@@ -1006,11 +1006,11 @@
 <script type="text/javascript">
     $('.is_loading').hide();
     $('.finalcontinue').hide();
-    
+    var prod_data;
     $(document).ready(function() {
         var stepCount = 0;
         var principal = 0;
-        var rate = 21;
+        var rate = 0;
         var duration = document.getElementById('slider_input');
         var principalVal = document.getElementById('amountInput');
         var principalText = document.getElementById('principalText');
@@ -1053,6 +1053,7 @@
                 $(this).parents(".row").children("#successMessage").fadeIn(3000);
             }
         });
+
         //Active card on click function
         $(".card").on({
             click: function() {
@@ -1060,95 +1061,12 @@
                 $(this).parent(".col").siblings().children(".card").removeClass("active-card");
             }
         });
+
         //back to wizard
         $(".back-to-wizard").on({
             click: function() {
                 location.reload(true);
             }
-        });
-
-
-        // $(".card").on({
-        //     click: function() {
-        //         // Remove the 'selected-card' class from all labels
-        //         var labels = document.querySelectorAll('.card');
-        //         labels.forEach(function(label) {
-        //             label.classList.remove('selected-card');
-        //         });
-
-        //         // Add the 'selected-card' class to the clicked label
-        //         this.classList.add('selected-card');
-
-        //         // Additional code to get the details of the selected loan product ID from the database
-        //         var selectedLoanProductID = $(this).find('input[type="radio"]').val();
-        //         fetch(`api/get-loan-product-details/${selectedLoanProductID}`)
-        //             .then(response => response.json())
-        //             .then(data => {
-        //             // console.log(data.max_loan_duration);
-
-        //             // Update the UI with the retrieved details
-        //             var sliderValue = $(this).val();
-        //             rate = data.def_loan_interest;
-        //             duration = data.def_loan_duration;
-        //             var my_returns = (parseInt(principal) * data.def_loan_interest) *
-        //                 parseInt(data.default_loan_duration) + parseInt(principal);
-
-        //             // Update a display element with the current value
-        //             $('#payback_value').text('Payback amount of: K' + my_returns.toFixed(2));
-        //             $('#principal_value').text('Borrowing: K' + principal);
-        //             $('#interest_value').text('Interest Rate: ' + data.def_loan_interest);
-        //             $('#slider_value').text('Payback in ' + data.def_loan_duration + ' Months');
-        //             $('#slider_input').attr('max', data.max_loan_duration);
-                    
-        //             if(data.services_fees !== undefined){
-        //                 data.services_fees.forEach(element => {
-        //                     $('#service_charge').text(data.services_fees.service_charge
-        //                     .name + ' ' + data.services_fees.service_charge
-        //                     .value);
-        //                 });
-        //             }
-        //         }).catch(error => {
-        //             console.error('Error fetching loan product details:', error);
-        //         });
-        //     }
-        // });
-
-
-        // Get the input element by its ID
-        const amountInput = document.getElementById('amountInput');
-
-        // Add an input event listener to the input element
-        amountInput.addEventListener('input', function() {
-            // Get the current value of the input
-            var inputValue = amountInput.value;
-
-            // Remove non-numeric characters (letters, symbols, commas)
-            var numericValue = inputValue.replace(/[^0-9.]/g, '');
-
-            // Convert the numeric value to a float
-            principal = parseInt(numericValue);
-
-            var my_returns = (parseInt(principal) * 0.21) * parseInt(2) + parseInt(principal);
-            // Log the cleaned and converted value to the console
-            console.log('Borrowing: ', principal);
-            $('#payback_value').text('Payback amount of: K' + my_returns.toFixed(2));
-            $('#principal_value').text('Borrowing: K' + principal);
-            // Update a display element with the current value
-            $('#slider_value').text('Payback in 2 Months');
-        });
-
-
-        // Use input event to track changes in the range input value
-        $('#slider_input').on('input', function() {
-
-            // Get the current value of the range input
-            var sliderValue = $(this).val();
-            var my_returns = (parseInt(principal) * 0.21) * parseInt(sliderValue) + parseInt(principal);
-
-            $('#payback_value').text('Payback amount of: K' + my_returns.toFixed(2));
-            $('#principal_value').text('Borrowing: K' + principal);
-            // Update a display element with the current value
-            $('#slider_value').text('Payback in ' + sliderValue + ' Months');
         });
     });
 
@@ -1169,20 +1087,9 @@
     window.addEventListener("resize", showSliderValue);
     slider_input.addEventListener('input', showSliderValue, false);
 
-    // function selectCard(selectedLabel) {
-    //     console.log(selectedLabel);
-    //     // Remove the 'selected-card' class from all labels
-    //     var labels = document.querySelectorAll('.card');
-    //     labels.forEach(function (label) {
-    //         label.classList.remove('selected-card');
-    //     });
-
-    //     // Add the 'selected-card' class to the clicked label
-    //     selectedLabel.classList.add('selected-card');
-    // }
 
     function selectCard(selectedLabel) {
-        
+
         $('.finalcontinue').show();
         // Get the value of the selected radio button
         var selectedRadioButton = selectedLabel.querySelector('input[type="radio"]');
@@ -1219,15 +1126,13 @@
 
         $('#durationInput').attr('max', data.max_loan_duration);
         $('#durationInput').attr('min', data.min_loan_duration);
-        
+
         // Calculate CRB - Loan Formulae
         principal = $('#slidatious').val();
-        rate = data.def_loan_interest;
+        rate = data.def_loan_interest / 100;
         duration = $('#durationInput').val();
-        
-        var my_returns = (parseInt(principal) * data.def_loan_interest) *
-            parseInt(duration) + parseInt(principal);
 
+        var my_returns = (parseInt(principal) * rate) * parseInt(duration) + parseInt(principal);
         // Update a display element with the current value
         $('#payback_value').text(my_returns.toFixed(2));
         $('#monthly_repay').text(my_returns.toFixed(2) / duration);
@@ -1237,7 +1142,7 @@
         // Add 30 days to the current date
         var futureDate = new Date(currentDate.getTime() + (30 * 24 * 60 * 60 * 1000));
         $('#nxt_repay_date').text(futureDate);
-                
+
         if(data.services_fees !== undefined){
             data.services_fees.forEach(element => {
                 $('#service_charge').text(data.services_fees.service_charge
@@ -1245,6 +1150,8 @@
                 .value);
             });
         }
+
+        prod_data = data;
     }
 
     function decreaseDuration() {
@@ -1254,8 +1161,7 @@
             if (numericValue > 1) {
                 var newValue = numericValue - 1;
                 $('#durationInput').val(newValue);
-                var my_returns = (parseInt(principal) * rate) *
-                parseInt(newValue) + parseInt(principal);
+                var my_returns = (parseInt(principal) * rate) * parseInt(newValue) + parseInt(principal);
                 $('#payback_value').text(my_returns.toFixed(2));
                 $('#monthly_repay').text(my_returns.toFixed(2) / newValue);
             }
@@ -1278,7 +1184,6 @@
             alert('Please choose a loan type');
         }
     }
-
     function showLoader(){
         $('.is_loading').show();
     }
@@ -1289,7 +1194,7 @@
         var my_returns = (parseInt(value) * rate) * parseInt(duration) + parseInt(value);
         $('#payback_value').text(my_returns.toFixed(2));
         $('#monthly_repay').text(my_returns.toFixed(2) / duration);
-        checker(); // Call your checker function
+        // checker(); // Call your checker function
     }
 
     // Event listener for number input changes
@@ -1298,7 +1203,7 @@
         var my_returns = (parseInt(value) * rate) * parseInt(duration) + parseInt(value);
         $('#payback_value').text(my_returns.toFixed(2));
         $('#monthly_repay').text(my_returns.toFixed(2) / duration);
-        checker(); // Call your checker function
+        // checker(); // Call your checker function
     }
     // Get all elements with the specified class
     var svgContainers = document.querySelectorAll('.svg-container');
@@ -1326,5 +1231,4 @@
         }
     });
 </script>
-<script src="{{ asset('public/web/js/app.calculator.js')}}">
 </div>
