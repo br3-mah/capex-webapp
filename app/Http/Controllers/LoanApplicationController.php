@@ -238,16 +238,14 @@ class LoanApplicationController extends Controller
      */
     public function new_loan(Request $request)
     {
+        DB::beginTransaction();
         $form = $request->toArray();
         // Remove non-numeric characters
         $amount = intval(str_replace(['K', ',', '$', "'", '"', ' '], '', $form['amount']));
 
-        DB::beginTransaction();
         try {
-
             // First Upload the files
-            $this->uploadCommonFiles($request);
-
+            // $this->uploadCommonFiles($request);
             $data = [
                 'user_id'=> auth()->user()->id,
                 'lname'=> auth()->user()->lname,
@@ -261,19 +259,20 @@ class LoanApplicationController extends Controller
                 'status' => 0,
                 'continue' => 1
             ];
+            $loan_product_name = $this->loan_product_name($form['loan_type']);
             $application = $this->apply_loan($data);
             $this->isKYCComplete();
             $mail = [
                 'user_id' => auth()->user()->id,
                 'application_id' => $application,
                 'name' => $data['fname'].' '.$data['lname'],
-                'loan_type' => $data['type'],
+                'loan_type' => $loan_product_name,
                 'duration' => $data['repayment_plan'],
                 'amount' => $data['amount'],
                 'type' => 'loan-application',
-                'msg' => 'You have new a '.$data['type'].' loan application request, with an incomplete loan submission form and kyc update'
+                'msg' => 'You have new a '.$loan_product_name.' loan application request, with an incomplete loan submission form and kyc update'
             ];
-            $process = $this->send_loan_email($mail);
+            $dispatch = $this->send_loan_email($mail);
 
             if($request->wantsJson()){
                 return response()->json([
@@ -283,7 +282,7 @@ class LoanApplicationController extends Controller
                     "data" => $application
                 ]);
             }else{
-                if($process){
+                if($dispatch){
                     DB::commit();
                     Session::flash('success', "Loan created successfully. ");
                     return redirect()->route('view-loan-requests');
