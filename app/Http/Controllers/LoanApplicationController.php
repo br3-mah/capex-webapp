@@ -151,7 +151,6 @@ class LoanApplicationController extends Controller
             }else{
 
                 DB::rollback();
-                dd('failed');
                 return response()->json([
                     "status" => 500,
                     "success" => false,
@@ -162,7 +161,8 @@ class LoanApplicationController extends Controller
                 ]);
             }
         } catch (\Throwable $th) {
-            dd($th);
+            Session::flash('error',$th->getMessage());
+            return redirect()->back();
         }
     }
 
