@@ -38,7 +38,7 @@ class LoanApplication extends Mailable
         ];
 
         $this->sms = [
-            'message' => 'Hello '.auth()->user()->fname.',\nCongratulations!🎉 Please check your email for important details and instructions in order to complete the loan.',
+            'message' => 'Hello '.auth()->user()->fname.', Thank you for applying. Please check your email for futher instructions in order to complete the loan request.',
             'phone'   =>  '26'.auth()->user()->phone
         ];
     }

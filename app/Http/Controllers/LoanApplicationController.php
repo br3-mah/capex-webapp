@@ -195,7 +195,6 @@ class LoanApplicationController extends Controller
             // DB::commit();
             return redirect()->to('/user/profile');
         } catch (\Throwable $th) {
-            dd($th);
             // DB::rollback();
             return redirect()->to('/user/profile');
         }
@@ -274,27 +273,19 @@ class LoanApplicationController extends Controller
             ];
             $dispatch = $this->send_loan_email($mail);
 
-            if($request->wantsJson()){
-                return response()->json([
-                    "status" => 200,
-                    "success" => true,
-                    "message" => "Your loan has been sent.",
-                    "data" => $application
-                ]);
+            if($dispatch){
+                DB::commit();
+                Session::flash('success', "Loan created successfully. ");
+                return redirect()->route('view-loan-requests');
             }else{
-                if($dispatch){
-                    DB::commit();
-                    Session::flash('success', "Loan created successfully. ");
-                    return redirect()->route('view-loan-requests');
-                }else{
-                    DB::commit();
-                    Session::flash('success', "Loan created successfully, Email could not be sent to the Borrower. ");
-                    return redirect()->route('view-loan-requests');
-                }
+                DB::commit();
+                Session::flash('success', "Loan created successfully, Email could not be sent to the Borrower. ");
+                return redirect()->route('view-loan-requests');
             }
+
         } catch (\Throwable $th) {
             DB::rollback();
-            Session::flash('error', "Loan could not be created, check your internet connection and try again. ");
+            Session::flash('error', "Loan could not be created, check your internet connection and try again. ".$th->getMessage());
             return redirect()->back();
         }
     }
@@ -648,7 +639,7 @@ class LoanApplicationController extends Controller
                 return redirect()->back();
             }
         } catch (\Throwable $th) {
-            dd($th);
+           return redirect()->back();
         }
     }
 
