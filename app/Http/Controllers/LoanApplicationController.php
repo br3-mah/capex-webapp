@@ -243,8 +243,6 @@ class LoanApplicationController extends Controller
         $amount = intval(str_replace(['K', ',', '$', "'", '"', ' '], '', $form['amount']));
 
         try {
-            // First Upload the files
-            // $this->uploadCommonFiles($request);
             $data = [
                 'user_id'=> auth()->user()->id,
                 'lname'=> auth()->user()->lname,
