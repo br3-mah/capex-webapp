@@ -719,8 +719,7 @@
         <!-- section -->
         <section>
             <div class="">
-                <form action="{{ route('apply-loan') }}" method="POST" enctype="multipart/form-data"
-                    class="main-content">
+                <form action="{{ route('apply-loan') }}" method="POST" enctype="multipart/form-data" class="main-content" novalidate>
                     @csrf
 
                     <div class="row justify-content-center">
@@ -930,7 +929,7 @@
                                                                 onclick="decreaseDuration()">-</span>
                                                             <input type="number" name="duration" id="durationInput"
                                                                 class="form-control text-center bg-purple"
-                                                                value="1" min="1" max="60">
+                                                                value="1">
                                                             <span class=" btn btn-secondary"
                                                                 onclick="increaseDuration()">+</span>
                                                         </div>
@@ -1171,19 +1170,25 @@
     }
 
     function increaseDuration() {
-        if(rate !== null){
+        if (rate !== null) {
             var currentValue = $('#durationInput').val();
             var numericValue = parseInt(currentValue);
             var newValue = numericValue + 1;
-            $('#durationInput').val(newValue);
-            var my_returns = (parseInt(principal) * rate) *
-                parseInt(newValue) + parseInt(principal);
-            $('#payback_value').text(my_returns.toFixed(2));
-            $('#monthly_repay').text(my_returns.toFixed(2) / newValue);
-        }else{
+
+            // Check if the new value exceeds the max limit
+            if (newValue <= 60) {
+                $('#durationInput').val(parseInt(newValue));
+                var my_returns = (parseInt(principal) * rate) * parseInt(newValue) + parseInt(principal);
+                $('#payback_value').text(my_returns.toFixed(2));
+                $('#monthly_repay').text((my_returns.toFixed(2) / newValue).toFixed(2));
+            } else {
+                alert('The maximum duration is 60.');
+            }
+        } else {
             alert('Please choose a loan type');
         }
     }
+
     function showLoader(){
         $('.is_loading').show();
     }

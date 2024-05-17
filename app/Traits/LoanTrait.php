@@ -74,7 +74,7 @@ trait LoanTrait{
     public function loan_product_name($id){
         return DB::table('loan_products')
         ->where('id', $id)
-        ->first();
+        ->first()->name;
     }
 
     public function get_loan_statuses($id){

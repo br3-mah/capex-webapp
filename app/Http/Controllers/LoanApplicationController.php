@@ -109,7 +109,7 @@ class LoanApplicationController extends Controller
 
                 // Apply for the loan
                 $res = $this->apply_loan($data);
-
+                $loan_product_name = $this->loan_product_name($form['loan_type']);
                 if($res == 'exists'){
                     $loan = Application::where('status', 0)->where('complete', 0)->where('user_id', $user->id)->orderBy('created_at', 'desc')->first();
                     return response()->json([
@@ -126,12 +126,12 @@ class LoanApplicationController extends Controller
                     $mail = [
                         'user_id' => $user->id,
                         'name' => $form['name'].' '.$form['lname'],
-                        'loan_type' => $form['type'].' '.$form['package_personal'],
+                        'loan_type' => $loan_product_name,
                         'phone' => $form['phone'],
                         'duration' => $form['repayment_plan'],
                         'amount' => $form['amount'],
                         'type' => 'loan-application',
-                        'msg' => 'You have new a '.$form['type'].' loan application request, with an incomplete loan submission form and kyc update'
+                        'msg' => 'You have new a '.$loan_product_name.' loan application request, with an incomplete loan submission form and kyc update'
                     ];
 
                     // Send information to the admin
@@ -243,12 +243,15 @@ class LoanApplicationController extends Controller
         $amount = intval(str_replace(['K', ',', '$', "'", '"', ' '], '', $form['amount']));
 
         try {
+
+            $loan_product_name = $this->loan_product_name($form['loan_type']);
             $data = [
                 'user_id'=> auth()->user()->id,
                 'lname'=> auth()->user()->lname,
                 'fname'=> auth()->user()->fname,
                 'email'=>  auth()->user()->email,
                 'amount'=> $amount,
+                'type'=> $loan_product_name,
                 'gender'=> auth()->user()->gender,
                 'loan_product_id'=> $form['loan_type'],
                 'repayment_plan'=> $form['duration'],
@@ -256,7 +259,7 @@ class LoanApplicationController extends Controller
                 'status' => 0,
                 'continue' => 1
             ];
-            $loan_product_name = $this->loan_product_name($form['loan_type']);
+
             $application = $this->apply_loan($data);
             $this->isKYCComplete();
             $mail = [
@@ -282,6 +285,7 @@ class LoanApplicationController extends Controller
             }
 
         } catch (\Throwable $th) {
+            dd($th);
             DB::rollback();
             Session::flash('error', "Loan could not be created, check your internet connection and try again. ".$th->getMessage());
             return redirect()->back();
