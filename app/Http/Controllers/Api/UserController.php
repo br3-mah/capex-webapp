@@ -87,7 +87,7 @@ class UserController extends Controller
 
         try {
             DB::beginTransaction();
-            $this->uploadCommonFiles($request);
+            $this->uploadCommonFilesRequest($request);
             DB::commit();
             return response()->json([
                 'message' => 'Successfully uploaded.',
