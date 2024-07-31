@@ -34,10 +34,7 @@ class AccountView extends Component
               ->orWhere('email', $key)
               ->orWhere('nrc', $key)->with('loans')->with('wallet')->with('blacklist')->get()->first();
     }
-
-    // public function exportPDF(){
-    //     return Excel::download(new AccountDetailExportExport, 'invoices.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
-    // }
+    
 
     public function blockUser(){
         try {

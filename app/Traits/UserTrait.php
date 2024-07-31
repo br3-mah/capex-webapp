@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Mail\OTPVerificationCode;
 use App\Models\Application;
 use App\Models\BankDetails;
 use App\Models\NextOfKing;
@@ -10,6 +11,7 @@ use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Mail;
 
 trait UserTrait{
 
@@ -166,26 +168,28 @@ trait UserTrait{
         return true;
     }
 
+    public function set_user_otp(){
+        $code = str_pad(rand(0, 99999), 5, '0', STR_PAD_LEFT);
+        User::where('id', auth()->user()->id)->update([
+            'opt_code' => $code
+        ]);
+        return $code;
+    }
+
     public function VerifyOTP(){
         try {
-
-            if(auth()->user()->opt_verified == 0){
-                // dd(auth()->user()->opt_verified == 0);
-                // Generate otp code
-                $code = str_pad(rand(0, 99999), 5, '0', STR_PAD_LEFT);
-
-                // Save into the database
-                User::where('id', auth()->user()->id)->update([
-                    'opt_code' => $code
-                ]);
-
+            $auth = auth()->user();
+            if($auth->opt_verified == 0){
+                $code = $this->set_user_otp();
                 // Send SMS
                 $data = [
-                    'message'=>$code.' is your OTP verification code',
-                    'phone'=> '26'.auth()->user()->phone,
+                    'message' => $code.' is your OTP verification code',
+                    'otp' => $code,
+                    'phone' => '26'.auth()->user()->phone,
                 ];
 
-                $this->send_with_server($data);
+                //Send email or SMS
+                Mail::to($auth)->send(new OTPVerificationCode($data));
 
                 // Then redirect the user to go and verify
                 return redirect()->route('otp');
@@ -196,6 +200,7 @@ trait UserTrait{
             return true;
         }
     }
+
     public function send_with_server($data) {
         $message = $data['message'];
         $username = 'gtzm-mightyfin';

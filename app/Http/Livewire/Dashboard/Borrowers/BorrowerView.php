@@ -54,11 +54,10 @@ class BorrowerView extends Component
     }
 
     public function borrowerExcelExport(){
-        return Excel::download(new BorrowerExport, 'Customers.xlsx');
+        // return Excel::download(new BorrowerExport, 'Customers.xlsx');
     }
 
     public function borrowerPDFExport(){
-        return Excel::download(new BorrowerExport, 'Customers.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
     }
 
     public function store(){
@@ -114,7 +113,7 @@ class BorrowerView extends Component
     }
 
     public function destroy($id){
-        $user = User::find($id); 
+        $user = User::find($id);
         if ($user) {
             try {
                 $user->delete();
