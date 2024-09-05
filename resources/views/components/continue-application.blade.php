@@ -1,668 +1,221 @@
-
-<div id="overlay"></div>
-<div class="modal" style="z-index: 99999" id="continue-loan-modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
-
-        <div class="p-6 modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title text-center ">
-                    <b>Loan Completion Form</b>
-                </h4>
-            </div>
-            <div class="modal-body row" style="overflow-y: scroll; overflow-x:hidden; height:63vh">
-                <div class="col-xxl-3 col-xl-3 col-lg-3" >
-                    <img width="240" src="https://img.freepik.com/free-vector/account-concept-illustration_114360-279.jpg?w=740&t=st=1700475235~exp=1700475835~hmac=99f4c6fbffcf369cc925fde13256cbcdefd9c50ab8b470e1d74610f67d158f4d">
-                </div>
-                <div class="col-xxl-9 col-xl-9 col-lg-9">
-                    <form class="py-6 pb-4 col-xxl-12 col-xl-12 col-lg-12 " method="post" action="{{ route('continue-loan') }}"  id="wizard" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="MAX_FILE_SIZE" value="64000000" />
-                        <input type="hidden" name="application_id" value="{{ App\Models\Application::currentApplication()->id }}">
-                        <input type="hidden" name="borrower_id" value="{{ auth()->user()->id }}">
-                        <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-                        <!-- Personal Info -->
-                        <div class="step col-xxl-12" id="step1">
-                            <div style="width: 90%" class="d-flex justify-content-between mb-2">
-                                <h5>Profile Details</h5>
-                            </div>
-                            <br>
-                            <div class="row mb-4"><div class="col-md-6">
-                                <label for="dob">D.O.B</label>
-                                <input type="date" class="form-control" id="dob" name="dob">
-                                <small id="jobDOBError" class="text-danger"></small>
-                            </div>
-
-                            <script>
-                                // Function to format the date as YYYY-MM-DD
-                                function formatDate(date) {
-                                    var year = date.getFullYear();
-                                    var month = ('0' + (date.getMonth() + 1)).slice(-2);
-                                    var day = ('0' + date.getDate()).slice(-2);
-                                    return `${year}-${month}-${day}`;
-                                }
-
-                                // Calculate the date 16 years ago
-                                var currentDate = new Date();
-                                var dobDate = new Date(currentDate.getFullYear() - 16, currentDate.getMonth(), currentDate.getDate());
-
-                                // Set the default value for the date input
-                                var dobInput = document.getElementById('dob');
-                                dobInput.value = formatDate(dobDate);
-                            </script>
-
-                                <div class="form-group col-md-6">
-                                    <label for="jobTitle">JOB TITLE</label>
-                                    <input value="{{ auth()->user()->occupation ?? auth()->user()->jobTitle }}"  type="text" class="form-control" id="jobTitleInput" placeholder="eg. Teacher" name="jobTitle">
-                                    <small id="jobTitleError" class="text-danger"></small>
-                                </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="form-group col-md-6">
-                                    <label for="phone">PHONE NUMBER
-                                        <small class="text-success">(eg. starting with: 0975, 00772, 965)</small></label>
-                                    <div class="input-group">
-                                        <select class="form-control" name="pcode">
-                                            <option value="26" data-thumbnail="https://png.pngtree.com/thumb_back/fw800/background/20221004/pngtree-waving-zambia-flag-background-image_1466907.jpg">
-                                                +26
-                                            </option>
-                                        </select>
-                                        <input
-                                            id="phone"
-                                            value="{{ auth()->user()->phone  }}"
-                                            type="text"
-                                            data-mask='0000 000 000'
-                                            name="phone"
-                                            class="form-control"
-                                            placeholder="0975 --- ---"
-                                        />
-                                    </div>
-                                    <small id="phoneError" class="text-danger"></small>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="employeeNo">EMPLOYEE NO</label>
-                                    <input value="{{ auth()->user()->employeeNo }}" type="text" class="form-control" id="employeeNo" placeholder="Employee No." name="employeeNo" maxlength="8">
-                                    <small id="employeeNoError" class="text-danger"></small>
-                                </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="col-md-6">
-                                    <label for="nrc">IDENTIFICATION TYPE</label>
-                                    <div class="input-group">
-                                        <select
-                                            id="nrc_id"
-                                            name="id_type"
-                                            class="form-control"
-                                            wire:model.defer="state.id_type"
-                                            >
-                                            <option {{ auth()->user()->id_type == null ? 'selected' : ''}} value="">-- ID TYPE --</option>
-                                            <option {{ auth()->user()->id_type == 'NRC' ? 'selected' : ''}} value="NRC">NRC</option>
-                                            <option {{ auth()->user()->id_type == 'Passport' ? 'selected' : ''}} value="Passport">Passport</option>
-                                            <option {{ auth()->user()->id_type == 'Driver Liecense' ? 'selected' : ''}} value="Driver Liecense">Driver Liecense</option>
-                                        </select>
-                                        <input value="{{auth()->user()->nrc_no ?? auth()->user()->nrc}}" type="text" placeholder="ID Number" class="form-control" id="nrc" name="nrc">
-                                    </div>
-                                    <small id="nrcError" class="text-danger"></small>
-                                    <br>
-                                    <small id="nrcIDError" class="text-danger"></small>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="ministry">MINISTRY</label>
-                                    <input value="{{ auth()->user()->ministry }}" placeholder="eg. Ministry of Health" type="text" class="form-control" id="ministry" name="ministry">
-                                </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="form-group col-md-6">
-                                    <label for="department">GENDER</label>
-                                    <select
-                                        id="gender"
-                                        class="form-control"
-                                        name="gender"
-                                        >
-                                        <option value=""> -- GENDER --</option>
-                                        <option {{ auth()->user()->gender == 'Male' ? 'selected' : ''}} value="Male">Male</option>
-                                        <option {{ auth()->user()->gender == 'Female' ? 'selected' : ''}} value="Female">Female</option>
-                                    </select>
-                                    <small id="genderError" class="text-danger"></small>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="department">DEPARTMENT</label>
-                                    <input value="{{ auth()->user()->department }}" type="text" placeholder="" class="form-control" id="department" name="department">
-                                </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="form-group col-md-6">
-                                    <label for="address">PHYSICAL ADDRESS</label>
-                                    <div class="input-group">
-                                        <input
-                                            id="address"
-                                            name="address"
-                                            class="form-control"
-                                            placeholder=""
-                                            value="{{ auth()->user()->address }}"/>
-                                    </div>
-                                    <small id="phoneAddress" class="text-danger"></small>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="yearsOfWork">YEARS OF WORK</label>
-                                    <select class="form-control" id="yearsOfWork" name="yearsOfWork">
-                                        <option value="1" {{ auth()->user()->employeeNo == 1 ? 'selected' : '' }}>1 Year</option>
-                                        <option value="2" {{ auth()->user()->employeeNo == 2 ? 'selected' : '' }}>2 Years</option>
-                                        <!-- Add more options as needed for different years of work -->
-                                    </select>
-                                    {{-- <small id="yearsOfWorkError" class="text-danger"></small> --}}
-                                </div>
-                            </div>
-                            <button type="button" style="float: right;" class="mt-3 btn btn-primary" onclick="nextStep(1)">
-                                Next
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+  
+    <div class="flex flex-wrap justify-center gap-4">
+        <div>
+            <div class="fixed inset-0 bg-black/80 z-[99999] hidden overflow-y-auto dark:bg-dark/90">
+                <div class="flex items-stretch justify-center min-h-screen">
+                    <div x-show="open" x-transition x-transition.duration.300 class="relative w-full p-0 overflow-hidden bg-white border shadow-3xl border-black/10 dark:bg-darklight dark:border-darkborder">
+                        <div class="flex items-center justify-between px-5 py-3 bg-white border-b border-black/10 dark:bg-darklight dark:border-darkborder">
+                            <h5 class="text-lg font-semibold dark:text-white">Your Loan Application</h5>
+                            <button type="button" class="text-muted hover:text-black dark:hover:text-white" @click="toggle">
+                                <svg class="w-5 h-5" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M24.2929 6.29289L6.29289 24.2929C6.10536 24.4804 6 24.7348 6 25C6 25.2652 6.10536 25.5196 6.29289 25.7071C6.48043 25.8946 6.73478 26 7 26C7.26522 26 7.51957 25.8946 7.70711 25.7071L25.7071 7.70711C25.8946 7.51957 26 7.26522 26 7C26 6.73478 25.8946 6.48043 25.7071 6.29289C25.5196 6.10536 25.2652 6 25 6C24.7348 6 24.4804 6.10536 24.2929 6.29289Z" fill="currentcolor" />
+                                    <path d="M7.70711 6.29289C7.51957 6.10536 7.26522 6 7 6C6.73478 6 6.48043 6.10536 6.29289 6.29289C6.10536 6.48043 6 6.73478 6 7C6 7.26522 6.10536 7.51957 6.29289 7.70711L24.2929 25.7071C24.4804 25.8946 24.7348 26 25 26C25.2652 26 25.5196 25.8946 25.7071 25.7071C25.8946 25.5196 26 25.2652 26 25C26 24.7348 25.8946 24.4804 25.7071 24.2929L7.70711 6.29289Z" fill="currentcolor" />
                                 </svg>
                             </button>
                         </div>
+                        <div class="p-5 space-y-4 min-h-[calc(100vh-53px)] flex flex-col justify-between">
+                            <div class="text-black dark:text-muted">
+                                <div class="w-full" style="overflow-y: scroll; overflow-x:hidden; height:63vh">
 
-                        {{-- KYC --}}
-                        <div class="step" id="step2">
-                            <div style="width: 90%" class="d-flex justify-content-between mb-2">
-                                <h5>KYC Documents</h5>
-                            </div>
-                            <br>
-                            <div class="row col-md-12 col-lg-12" style="">
-                                <div class="file-uploader col-xxl-6 col-xl-6 col-lg-6 border" style="border: 1px #d3d1d1; padding:2%;">
-                                    <!-- Use a label for file input and add a Font Awesome icon -->
+                                        <form class="py-2 pb-2 w-full " method="post" action="{{ route('continue-loan') }}"  id="wizard" enctype="multipart/form-data">
+                                            @csrf
+                                            <input type="hidden" name="MAX_FILE_SIZE" value="64000000" />
+                                            <input type="hidden" name="application_id" value="{{ App\Models\Application::currentApplication()->id }}">
+                                            <input type="hidden" name="borrower_id" value="{{ auth()->user()->id }}">
+                                            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                                            <!-- Personal Info -->
+                                            <div id="step1" class="step w-full max-w-6xl mx-auto bg-gradient-to-br from-blue-50 to-purple-50 shadow-xl rounded-2xl overflow-hidden">
+                                                <div class="p-12">
+                                                    <div class="flex justify-between items-center mb-8 py-4">
+                                                        <h5 class="text-3xl font-bold text-gray-800">Basic Info</h5>
+                                                        <div class="bg-indigo-100 text-indigo-800 text-base font-medium px-4 py-2 rounded-full shadow-sm">Step 1 of 6</div>
+                                                    </div>
+                                                    
+                                                    <div class="bg-white p-8 rounded-xl shadow-sm mb-8">
+                                                        @include('livewire.dashboard.__parts.__basic_info')
+                                                    </div>
+                                                    
+                                                    <div class="mt-10 flex justify-end">
+                                                        <button type="button" 
+                                                            class="flex items-center btn bg-purple border border-purple rounded-full text-white transition-all duration-300 hover:bg-purple/[0.85] hover:border-purple/[0.85]"
+                                                            onclick="nextStep(1)"
+                                                        >
+                                                            Next
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>      
 
-                                    <input type="file" value="{{ $meta->uploads->where('name', 'nrc_file')->first()->path }}" class="file-input visually-hidden" id="fileInput" accept=".pdf, .doc, .docx" name="nrc_file">
+                                            <div id="step2" class="step w-full">
+                                                <div class="flex justify-between items-center mb-8 py-4">
+                                                    <h5 class="text-3xl font-bold text-gray-800">NRC and/or TPin Upload (KYC)</h5>
+                                                    <div class="bg-indigo-100 text-indigo-800 text-base font-medium px-4 py-2 rounded-full shadow-sm">Step 2 of 6</div>
+                                                </div>
+                                                @include('livewire.dashboard.__parts.__kyc_uploads')
+                                                <div class="flex justify-between mt-2">
+                                                    <button type="button" class="btn bg-muted border border-muted rounded-full text-white transition-all duration-300 hover:bg-muted/[0.85] hover:border-muted/[0.85] dark:text-white dark:border-darkmuted dark:hover:text-white flex items-center mr-2" onclick="prevStep(2)">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left mr-2" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                                                        </svg>
+                                                        Back
+                                                    </button>
+                                                    <button type="button" class="flex items-center btn bg-purple border border-purple rounded-full text-white transition-all duration-300 hover:bg-purple/[0.85] hover:border-purple/[0.85]" onclick="nextStep(2)">
+                                                        Next
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right ml-2" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            
 
-                                    <label for="fileInput" class="bg-primary p-2 text-white rounded file-input-label">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-cloud-upload" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
-                                            <path fill-rule="evenodd" d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3z"/>
-                                        </svg>
-                                        <span>Upload Copy of NRC</span>
-                                    </label>
+                                            <!-- Next of Kin Info -->
+                                            <div class="step" id="step3">
+                                                @include('livewire.dashboard.__parts.__next-of-kin')
+                                                <div class="flex justify-between mt-2">
+                                                    <button type="button" class="flex items-center btn bg-muted border border-muted rounded-full text-white transition-all duration-300 hover:bg-muted/[0.85] hover:border-muted/[0.85] dark:text-white dark:border-darkmuted dark:hover:text-white" onclick="prevStep(3)">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                                                        </svg>
+                                                        Back
+                                                    </button>
+                                                    <button type="button" class="flex items-center btn bg-purple border border-purple rounded-full text-white transition-all duration-300 hover:bg-purple/[0.85] hover:border-purple/[0.85]" onclick="nextStep(3)">
+                                                        Next
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- References -->
+                                            <div class="step" id="step4">
+                                                <h5>References</h5>
+                                                <p>Human Resource Details:</p>
+                                                <br>
+                                                @include('livewire.dashboard.__parts.__references')
+                                                <div class="flex justify-between mt-2">
+                                                    <button type="button" class="items-center flex btn bg-muted border border-muted rounded-full text-white transition-all duration-300 hover:bg-muted/[0.85] hover:border-muted/[0.85] dark:text-white dark:border-darkmuted dark:hover:text-white" onclick="prevStep(4)">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                                                        </svg>
+                                                        Back
+                                                    </button>
+                                                    <button type="button" class="flex items-center btn bg-purple border border-purple rounded-full text-white transition-all duration-300 hover:bg-purple/[0.85] hover:border-purple/[0.85]" onclick="nextStep(4)">
+                                                        Next
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
 
-                                    <!-- Uploaded file list -->
-                                    <div class="pt-2">
-                                        <ul class="file-list" id="fileList"></ul>
-                                        @if ($meta->uploads->where('name', 'nrc_file')->isNotEmpty())
-                                            <p  class="file-list">You uploaded a National ID Copy on
-                                            {{
-                                                $meta->uploads->where('name', 'nrc_file')->first() != null ?
-                                                $meta->uploads->where('name', 'nrc_file')->first()->created_at->toFormattedDateString() : ''
-                                            }}
-                                            </p>
-                                        @endif
-                                    </div>
-                                    <small id="nrcFileError" class="text-danger"></small>
+                                            <!-- Bank Details -->
+                                            <div class="step" id="step5">
+                                                <h5>Bank Details</h5>
+                                                <br>
+                                                @include('livewire.dashboard.__parts.__bank-info')
+                                                <div class="flex justify-between mt-2">
+                                                    <button type="button" class="flex items-center btn bg-muted border border-muted rounded-full text-white transition-all duration-300 hover:bg-muted/[0.85] hover:border-muted/[0.85] dark:text-white dark:border-darkmuted dark:hover:text-white" onclick="prevStep(5)">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                                                        </svg>
+                                                        Back
+                                                    </button>
+                                                    <button type="button" class="flex items-center btn bg-purple border border-purple rounded-full text-white transition-all duration-300 hover:bg-purple/[0.85] hover:border-purple/[0.85]" onclick="nextStep(5)">
+                                                        Next
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <!-- Bank Details -->
+                                            <div class="step" id="step6">
+                                                <div style="width: 90%" class="d-block justify-content-start mb-2">
+                                                    <h5>Requirements</h5>
+                                                    <span class="justify-content-end items-right float-right text-left">
+                                                        <p>Click the button below to share preapproval form, if missing</p>
+                                                        <button title="Send the preapproval form to employer, manager, or supervisor" type="button" class="btn btn-sm" style="background-color: rgb(54, 15, 94)" onclick="openSendDocModal()">Send Preapproval</button>
+                                                    </span>
+                                                </div>
+                                                <br>
+                                                @include('livewire.dashboard.__parts.__doc_upload')
+                                                <div class="flex justify-between mt-2">
+                                                    <button type="button" class="btn bg-muted border border-muted rounded-full text-white transition-all duration-300 hover:bg-muted/[0.85] hover:border-muted/[0.85] dark:text-white dark:border-darkmuted dark:hover:text-white flex items-center" onclick="prevStep(6)">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                                                        </svg>
+                                                        Back
+                                                    </button>
+                                                    <button type="button" class="flex items-center btn bg-purple border border-purple rounded-full text-white transition-all duration-300 hover:bg-purple/[0.85] hover:border-purple/[0.85]" onclick="nextStep(6)">
+                                                        Next
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- Loan Details -->
+                                            <div class="step" id="step7">
+                                                <h5>Loan Summary Details</h5>
+                                                <br>
+                                                <div class="col-lg-12 row">
+                                                    <div class="form-group col-md-6">
+                                                        <p>Loan Amount: <b>K{{ $activeLoan->amount }}</b> </p>
+                                                        <p>Loan Type: <b>{{ App\Models\Application::loanProduct($activeLoan->loan_product_id)->name  }} Loan</b> </p>
+                                                        <p>Interest rate: <b> {{App\Models\Application::loanProduct($activeLoan->loan_product_id)->def_loan_interest }} %</b> </p>
+                                                        <p>Service Charge:  <b>10%</b> </p>
+                                                        <p>Tenure: <b>{{ $activeLoan->repayment_plan }} (Months)</b> </p>
+
+                                                        <input type="hidden" name="final" value="1">
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <p>You will receive: <b>K {{ App\Models\Application::receiveAmount($activeLoan->amount, $activeLoan->repayment_plan)}}</b> </p>
+                                                        <p>Payback Amount: <b>K {{ App\Models\Application::payback($activeLoan->amount, $activeLoan->repayment_plan, $activeLoan->loan_product_id)}}</b> </p>
+                                                        <p>Next Payment Amount: <b>K {{ App\Models\Application::paybackInstallment($activeLoan->amount, $activeLoan->repayment_plan, $activeLoan->loan_product_id)}}</b> </p>
+                                                        <p>Next Payment Date: <b> {{ App\Models\Application::paybackNextDate($activeLoan) }}</b> </p>
+                                                        <p>Phone Number: <b>{{ auth()->user()->phone }}</b> </p>
+                                                        <p>Email: <b>{{ auth()->user()->email }}</b> </p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex justify-between mt-2">
+                                                    <button id="backicon" type="button" class="btn bg-muted border border-muted rounded-full text-white transition-all duration-300 hover:bg-muted/[0.85] hover:border-muted/[0.85] dark:text-white dark:border-darkmuted dark:hover:text-white flex items-center" onclick="prevStep(7)">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                                                        </svg>
+                                                        Back
+                                                    </button>
+                                                    <button type="submit" id="submit_click" class="btn bg-success border border-success rounded-full text-white transition-all duration-300 hover:bg-success/[0.85] hover:border-success/[0.85]">
+                                                        <div id="ploading" style="display:none;">
+                                                            <svg width="60" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle fill="#ffff" stroke="#ffff" stroke-width="2" r="15" cx="35" cy="100"><animate attributeName="cx" calcMode="spline" dur="0.9" values="35;165;165;35;35" keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1" repeatCount="indefinite" begin="0"></animate></circle><circle fill="#ffff" stroke="#BB14FF" stroke-width="2" opacity=".8" r="15" cx="35" cy="100"><animate attributeName="cx" calcMode="spline" dur="0.9" values="35;165;165;35;35" keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1" repeatCount="indefinite" begin="0.05"></animate></circle><circle fill="#F0E7F9" stroke="#BB14FF" stroke-width="2" opacity=".6" r="15" cx="35" cy="100"><animate attributeName="cx" calcMode="spline" dur="0.9" values="35;165;165;35;35" keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1" repeatCount="indefinite" begin=".1"></animate></circle><circle fill="#BB14FF" stroke="#BB14FF" stroke-width="2" opacity=".4" r="15" cx="35" cy="100"><animate attributeName="cx" calcMode="spline" dur="0.9" values="35;165;165;35;35" keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1" repeatCount="indefinite" begin=".15"></animate></circle><circle fill="#BB14FF" stroke="#BB14FF" stroke-width="2" opacity=".2" r="15" cx="35" cy="100"><animate attributeName="cx" calcMode="spline" dur="0.9" values="35;165;165;35;35" keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1" repeatCount="indefinite" begin=".2"></animate></circle></svg>
+                                                            <small>Please wait...</small>
+                                                        </div>
+                                                        <div id="finishicon">
+                                                            Finish
+                                                            <svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                                            </svg>
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                        </form>
                                 </div>
-                                <div class="file-uploader col-xxl-6 col-xl-6 col-lg-6 border" style="border: 1px #d3d1d1; padding:2%;">
-                                    <!-- Use a label for file input and add a Font Awesome icon -->
-                                    <input type="file" class="file-input visually-hidden"  value="{{ $meta->uploads->where('name', 'tpin_file')->first()->path }}" id="fileInput2" accept=".pdf, .doc, .docx" name="tpin_file">
-                                    <label for="fileInput2" class="bg-primary p-2 text-white rounded file-input-label">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-cloud-upload" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
-                                            <path fill-rule="evenodd" d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3z"/>
-                                        </svg>
-                                        <span>Upload Copy of Tpin <span class="badge badge-danger bg-danger">Optional</span></span>
-                                    </label>
-
-                                    <!-- Uploaded file list -->
-                                    <div class="pt-2">
-                                        <ul class="file-list-2" id="fileList-2"></ul>
-                                        @if ($meta->uploads->where('name', 'tpin_file')->isNotEmpty())
-                                            <p class="file-list">You uploaded a Tpin Copy on
-                                                {{
-                                                    $meta->uploads->where('name', 'tpin_file')->first() != null ?
-                                                    $meta->uploads->where('name', 'tpin_file')->first()->created_at->toFormattedDateString() : ''
-                                                }}
-                                            </p>
-                                        @endif
-                                    </div>
-                                    <small id="fiileInput2Error" class="text-danger"></small>
-                                </div>
-                            </div>
-                            <div style="float: right;" class="mt-2">
-                                <button type="button" class="btn btn-light text-dark" onclick="prevStep(2)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                                    </svg>
-                                    Back
-                                </button>
-                                <button type="button" class="btn btn-primary" onclick="nextStep(2)">
-                                    Next
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-                                    </svg>
-                                </button>
                             </div>
                         </div>
-
-                        <!-- Next of Kin Info -->
-                        <div class="step" id="step3">
-                            <h5>Next of Kin Details</h5>
-                            <br>
-                            <div class="row mb-4">
-                                <div class="form-group col-md-6">
-                                    <label for="nextOfKinFirstName">FIRST NAME (Next of Kin)</label>
-                                    <input type="text" value="{{ $meta->next_of_king->first()->fname }}" class="form-control" id="nextOfKinFirstName" name="nextOfKinFirstName">
-                                    <small id="nokFNError" class="text-danger"></small>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="nextOfKinLastName">LAST NAME (Next of Kin)</label>
-                                    <input type="text" value="{{ $meta->next_of_king->first()->lname }}"  class="form-control" id="nextOfKinLastName" name="nextOfKinLastName">
-                                    <small id="nokLNError" class="text-danger"></small>
-                                </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="form-group col-md-6">
-                                    <label for="nextOfKinPhone">PHONE NUMBER (Next of Kin)</label>
-                                    <div class="input-group">
-                                        <select class="form-control" name="kpcode">
-                                            <option value="260">+260</option>
-                                        </select>
-                                        <input
-                                            id="nextOfKinPhone"
-                                            type="text"
-                                            value="{{ $meta->next_of_king->first()->phone }}"
-                                            name="nextOfKinPhone"
-                                            class="form-control"
-                                            data-mask='000 000 000'
-                                            placeholder=""
-                                        />
-                                    </div>
-                                    <small id="nextOfKinPhoneError" class="text-danger"></small>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="physicalAddress">PHYSICAL ADDRESS (Next of Kin)</label>
-                                    <input type="text" value="{{ $meta->next_of_king->first()->address }}"  class="form-control" id="physicalAddress" name="physicalAddress">
-                                </div>
-                            </div>
-                            <div class="form-group mb-4">
-                                <label for="relationship">RELATIONSHIP WITH APPLICANT</label>
-                                <input type="text" value="{{ $meta->next_of_king->first()->relation }}"  class="form-control" id="relationship" name="relationship">
-                                <small id="relationError" class="text-danger"></small>
-                            </div>
-                            <div style="float: right;">
-                                <button type="button" class="btn btn-light text-dark" onclick="prevStep(3)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                                    </svg>
-                                    Back
-                                </button>
-                                <button type="button" class="btn btn-primary" onclick="nextStep(3)">
-                                    Next
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        {{-- !mportant --}}
-                        {{-- <div class="step" id="step3">
-                            <h4>Guarantor's Information</h4>
-
-                            <div class="row mb-4">
-                                <div class="form-group col-md-6">
-                                    <label for="guarantorName">Guarantor’s Name</label>
-                                    <input type="text" class="form-control" id="guarantorName" name="guarantorName">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="guarantorAddress">Residential address</label>
-                                    <input type="text" class="form-control" id="guarantorAddress" name="guarantorAddress">
-                                </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="form-group col-md-6">
-                                    <label for="guarantorNRC">NRC Number</label>
-                                    <input type="text" class="form-control" id="guarantorNRC" name="guarantorNRC">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="guarantorDOB">Date of Birth</label>
-                                    <input type="date" class="form-control" id="guarantorDOB" name="guarantorDOB">
-                                </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="form-group col-md-6">
-                                    <label for="relationshipToBorrower">Relationship to the Borrower</label>
-                                    <input type="text" class="form-control" id="relationshipToBorrower" name="relationshipToBorrower">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="guarantorContactNumber">Contact Number</label>
-                                    <input type="text" class="form-control" id="guarantorContactNumber" name="guarantorContactNumber">
-                                </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="form-group col-md-6">
-                                    <label for="alternativeNumber">Alternative Number</label>
-                                    <input type="text" class="form-control" id="alternativeNumber" name="alternativeNumber">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="spouseContactNumber">Contact NO. of Spouse</label>
-                                    <input type="text" class="form-control" id="spouseContactNumber" name="spouseContactNumber">
-                                </div>
-                            </div>
-                            <!-- Navigation buttons to move to the previous and next steps -->
-                            <div style="float: right;">
-                                <button type="button" class="btn btn-light text-dark" onclick="prevStep(3)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                                    </svg>
-                                    Back
-                                </button>
-                                <button type="button" class="btn btn-primary" onclick="nextStep(3)">
-                                    Next
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div> --}}
-                        <!-- References -->
-                        <div class="step" id="step4">
-                            <h5>References</h5>
-                            <p>Human Resource Details:</p>
-                            <br>
-                            <div class="row mb-4">
-                                <div class="form-group col-md-4">
-                                    <label for="hrFirstName">FIRST NAME (HR)</label>
-                                    <input type="text" value="{{ $meta->refs->first()->hrFname }}" class="form-control" id="hrFirstName" name="hrFirstName">
-                                    <small id="fnHRError" class="text-danger"></small>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="hrLastName">LAST NAME (HR)</label>
-                                    <input type="text" value="{{ $meta->refs->first()->hrLname }}" class="form-control" id="hrLastName" name="hrLastName">
-                                    <small id="lnHRError" class="text-danger"></small>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="hrContactNumber">CONTACT NUMBER (HR)</label>
-                                    <input type="text" value="{{ $meta->refs->first()->hrContactNumber }}" data-mask='000 0000 000' class="form-control" id="hrContactNumber" name="hrContactNumber">
-                                    <small id="contactHRError" class="text-danger"></small>
-                                </div>
-                            </div>
-
-                            <p>Supervisor Details:</p>
-                            <div class="row mb-4">
-                                <div class="form-group col-md-4">
-                                    <label for="supervisorFirstName">FIRST NAME (Supervisor)</label>
-                                    <input type="text" value="{{ $meta->refs->first()->supervisorFirstName }}" class="form-control" id="supervisorFirstName" name="supervisorFirstName">
-                                    <small id="supFNError" class="text-danger"></small>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="supervisorLastName">LAST NAME (Supervisor)</label>
-                                    <input type="text" value="{{ $meta->refs->first()->supervisorLastName }}" class="form-control" id="supervisorLastName" name="supervisorLastName">
-                                    <small id="supLNError" class="text-danger"></small>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="supervisorContactNumber">CONTACT NUMBER (Supervisor)</label>
-                                    <input type="text" value="{{ $meta->refs->first()->supervisorContactNumber }}" data-mask='000 0000 000' class="form-control" id="supervisorContactNumber" name="supervisorContactNumber">
-                                    <small id="supContactError" class="text-danger"></small>
-                                </div>
-                            </div>
-                            <div style="float: right;">
-                                <button type="button" class="btn btn-light text-dark" onclick="prevStep(4)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                                    </svg>
-                                    Back
-                                </button>
-                                <button type="button" class="btn btn-primary" onclick="nextStep(4)">
-                                    Next
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Bank Details -->
-                        <div class="step" id="step5">
-                            <h5>Bank Details</h5>
-                            <br>
-                            <div class="row mb-4">
-                                <div class="form-group col-md-6">
-                                    <label for="bankName">BANK NAME</label>
-                                    <input type="text" value="{{ $meta->bank->first()->bankName }}" class="form-control" id="bankName" name="bankName">
-                                    <small id="bankNameError" class="text-danger"></small>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="branchName">BRANCH NAME</label>
-                                    <input type="text" value="{{ $meta->bank->first()->branchName }}" class="form-control" id="branchName" name="branchName">
-                                    <small id="bankBranchError" class="text-danger"></small>
-                                </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="form-group col-md-6">
-                                    <label for="accountNumber">ACCOUNT NUMBER</label>
-                                    <input type="text" value="{{ $meta->bank->first()->accountNumber }}" class="form-control" id="accountNumber" name="accountNumber" placeholder="XXXX XXXX XXXX XXXX">
-                                    <small id="bankAccError" class="text-danger"></small>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="accountNames">ACCOUNT NAMES</label>
-                                    <input type="text" value="{{ $meta->bank->first()->accountNames }}" class="form-control" id="accountNames" name="accountNames">
-                                    <small id="bankAccNameError" class="text-danger"></small>
-                                </div>
-                            </div>
-                            <div style="float: right;">
-                                <button type="button" class="btn btn-light text-dark" onclick="prevStep(5)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                                    </svg>
-                                    Back
-                                </button>
-                                <button type="button" class="btn btn-primary" onclick="nextStep(5)">
-                                    Next
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Bank Details -->
-                        <div class="step" id="step6">
-                            <div style="width: 90%" class="d-block justify-content-start mb-2">
-                                <h5>Requirements</h5>
-                                <span class="justify-content-end items-right float-right text-left">
-                                    <p>Click the button below to share preapproval form, if missing</p>
-                                    <button title="Send the preapproval form to employer, manager, or supervisor" type="button" class="btn btn-sm" style="background-color: rgb(54, 15, 94)" onclick="openSendDocModal()">Send Preapproval</button>
-                                </span>
-                            </div>
-                            <br>
-                            <div class="col-xxl-12 col-xl-12 col-lg-12">
-                                <div class="text-success" id="sendDocResponseText">Pre-approval forms share successfully</div>
-                                <div class="text-danger" id="sendDocResponseText2">Could not send, Please try again</div>
-                            </div>
-
-                            <div class="row col-md-12 col-lg-12" style="">
-                                <div class="file-uploader col-xxl-6 col-xl-6 col-lg-6 border" style="border: 1px #d3d1d1; padding:2%;">
-                                    <input type="file" value="{{ $meta->uploads->where('name', 'payslip_file')->first()->path }}" class="file-input visually-hidden" id="fileInput3" accept=".pdf, .doc, .docx" name="payslip_file">
-                                    <label for="fileInput3" class="file-input-label">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-cloud-upload" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
-                                            <path fill-rule="evenodd" d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3z"/>
-                                        </svg>
-                                        <span>Upload Latest Payslip</span>
-                                    </label>
-                                    <div class="pt-2">
-                                        <ul class="file-list-2" id="fileList-3"></ul>
-                                        @if ($meta->uploads->where('name', 'payslip_file')->isNotEmpty())
-                                            <p class="file-list">You uploaded a Payslip Copy on
-                                                {{
-                                                    $meta->uploads->where('name', 'payslip_file')->first() != null ?
-                                                    $meta->uploads->where('name', 'payslip_file')->first()->created_at->toFormattedDateString() : ''
-                                                }}
-                                            </p>
-                                        @endif
-                                    </div>
-                                    <small id="payslipError" class="text-danger"></small>
-                                </div>
-                                <div class="file-uploader col-xxl-6 col-xl-6 col-lg-6 border" style="border: 1px #d3d1d1; padding:2%;">
-                                    <!-- Use a label for file input and add a Font Awesome icon -->
-                                    <input type="file" value="{{ $meta->uploads->where('name', 'bankstatement')->first()->path }}" class="file-input visually-hidden" id="fileInput4" accept=".pdf, .doc, .docx" name="bankstatement">
-                                    <label for="fileInput4" class="file-input-label">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-cloud-upload" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
-                                            <path fill-rule="evenodd" d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3z"/>
-                                        </svg>
-                                        <span>3 months Bank statement</span>
-                                    </label>
-
-                                    <!-- Uploaded file list -->
-                                    <div class="pt-2">
-                                        <ul class="file-list-3" id="fileList-4"></ul>
-                                        @if ($meta->uploads->where('name', 'bankstatement')->isNotEmpty())
-                                            <p class="file-list">You uploaded a Bank Statement Copy on
-                                            {{
-                                                $meta->uploads->where('name', 'bankstatement')->first() !== null ?
-                                                $meta->uploads->where('name', 'bankstatement')->first()->created_at->toFormattedDateString() : ''
-                                            }}
-                                            </p>
-                                        @endif
-                                    </div>
-                                    <small id="bankstatementError" class="text-danger"></small>
-                                </div>
-                                <div class="file-uploader col-xxl-6 col-xl-6 col-lg-6 border" style="border: 1px #d3d1d1; padding:2%;">
-                                    <!-- Use a label for file input and add a Font Awesome icon -->
-                                    <input type="file" value="{{ $meta->uploads->where('name', 'passport')->first()->path }}" class="file-input visually-hidden" id="fileInput5" accept=".pdf, .doc, .docx" name="passport">
-                                    <label for="fileInput5" class="file-input-label">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-cloud-upload" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
-                                            <path fill-rule="evenodd" d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3z"/>
-                                        </svg>
-                                        <span>Passport size photo</span>
-                                    </label>
-
-                                    <!-- Uploaded file list -->
-                                    <div class="pt-2">
-                                        <ul class="file-list-4" id="fileList-5"></ul>
-                                        @if ($meta->uploads->where('name', 'passport')->isNotEmpty())
-                                            <p class="file-list">You uploaded a Passport Size photo on
-                                                {{
-                                                    $meta->uploads->where('name', 'passport')->first() != null ?
-                                                    $meta->uploads->where('name', 'passport')->first()->created_at->toFormattedDateString() : ''
-                                                }}
-                                            </p>
-                                        @endif
-                                    </div>
-                                    <small id="passportError" class="text-danger"></small>
-                                </div>
-                                <div class="file-uploader col-xxl-6 col-xl-6 col-lg-6 border" style="border: 1px #d3d1d1; padding:2%;">
-                                    <!-- Use a label for file input and add a Font Awesome icon -->
-                                    <input type="file" value="{{$meta->uploads->where('name', 'preapproval')->first()->path}}" class="file-input visually-hidden" id="fileInput6" accept=".pdf, .doc, .docx" name="preapproval">
-                                    <label for="fileInput6" class="file-input-label">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-cloud-upload" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
-                                            <path fill-rule="evenodd" d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3z"/>
-                                        </svg>
-                                        <span>Pre approval Document</span>
-                                    </label>
-
-                                    <!-- Uploaded file list -->
-                                    <div class="pt-2">
-                                        <ul class="file-list-5" id="fileList-6"></ul>
-                                        @if ($meta->uploads->where('name', 'preapproval')->isNotEmpty())
-                                            <p class="file-list">You uploaded a Pre-approval form Copy on
-                                                {{
-                                                    $meta->uploads->where('name', 'preapproval')->first() != null ?
-                                                    $meta->uploads->where('name', 'preapproval')->first()->created_at->toFormattedDateString() :''
-                                                }}
-                                            </p>
-                                        @endif
-                                    </div>
-                                    <small id="preapprovalError" class="text-danger"></small>
-                                </div>
-                                <div class="file-uploader col-xxl-6 col-xl-6 col-lg-6 border" style="border: 1px #d3d1d1; padding:2%;">
-                                    <!-- Use a label for file input and add a Font Awesome icon -->
-                                    <input type="file" value="{{ $meta->uploads->where('name', 'letterofintro')->first()->path }}" class="file-input visually-hidden" id="fileInput7" accept=".pdf, .doc, .docx" name="letterofintro">
-                                    <label for="fileInput7" class="file-input-label">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-cloud-upload" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
-                                            <path fill-rule="evenodd" d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3z"/>
-                                        </svg>
-                                        <span>Letter of Introduction <span class="badge badge-danger bg-danger">Optional</span></span>
-                                    </label>
-
-                                    <!-- Uploaded file list -->
-                                    <div class="pt-2">
-                                        <ul class="file-list-5" id="fileList-7"></ul>
-                                        @if ($meta->uploads->where('name', 'letterofintro')->isNotEmpty())
-                                            <p class="file-list">You uploaded a Letter of Introduction Copy on
-                                                {{
-                                                    $meta->uploads->where('name', 'letterofintro')->first() != null ?
-                                                    $meta->uploads->where('name', 'letterofintro')->first()->created_at->toFormattedDateString() : ''
-                                                }}
-                                            </p>
-                                        @endif
-                                    </div>
-                                    <small id="letterError" class="text-danger"></small>
-                                </div>
-                            </div>
-                            <div style="float: right;">
-                                <button type="button" class="btn btn-light text-dark" onclick="prevStep(6)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                                    </svg>
-                                    Back
-                                </button>
-                                <button type="button" class="btn btn-primary" onclick="nextStep(6)">
-                                    Next
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-
-
-                        <!-- Loan Details -->
-                        <div class="step" id="step7">
-                            <h5>Loan Summary Details</h5>
-                            <br>
-                            <div class="col-lg-12 row">
-                                <div class="form-group col-md-6">
-                                    <p>Loan Amount: <b>K{{ $activeLoan->amount }}</b> </p>
-                                    <p>Loan Type: <b>{{ App\Models\Application::loanProduct($activeLoan->loan_product_id)->name  }} Loan</b> </p>
-                                    <p>Interest rate: <b> {{App\Models\Application::loanProduct($activeLoan->loan_product_id)->def_loan_interest }} %</b> </p>
-                                    <p>Service Charge:  <b>10%</b> </p>
-                                    <p>Tenure: <b>{{ $activeLoan->repayment_plan }} (Months)</b> </p>
-
-                                    <input type="hidden" name="final" value="1">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <p>You will receive: <b>K {{ App\Models\Application::receiveAmount($activeLoan->amount, $activeLoan->repayment_plan)}}</b> </p>
-                                    <p>Payback Amount: <b>K {{ App\Models\Application::payback($activeLoan->amount, $activeLoan->repayment_plan, $activeLoan->loan_product_id)}}</b> </p>
-                                    <p>Next Payment Amount: <b>K {{ App\Models\Application::paybackInstallment($activeLoan->amount, $activeLoan->repayment_plan, $activeLoan->loan_product_id)}}</b> </p>
-                                    <p>Next Payment Date: <b> {{ App\Models\Application::paybackNextDate($activeLoan) }}</b> </p>
-                                    <p>Phone Number: <b>{{ auth()->user()->phone }}</b> </p>
-                                    <p>Email: <b>{{ auth()->user()->email }}</b> </p>
-                                </div>
-                            </div>
-                            <div style="float: right;">
-                                <button id="backicon" type="button" class="btn btn-light text-dark" onclick="prevStep(7)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                                    </svg>
-                                    Back
-                                </button>
-                                <button type="submit" id="submit_click" class="btn btn-primary">
-                                    <div id="ploading" style="display:none;">
-                                        <svg width="60" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle fill="#ffff" stroke="#ffff" stroke-width="2" r="15" cx="35" cy="100"><animate attributeName="cx" calcMode="spline" dur="0.9" values="35;165;165;35;35" keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1" repeatCount="indefinite" begin="0"></animate></circle><circle fill="#ffff" stroke="#BB14FF" stroke-width="2" opacity=".8" r="15" cx="35" cy="100"><animate attributeName="cx" calcMode="spline" dur="0.9" values="35;165;165;35;35" keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1" repeatCount="indefinite" begin="0.05"></animate></circle><circle fill="#F0E7F9" stroke="#BB14FF" stroke-width="2" opacity=".6" r="15" cx="35" cy="100"><animate attributeName="cx" calcMode="spline" dur="0.9" values="35;165;165;35;35" keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1" repeatCount="indefinite" begin=".1"></animate></circle><circle fill="#BB14FF" stroke="#BB14FF" stroke-width="2" opacity=".4" r="15" cx="35" cy="100"><animate attributeName="cx" calcMode="spline" dur="0.9" values="35;165;165;35;35" keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1" repeatCount="indefinite" begin=".15"></animate></circle><circle fill="#BB14FF" stroke="#BB14FF" stroke-width="2" opacity=".2" r="15" cx="35" cy="100"><animate attributeName="cx" calcMode="spline" dur="0.9" values="35;165;165;35;35" keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1" repeatCount="indefinite" begin=".2"></animate></circle></svg>
-                                        <small>Please wait...</small>
-                                    </div>
-                                    <div id="finishicon">
-                                        Finish
-                                        <svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-                                        </svg>
-                                    </div>
-                                </button>
-                            </div>
-                        </div>
-
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 {{-- <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> --}}
 <script>
@@ -757,7 +310,7 @@
       var employeeNo = document.getElementById('employeeNo');
       var employeeNoError = document.getElementById('employeeNoError');
       var dobInput = document.getElementById('dob');
-      var dobError = document.getElementById('jobDOBError');
+      var dobError = document.getElementById('dobError');
       var phoneInput = document.getElementById('phone');
       var phoneError = document.getElementById('phoneError');
       var nrcInput = document.getElementById('nrc');
@@ -832,52 +385,53 @@
 
     }
 
-    function _validate_step2(){
-      var fileInput = document.getElementById('fileInput');
-      var nrcFileError = document.getElementById('nrcFileError');
-      var fileInput2 = document.getElementById('fileInput2');
-      var fiileInput2Error = document.getElementById('fiileInput2Error');
+    function _validate_step2() {
+        var fileInput = document.getElementById('fileInput');
+        var nrcFileError = document.getElementById('nrcFileError');
+        var fileInput2 = document.getElementById('fileInput2');
+        var fiileInput2Error = document.getElementById('fiileInput2Error');
 
-      var nrcExists = "{{$meta->uploads->where('name', 'nrc_file')->first()->path}}";
-      var tpinExists = "{{$meta->uploads->where('name', 'tpin_file')->first()->path}}";
+        // Safely retrieve the paths from PHP variables
+        var nrcExists = @json($nrcPath);
+        var tpinExists = @json($tpinPath);
 
-      // In this example, we'll check if the input is not empty
-      if (fileInput.value === '' && nrcExists === '') {
-        nrcFileError.textContent = 'Please upload copy of national ID';
-      }
-        //   if (!fileInput2.value && tpinExists === 'null') {
-        //     fiileInput2Error.textContent = 'Please upload copy of Tpin';
-        //   }
-        // !fileInput2.value && tpinExists === 'null' ||
-      if (fileInput.value === '' && nrcExists === '') {
-          return false;
-      } else {
+        console.log(nrcExists);
+        console.log(tpinExists);
+        // Check if the inputs are empty and the files do not exist
+        if (fileInput.value === '' && nrcExists === '') {
+            nrcFileError.textContent = 'Please upload a copy of your national ID';
+            return false;
+        }
 
-          // Prepare data to send to the server
-          var formData = new FormData();
+        // Prepare data to send to the server
+        var formData = new FormData();
 
-          // Get the files
-          formData.append('nrc_file', fileInput.files[0]);
-          formData.append('tpin_file', fileInput2.files[0]);
+        // Get the files
+        if (fileInput.files.length > 0) {
+            formData.append('nrc_file', fileInput.files[0]);
+        }
+        if (fileInput2.files.length > 0) {
+            formData.append('tpin_file', fileInput2.files[0]);
+        }
 
-          // Perform Fetch API request to the Laravel backend
-          fetch("{{ route('continue-loan') }}", {
-              method: 'POST',
-              body: formData
-          })
-          .then(response => response.json())
-          .then(data => {
-              // Handle the success response from the server
-              console.log('Data successfully updated or created:', data);
-          })
-          .catch(error => {
-              // Handle the error response from the server
-              // console.error('Error updating or creating data:', error);
-          });
-          return true;
-      }
+        // Perform Fetch API request to the Laravel backend
+        fetch("{{ route('continue-loan') }}", {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the success response from the server
+            console.log('Data successfully updated or created:', data);
+        })
+        .catch(error => {
+            // Handle the error response from the server
+            console.error('Error updating or creating data:', error);
+        });
 
+        return true;
     }
+
 
     function _validate_step3(){
       // Required
@@ -1062,81 +616,82 @@
     }
 
     function _validate_step6(){
-      var fileInput3 = document.getElementById('fileInput3');
-      var payslipError = document.getElementById('payslipError');
-      var fileInput4 = document.getElementById('fileInput4');
-      var bankstatementError = document.getElementById('bankstatementError');
-      var fileInput5 = document.getElementById('fileInput5');
-      var passportError = document.getElementById('passportError');
-      var fileInput6 = document.getElementById('fileInput6');
-      var preapprovalError = document.getElementById('preapprovalError');
-      var fileInput7 = document.getElementById('fileInput7');
-      var letterError = document.getElementById('letterError');
+        var fileInput3 = document.getElementById('fileInput3');
+        var payslipError = document.getElementById('payslipError');
+        var fileInput4 = document.getElementById('fileInput4');
+        var bankstatementError = document.getElementById('bankstatementError');
+        var fileInput5 = document.getElementById('fileInput5');
+        var passportError = document.getElementById('passportError');
+        var fileInput6 = document.getElementById('fileInput6');
+        var preapprovalError = document.getElementById('preapprovalError');
+        var fileInput7 = document.getElementById('fileInput7');
+        var letterError = document.getElementById('letterError');
 
-      var payslipExists = "{{$meta->uploads->where('name', 'nrc_file')->first()->path}}";
-      var bankExists = "{{$meta->uploads->where('name', 'bankstatement')->first()->path}}";
-      var passportExists = "{{$meta->uploads->where('name', 'passport')->first()->path}}";
-      var preapprovalExists = "{{$meta->uploads->where('name', 'preapproval')->first()->path}}";
-      var letterExists = "{{$meta->uploads->where('name', 'letterofintro')->first()->path}}";
+        var payslipExists = "{{ $util && $util->uploads->where('name', 'nrc_file')->first() ? $util->uploads->where('name', 'nrc_file')->first()->path : '' }}";
+        var bankExists = "{{ $util && $util->uploads->where('name', 'bankstatement')->first() ? $util->uploads->where('name', 'bankstatement')->first()->path : '' }}";
+        var passportExists = "{{ $util && $util->uploads->where('name', 'passport')->first() ? $util->uploads->where('name', 'passport')->first()->path : '' }}";
+        var preapprovalExists = "{{ $util && $util->uploads->where('name', 'preapproval')->first() ? $util->uploads->where('name', 'preapproval')->first()->path : '' }}";
+        var letterExists = "{{ $util && $util->uploads->where('name', 'letterofintro')->first() ? $util->uploads->where('name', 'letterofintro')->first()->path : '' }}";
+
 
         payslipError.textContent = '';
         bankstatementError.textContent = '';
         passportError.textContent = '';
         preapprovalError.textContent = '';
 
-      // we'll check if the input is not empty
-      if (!fileInput3.value && payslipExists === '') {
-        // alert('1');
-        payslipError.textContent = 'Please upload copy of Latest Payslip';
-      }
+        // we'll check if the input is not empty
+        if (!fileInput3.value && payslipExists === '') {
+            // alert('1');
+            payslipError.textContent = 'Please upload copy of Latest Payslip';
+        }
 
-      if (!fileInput4.value && bankExists === '' ) {
-        // alert('2');
-        bankstatementError.textContent = 'Please upload copy of Bank Statement';
-      }
-      if (!fileInput5.value && passportExists === '') {
-        // alert('3');
-        passportError.textContent = 'Please upload a Passport size photo';
-      }
-      if (!fileInput6.value && preapprovalExists === '') {
-        // alert('4');
-        preapprovalError.textContent = 'Please upload signed Preapproval form';
-      }
+        if (!fileInput4.value && bankExists === '' ) {
+            // alert('2');
+            bankstatementError.textContent = 'Please upload copy of Bank Statement';
+        }
+        if (!fileInput5.value && passportExists === '') {
+            // alert('3');
+            passportError.textContent = 'Please upload a Passport size photo';
+        }
+        if (!fileInput6.value && preapprovalExists === '') {
+            // alert('4');
+            preapprovalError.textContent = 'Please upload signed Preapproval form';
+        }
 
-        //   !fileInput7.value || letterExists === 'null' --letter of introduction
-      if (!fileInput3.value && payslipExists === '' ||
-        !fileInput4.value && bankExists === '' ||
-        !fileInput5.value && passportExists === '' ||
-        !fileInput6.value && preapprovalExists === ''
-        ){
-          return false;
-      } else {
-          // Prepare data to send to the server
-          var formData = new FormData();
+            //   !fileInput7.value || letterExists === 'null' --letter of introduction
+        if (!fileInput3.value && payslipExists === '' ||
+            !fileInput4.value && bankExists === '' ||
+            !fileInput5.value && passportExists === '' ||
+            !fileInput6.value && preapprovalExists === ''
+            ){
+            return false;
+        } else {
+            // Prepare data to send to the server
+            var formData = new FormData();
 
-          // Get the files
-          formData.append('payslip_file', fileInput3.files[0]);
-          formData.append('bankstatement', fileInput4.files[0]);
-          formData.append('passport', fileInput5.files[0]);
-          formData.append('preapproval', fileInput6.files[0]);
-          formData.append('letterofintro', fileInput7.files[0]);
+            // Get the files
+            formData.append('payslip_file', fileInput3.files[0]);
+            formData.append('bankstatement', fileInput4.files[0]);
+            formData.append('passport', fileInput5.files[0]);
+            formData.append('preapproval', fileInput6.files[0]);
+            formData.append('letterofintro', fileInput7.files[0]);
 
-          // Perform Fetch API request to the Laravel backend
-          fetch("{{ route('continue-loan') }}", {
-              method: 'POST',
-              body: formData
-          })
-          .then(response => response.json())
-          .then(data => {
-              // Handle the success response from the server
-              console.log('Data successfully updated or created:', data);
-          })
-          .catch(error => {
-              // Handle the error response from the server
-              // console.error('Error updating or creating data:', error);
-          });
-          return true;
-      }
+            // Perform Fetch API request to the Laravel backend
+            fetch("{{ route('continue-loan') }}", {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the success response from the server
+                console.log('Data successfully updated or created:', data);
+            })
+            .catch(error => {
+                // Handle the error response from the server
+                // console.error('Error updating or creating data:', error);
+            });
+            return true;
+        }
 
     }
 

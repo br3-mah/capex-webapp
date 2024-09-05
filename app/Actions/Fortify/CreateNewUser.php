@@ -26,7 +26,6 @@ class CreateNewUser implements CreatesNewUsers
             'fname' => ['required', 'string', 'max:255'],
             'lname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            // 'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['required', 'accepted'] : '',
             'phone' => [
                 'required', // Enforce presence
@@ -44,13 +43,6 @@ class CreateNewUser implements CreatesNewUsers
                 'password' => Hash::make($input['password']),
             ]);
             $user->assignRole('user');
-
-            // Get my applications & wallet
-            Wallet::create([
-                'email' => $user->email,
-                'user_id' => $user->id,
-                'phone' => $input['phone']
-            ]);
             return $user;
         } catch (\Throwable $th) {
             dd($th->getMessage());

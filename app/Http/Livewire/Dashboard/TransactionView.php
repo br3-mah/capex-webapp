@@ -9,6 +9,6 @@ class TransactionView extends Component
     public function render()
     {
         return view('livewire.dashboard.transaction-view')
-        ->layout('layouts.dashboard');
+        ->layout('layouts.app');
     }
 }

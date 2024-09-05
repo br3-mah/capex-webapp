@@ -216,11 +216,10 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         try {
-            $input = $request->toArray();
-            Validator::make($input, [
+            $form = $request->toArray();
+            Validator::make($form, [
                 'fname' => ['required', 'string', 'max:255'],
                 'lname' => ['required', 'string', 'max:255'],
-                // 'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore(auth()->user()->email)],
                 'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
                 'phone' => ['required'],
                 'address' => ['required'],
@@ -230,24 +229,25 @@ class UserController extends Controller
                 'id_type' => ['required'],
             ])->validateWithBag('updateProfileInformation');
 
+            // dd($form);
             $user = auth()->user();
-            $user->fname = $input['fname'];
-            $user->lname = $input['lname'];
-            $user->phone = $input['phone'];
+            $user->fname = $form['fname'];
+            $user->lname = $form['lname'];
+            $user->phone = $form['phone'];
             // $user->email = $input['email'];
-            $user->address = $input['address'];
-            $user->occupation = $input['occupation'];
-            $user->id_type = $input['id_type'];
-            $user->nrc_no = $input['nrc_no'];
-            $user->nrc = $input['nrc_no'];
-            $user->dob = $input['dob'];
-            $user->gender = $input['gender'];
+            $user->address = $form['address'];
+            $user->occupation = $form['occupation'];
+            $user->jobTitle = $form['occupation'];
+            $user->id_type = $form['id_type'];
+            $user->nrc_no = $form['nrc_no'];
+            $user->nrc = $form['nrc_no'];
+            $user->dob = $form['dob'];
+            $user->gender = $form['gender'];
+            $user->about_me = $form['about'];
             $user->save();
 
-            $this->isKYCComplete();
-
-
-
+            $this->uploadUserPhotos($request, $user);
+            $this->isUserKYCComplete();
             return redirect()->back()->with('success', 'Profile photo updated successfully.');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'An error occurred while updating the profile photo. '.$th->getMessage());

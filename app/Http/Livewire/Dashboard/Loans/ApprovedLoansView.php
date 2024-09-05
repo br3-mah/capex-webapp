@@ -13,7 +13,7 @@ use App\Traits\LoanTrait;
 use App\Traits\SettingTrait;
 
 class ApprovedLoansView extends Component
-{    
+{
     use EmailTrait, WalletTrait, LoanTrait, SettingTrait;
     public $loan_requests, $loan_request, $new_loan_user, $user_basic_pay, $user_net_pay, $loan_id;
     public $type = [];
@@ -26,14 +26,13 @@ class ApprovedLoansView extends Component
         try {
             // Retrieve users with the 'user' role, excluding their applications
             $this->users = User::role('user')->without('applications')->get();
-    
             if (auth()->user()->hasRole('user')) {
                 // Retrieve loan requests for the authenticated user and paginate the results (5 items per page)
                 $this->loan_requests = Application::with('loan')->where('user_id', auth()->user()->id)->orderBy('id', 'desc')->get();
                 $requests = Application::with('loan')->where('user_id', auth()->user()->id)->orderBy('id', 'desc')->paginate(5);
                 return view('livewire.dashboard.loans.approved-loans-view',[
                     'requests'=>$requests
-                ])->layout('layouts.dashboard');
+                ])->layout('layouts.app');
             }else{
                 if($this->current_configs('loan-approval')->value == 'auto'){
                     // get loan only if first review as approved
@@ -47,7 +46,7 @@ class ApprovedLoansView extends Component
                 }
                 return view('livewire.dashboard.loans.approved-loans-view',[
                     'requests'=>$requests
-                ])->layout('layouts.admin');
+                ])->layout('layouts.app');
             }
         } catch (\Throwable $th) {
             // If an exception occurs, set $loan_requests to an empty array
@@ -56,12 +55,12 @@ class ApprovedLoansView extends Component
             if (auth()->user()->hasRole('user')) {
                 return view('livewire.dashboard.loans.approved-loans-view',[
                     'requests'=>$requests
-                ])->layout('layouts.dashboard');
+                ])->layout('layouts.app');
             }else{
                 dd($th);
                 return view('livewire.dashboard.loans.approved-loans-view',[
                     'requests'=>$requests
-                ])->layout('layouts.admin');
+                ])->layout('layouts.app');
             }
         }
     }

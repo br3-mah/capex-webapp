@@ -12,6 +12,8 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\NewAccessToken;
 use Illuminate\Support\Str;
+
+
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -34,25 +36,41 @@ class User extends Authenticatable
         'phone',
         'phone2',
         'address',
-        'occupation',
+        'address2',
+        'email',
         'nrc',
         'nrc_no',
         'dob',
         'gender',
-        'loan_status',
-        'basic_pay',
-        'profile_photo_path',
-        'net_pay',
-        'id_type',
-        'email',
         'password',
-
-        'employeeNo',
-        'jobTitle',
         'ministry',
         'department',
+        'about_me',
+        // ---------------- configs --------
+        'loan_status',
+        'id_type',
         'opt_code',
-        'opt_verified'
+        'opt_verified',
+        // ---------------- Employer ---------
+        'employer',
+        'employeeNo',
+        'empaddress',
+        'empemail',
+        'empphone',
+        'occupation',
+        'basic_pay',
+        'net_pay',
+        // --------------- Next of Kin -------
+        'nokfname',
+        'noklname',
+        'nokphone',
+        'nokemail',
+        'nokdob',
+        'nokaddress',
+        'nokgender',
+        'noknrc',
+        'nokrelation',
+        'nokoccupation'
     ];
 
     /**
@@ -87,6 +105,25 @@ class User extends Authenticatable
         // 'create_token'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($application) {
+            $application->uuid = static::generateNumericUUID(5); // Generate 5-digit numeric UUID
+        });
+    }
+
+    protected static function generateNumericUUID($length = 5)
+    {
+        $digits = '0123456789';
+        $uuid = '';
+        for ($i = 0; $i < $length; $i++) {
+            $uuid .= $digits[rand(0, strlen($digits) - 1)];
+        }
+        return $uuid;
+    }
+
     public function getCreateTokenAttribute()
     {
         $token = $this->tokens()->create([
@@ -108,7 +145,16 @@ class User extends Authenticatable
 
 
     public static function meta(){
-        return User::where('id', auth()->user()->id)->with(['uploads', 'next_of_king', 'refs','bank'])->first();
+        return User::where('id', auth()->user()->id)->with([
+            'uploads',
+            'next_of_king',
+            'party',
+            'bank'])->first();
+    }
+
+    public static function user_meta($id){
+        return User::where('id', $id)->with(['uploads', 'next_of_king', 'refs','bank'])->first()->toArray();
+
     }
 
     public static function totalCustomerBorrowed($user){
@@ -125,7 +171,7 @@ class User extends Authenticatable
     public static function totalIncompleteKYCBorrowers(){
         return Application::where('complete', 1)->count();
     }
-    
+
     public function nextkin(){
         return $this->hasMany(NextOfKing::class);
     }
@@ -153,25 +199,54 @@ class User extends Authenticatable
 
     public function loans(){
         return $this->hasMany(Application::class)->orderBy('created_at', 'desc');
-    }    
+    }
 
     public function active_loans(){
         return $this->hasOne(Application::class)->where('status', 1)->where('complete', 1);
     }
+
     public function next_of_king()
     {
         return $this->hasMany(NextOfKing::class)->orderBy('created_at', 'desc');
     }
+
     public function refs()
     {
         return $this->hasMany(References::class)->orderBy('created_at', 'desc');
     }
+
     public function bank()
     {
         return $this->hasMany(BankDetails::class)->orderBy('created_at', 'desc');
     }
+
+    public function nrc_photos()
+    {
+        return $this->hasMany(NRCPhoto::class)->orderBy('created_at', 'desc');
+    }
+
     public function uploads(){
         return $this->hasMany(UserFile::class);
+    }
+
+    public function loan_notifications(){
+        return $this->hasMany(LoanNotification::class);
+    }
+
+    public function photos(){
+        return $this->hasMany(UserPhoto::class);
+    }
+
+    public function guarantors(){
+        return $this->hasMany(Guarantor::class);
+    }
+
+    public function party(){
+        return $this->hasMany(RelatedParty::class);
+    }
+
+    public function assigned_loans(){
+        return $this->hasMany(LoanManualApprover::class);
     }
     public function tickets(){
         return $this->belongsTo(Ticket::class);

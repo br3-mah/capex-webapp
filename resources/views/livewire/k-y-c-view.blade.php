@@ -1,3 +1,3 @@
 <div>
-    @include('profile.show')
+    {{-- @include('profile.show') --}}
 </div>

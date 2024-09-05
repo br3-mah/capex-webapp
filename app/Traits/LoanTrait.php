@@ -11,6 +11,7 @@ use App\Models\LoanPackage;
 use App\Models\LoanProduct;
 use App\Models\Loans;
 use App\Models\LoanStatus;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Notifications\LoanRequestNotification;
 use Carbon\Carbon;
@@ -23,6 +24,13 @@ use Illuminate\Support\Facades\Notification;
 trait LoanTrait{
     use EmailTrait;
     public $application;
+
+    public function all_applications(){
+        return Application::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->get();
+    }
+    public function all_transactions(){
+        return Transaction::with('application')->where('user_id', auth()->user()->id)->orderBy('id', 'desc')->get();
+    }
 
     public function get_all_loan_products(){
         return LoanProduct::with([
@@ -71,6 +79,19 @@ trait LoanTrait{
         ->first();
 
     }
+
+    public function get_loan_category($id){
+        return DB::table('loan_child_types')
+        ->where('id', $id)
+        ->get();
+    }
+
+    public function get_loan_type($id){
+        return DB::table('loan_types')
+        ->where('id', $id)
+        ->get();
+    }
+
     public function loan_product_name($id){
         return DB::table('loan_products')
         ->where('id', $id)
@@ -179,18 +200,48 @@ trait LoanTrait{
         }
     }
 
+    //!mportant
     public function getCurrentLoan(){
-        return Application::with('loan')
-        ->where('email', auth()->user()->email)
+        return Application::with('loan_product')->orWhere('status', 0)
+        ->orWhere('status', 2)
+        ->where('complete', 0)
         ->orWhere('user_id', auth()->user()->id)
         ->orderBy('created_at', 'desc') // Add this line to order by 'created_at' column in descending order
         ->first();
     }
+
     public function get_loan_details($id){
-        $data = Application::with('user.nextkin')
-        ->with('user.uploads')->where('id', $id)->first();
-        return $data;
+        return Application::with('user.uploads')->where('id', $id)->first(); 
     }
+
+    public function createUpdateTemporalLoan($data)
+    {
+        $application = $this->getCurrentLoan();
+        if ($application) {
+            // Update the existing application
+            $application->update([
+                'amount' => $data['amount'],
+                'repayment_plan' => $data['duration'],
+                'loan_product_id' => $data['loan_package'],
+                'loan_type_id' => $data['loan_type'], // Loan type
+                'loan_child_type_id' => $data['loan_category'],
+                'status' => 100,
+                'user_id' => auth()->user()->id
+            ]);
+        } else {
+            // Create a new application
+            Application::create([
+                'amount' => $data['amount'],
+                'repayment_plan' => $data['duration'],
+                'loan_product_id' => $data['loan_package'],
+                'loan_type_id' => $data['loan_type'], // Loan type
+                'loan_child_type_id' => $data['loan_category'],
+                'status' => 100,
+                'user_id' => auth()->user()->id
+            ]);
+        }
+    }
+
 
     public function apply_loan($data){
         try {

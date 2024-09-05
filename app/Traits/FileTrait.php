@@ -42,6 +42,13 @@ trait FileTrait{
                 ['path' => $nrc_file]
             );
         }
+        if ($request->hasFile('nrc_b_file')) {
+            $nrc_b_file = $request->file('nrc_b_file')->store('nrc_b_file', 'public');
+            UserFile::updateOrCreate(
+                ['name' => 'nrc_b_file', 'user_id' => auth()->user()->id],
+                ['path' => $nrc_b_file]
+            );
+        }
         if ($request->hasFile('tpin_file')) {
             $tpin_file = $request->file('tpin_file')->store('tpin_file', 'public');
             UserFile::updateOrCreate(

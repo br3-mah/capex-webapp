@@ -25,7 +25,6 @@
                                             </p>
                                         </div>
                                         <div class="">
-                                            {{-- <img src="https://img.freepik.com/premium-vector/funding-small-business-backing-startup-project-banking-loan-start-new-business-investment_566886-6085.jpg?w=740" alt=""> --}}
                                             <svg class="dot-svg" width="40" height="40" viewBox="0 0 89 90" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <circle cx="2.5" cy="2.5" r="2.5" fill="#D9D9D9"/>
                                                 <circle cx="23.5" cy="2.5" r="2.5" fill="#D9D9D9"/>

@@ -16,7 +16,7 @@ class CareerSettings extends Component
         $this->authorize('view system settings');
         $this->careers = CareerSetting::get();
         return view('livewire.dashboard.settings.career-settings')
-        ->layout('layouts.dashboard');
+        ->layout('layouts.app');
     }
 
     public function store(){

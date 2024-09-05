@@ -9,6 +9,6 @@ class PaymentGatePage extends Component
     public function render()
     {
         return view('livewire.dashboard.payment-gate-page')
-        ->layout('layouts.dashboard');
+        ->layout('layouts.app');
     }
 }

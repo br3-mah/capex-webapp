@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WalletController;
 use App\Http\Controllers\Auth\OTPController;
 use App\Http\Controllers\LoanApplicationController;
+use App\Http\Controllers\LoanProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -78,6 +79,10 @@ Route::get('/get-loan-defaulted-statuses', [SettingController::class, '__get_def
 Route::get('/get-loan-denied-statuses', [SettingController::class, '__get_denied_status']);
 Route::get('/get-loan-not-taken-up-statuses', [SettingController::class, '__get_not_taken_status']);
 
+//Dependent dropdown
+Route::get('/get-loan-categories/{loanTypeId}', [LoanProductController::class, 'getLoanCategories']);
+Route::get('/get-loan-packages/{loanCategoryId}', [LoanProductController::class, 'getLoanPackages']);
+Route::get('/get-loan-package-item/{packageId}', [LoanProductController::class, 'getLoanPackageDetails']);
 
 // Deprected
 Route::get('get-my-wallet/{id}', [LoanRequestController::class, 'getWallets']);

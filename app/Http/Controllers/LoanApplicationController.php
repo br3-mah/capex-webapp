@@ -537,64 +537,42 @@ class LoanApplicationController extends Controller
             return redirect()->back();
         }
     }
+
+
     public function continue_loan(Request $request){
         try {
             $data = $request->toArray();
-
-            // First Upload the files
             $this->uploadCommonFiles($request);
-
-            // Data Segmentation
-            if(isset($data['dob'])){
+            if(isset($data['phone'])){
                 $personal = [
                     'dob' => $data['dob'],
                     'nrc_no' => $data['nrc'],
-                    'id_type' => $data['nrc_id'],
+                    'id_type' => $data['id_type'],
                     'phone' => $data['phone'],
                     'employeeNo' => $data['employeeNo'],
                     'jobTitle' => $data['jobTitle'],
                     'ministry' => $data['ministry'],
                     'department' => $data['department'],
                     'borrower_id' => $data['borrower_id'],
-                    'gender'=> $data['gender']
+                    'gender'=> $data['gender'],
+                    'address'=> $data['address'],
                 ];
                 $this->updateUser($personal);
             }
 
-            if (isset($data['nextOfKinFirstName'])) {
-                $nok = [
-                    'nok_fname' => $data['nextOfKinFirstName'],
-                    'nok_lname' => $data['nextOfKinLastName'],
-                    'nok_phone' => $data['nextOfKinPhone'],
-                    'nok_relation' => $data['relationship'],
-                    'nok_address' => $data['physicalAddress'],
-                    'user_id' => $data['borrower_id']
-                ];
-                $this->createNOK($nok);
+            if (isset($data['amount']) && isset($data['duration']) && isset($data['loan_package'])) {
+                $this->createUpdateTemporalLoan($data);
             }
-            // $guarants = [
-            //     'gfname'=> $data['guarantorName'],
-            //     'gnrc_no'=> $data['guarantorNRC'],
-            //     'gdob'=> $data['guarantorDOB'],
-            //     'gphone'=> $data['guarantorContactNumber'],
-            //     'gphone2'=> $data['alternativeNumber'],
-            //     'gphonesp3'=> $data['spouseContactNumber'],
-            //     'gaddress'=> $data['guarantorAddress'],
-            //     'g_relation'=> $data['relationshipToBorrower'],
-            //     'application_id' => $data['application_id']
-            // ];
-            if (isset($data['hrFirstName'])) {
-                $refs = [
-                    'hrFname'=> $data['hrFirstName'],
-                    'hrLname'=> $data['hrLastName'],
-                    'hrContactNumber'=> $data['hrContactNumber'],
-                    'supervisorFirstName'=> $data['supervisorFirstName'],
-                    'supervisorLastName'=> $data['supervisorLastName'],
-                    'supervisorContactNumber'=> $data['supervisorContactNumber'],
-                    'user_id' => $data['borrower_id'],
-                    'application_id' => $data['application_id']
-                ];
-                $this->createRefs($refs);
+
+
+            if (isset($data['nokfname'])) {
+                $this->updateKinUser($data);
+            }
+            if (isset($data['rp_fname'])) {
+                $this->createRelatedParties($data);
+            }
+            if (isset($data['g_lname']) && isset($data['g_fname'])) {
+                $this->createGuarantors($data);
             }
 
             if (isset($data['bankName'])) {
@@ -608,40 +586,12 @@ class LoanApplicationController extends Controller
                 $this->createBankDetails($bank);
             }
 
-            // Update Loan info
-            if(isset($data['final'])){
-                $loan = Application::where('id',  $data['application_id'])->first();
-                $loan->continue = 0;
-                $loan->save();
-
-                $mail = [
-                    'user_id' => auth()->user()->id,
-                    'name' => auth()->user()->fname.' '.auth()->user()->lname,
-                    'loan_type' => $loan->type,
-                    'phone' => '',
-                    'duration' => $loan->repayment_plan,
-                    'amount' => $loan->amount,
-                    'type' => 'loan-application',
-                    'msg' => $loan->type.' loan submission form and kyc successfully completed.'
-                ];
-
-                // Send information to the admin
-                $this->send_loan_email($mail);
-
-                return view('livewire.dashboard.loans.success-page')
-                ->layout('layouts.dashboard');
-            }
-
-            if($request->wantsJson()){
-                return response()->json([
-                    "status" => 200,
-                    "success" => true
-                ]);
-            }else{
-                return redirect()->back();
-            }
+            return response()->json([
+                "status" => 200,
+                "success" => true
+            ]);
         } catch (\Throwable $th) {
-           return redirect()->back();
+           dd($th);
         }
     }
 

@@ -5,9 +5,12 @@ namespace App\Traits;
 use App\Mail\OTPVerificationCode;
 use App\Models\Application;
 use App\Models\BankDetails;
+use App\Models\Guarantor;
 use App\Models\NextOfKing;
 use App\Models\References;
+use App\Models\RelatedParty;
 use App\Models\User;
+use App\Models\UserPhoto;
 use App\Models\Wallet;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Collection;
@@ -96,10 +99,9 @@ trait UserTrait{
         }
     }
     public function isUserKYCComplete($id){
-        $loan = Application::where('status', 0)
-        ->where('complete', 0)
-        ->where('user_id', $id)
-        ->orderBy('created_at', 'desc')
+        $loan = Application::with('loan_product')->orWhere('status', 0)
+        ->orWhere('status', 2)->where('complete', 0)->orWhere('user_id', auth()->user()->id)
+        ->orderBy('created_at', 'desc') // Add this line to order by 'created_at' column in descending order
         ->get();
         $user = User::where('id', $id)->with('uploads')->get()->toArray();
         if($loan->first() !== null && !empty($user)){
@@ -107,9 +109,7 @@ trait UserTrait{
                 if(
                     isset($user[0]['uploads'][0]) &&
                     isset($user[0]['uploads'][1]) &&
-                    isset($user[0]['uploads'][2]) &&
-                    isset($user[0]['uploads'][3]) &&
-                    isset($user[0]['uploads'][4])
+                    isset($user[0]['uploads'][2])
                 ){
                     $loan->complete = 1;
                     $loan->save();
@@ -149,16 +149,33 @@ trait UserTrait{
     public function updateUser($data){
         $user = User::where('id', $data['borrower_id'])->first();
         $user->dob = $data['dob'];
-        $user->nrc_no = $data['nrc_no'];
         $user->phone = $data['phone'];
+        $user->nrc_no = $data['nrc_no'];
         $user->gender = $data['gender'];
         $user->id_type = $data['id_type'];
-        $user->employeeNo = $data['employeeNo'];
+        $user->address = $data['address'];
+        $user->address2 = $data['address'];
         $user->jobTitle = $data['jobTitle'];
         $user->ministry = $data['ministry'];
+        $user->employeeNo = $data['employeeNo'];
         $user->department = $data['department'];
         $user->save();
     }
+
+    public function updateKinUser($data){
+        $user = User::where('id', $data['borrower_id'])->first();
+        $user->noknrc = $data['noknrc'];
+        $user->nokfname = $data['nokfname'];
+        $user->noklname = $data['noklname'];
+        $user->nokphone = $data['nokphone'];
+        $user->nokemail = $data['nokemail'];
+        $user->nokaddress = $data['nokaddress'];
+        $user->nokoccupation = $data['nokoccupation'];
+        $user->nokrelation = $data['nokrelation'];
+        $user->nokgender = $data['nokgender'];
+        $user->save();
+    }
+
     public function createRefs($data){
         References::create($data);
         return true;
@@ -249,6 +266,76 @@ trait UserTrait{
 
         // Return the API response
         return $response;
+    }
+
+
+    //---Migration From Admin
+    public function createRelatedParties($data)
+    {
+        RelatedParty::updateOrCreate(
+            ['user_id' => $data['borrower_id'] ?? null], // Search criteria
+            [
+                'fname' => $data['rp_fname'] ?? null,
+                'lname' => $data['rp_lname'] ?? null,
+                'email' => $data['rp_email'] ?? null,
+                'phone' => $data['rp_phone'] ?? null,
+                'relation' => $data['rp_relation'] ?? null,
+                'occupation' => $data['rp_occupation'] ?? null,
+                'nrc_no' => $data['rp_nrc_no'] ?? null,
+                'address' => $data['rp_address'] ?? null,
+                'gender' => $data['rp_gender'] ?? null,
+                'user_id' => $data['borrower_id'] ?? null
+            ]
+        );
+        return true;
+    }    
+
+    public function createGuarantors($data){
+        Guarantor::create([
+            'email' => $data['g_email'] ?? null,
+            'fname' => $data['g_fname'] ?? null,
+            'lname' => $data['g_lname'] ?? null,
+            'phone' => $data['g_phone'] ?? null,
+            'relation' => $data['g_relation'] ?? null,
+            'address' => $data['g_address'] ?? null,
+            'gender' => $data['g_gender'] ?? null,
+            'user_id' => $data['borrower_id'] ?? null
+        ]);
+        return true;
+    }
+
+    public function uploadUserPhotos($request = null, $user)
+    {
+        // Handle Primary Photo Upload
+        if ($request->hasFile('primary_image_path')) {
+            $primaryPhotoPath = $request->file('primary_image_path')->store('users', 'public');
+            UserPhoto::updateOrCreate(
+                ['name' => 'primary', 'user_id' => $user->id],
+                ['path' => $primaryPhotoPath]
+            );
+        }
+
+        // Handle Secondary Photo Upload
+        if ($request->hasFile('secondary_image_path')) {
+            $secondaryPhotoPath = $request->file('secondary_image_path')->store('users', 'public');
+            UserPhoto::updateOrCreate(
+                ['name' => 'secondary', 'user_id' => $user->id],
+                ['path' => $secondaryPhotoPath]
+            );
+        }
+
+        // Handle Tertiary Photo Upload
+        if ($request->hasFile('tertiary_image_path')) {
+            $tertiaryPhotoPath = $request->file('tertiary_image_path')->store('users', 'public');
+            UserPhoto::updateOrCreate(
+                ['name' => 'tertiary', 'user_id' => $user->id],
+                ['path' => $tertiaryPhotoPath]
+            );
+        }
+    }
+
+    public function meta(){
+        return User::meta();
     }
 }
 

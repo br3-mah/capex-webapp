@@ -20,23 +20,23 @@ class MakePaymentView extends Component
 
     public function render()
     {
-        
+
         $this->loans = Loans::with('application')
                         ->where('closed', 0)
                         ->get();
         $this->transactions = Transaction::with('application.user')->orderBy('created_at', 'desc')->get();
         return view('livewire.dashboard.accounts.make-payment-view')
-        ->layout('layouts.admin');
+        ->layout('layouts.app');
     }
 
-    public function makepayment(){     
+    public function makepayment(){
         DB::beginTransaction();
         try {
             // Update Borrower Balance
             $borrower_loan = Loans::where('id', $this->loan_id)->with('application')->first();
-            
+
             $balance = Loans::loan_balance($borrower_loan->application->id);
-        
+
             if($this->amount <= $balance){
                 // Insert in main wallet
                 $this->repayLoanWalletFunds($this->amount);
@@ -48,7 +48,7 @@ class MakePaymentView extends Component
                     'transaction_fee' => 0,
                     'profit_margin' => $this->amount,
                     'proccess_by' => auth()->user()->fname.' '.auth()->user()->lname,
-                    'charge_amount' => $borrower_loan->payback 
+                    'charge_amount' => $borrower_loan->payback
                 ]);
 
                 // Update Installment
@@ -64,12 +64,12 @@ class MakePaymentView extends Component
                 }
 
                 DB::commit();
-                session()->flash('success', 'Successfully repaid '.$this->amount);  
+                session()->flash('success', 'Successfully repaid '.$this->amount);
             }else{
                 session()->flash('amount_invalid', 'The amount you enter is greater than the repayment amount. Failed Transaction');
             }
 
-            
+
         } catch (\Throwable $th) {
             DB::rollback();
             session()->flash('error', 'Oops something failed here, please contact the Administrator.');

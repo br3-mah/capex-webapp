@@ -9,6 +9,6 @@ class SettingsLanding extends Component
     public function render()
     {
         return view('livewire.dashboard.settings.settings-landing')
-        ->layout('layouts.dashboard');
+        ->layout('layouts.app');
     }
 }

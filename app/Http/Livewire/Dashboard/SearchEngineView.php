@@ -23,6 +23,6 @@ class SearchEngineView extends Component
     public function render()
     {
         return view('livewire.dashboard.search-engine-view')
-        ->layout('layouts.dashboard');
+        ->layout('layouts.app');
     }
 }

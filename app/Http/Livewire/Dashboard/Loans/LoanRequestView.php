@@ -38,18 +38,18 @@ class LoanRequestView extends Component
             $this->loan_requests = Application::with('loan')->where('user_id', auth()->user()->id)->orderBy('id', 'desc')->get();
             $requests = Application::with('loan')->where('user_id', auth()->user()->id)->orderBy('id', 'desc')->paginate(5);
             return view('livewire.dashboard.loans.loan-request-view',[
-                'requests'=>$requests
-            ])->layout('layouts.dashboard');
+                'requests' => $requests
+            ])->layout('layouts.app');
         } catch (\Throwable $th) {
             // If an exception occurs, set $loan_requests to an empty array
             $this->loan_requests = [];
             $requests = [];
             return view('livewire.dashboard.loans.loan-request-view',[
-                'requests'=>$requests
-            ])->layout('layouts.dashboard');
+                'requests' => $requests
+            ])->layout('layouts.app');
         }
     }
-    
+
 
     public function exportLoans(){
         switch ($this->status) {
@@ -65,7 +65,7 @@ class LoanRequestView extends Component
             case 3:
                 $name = 'Rejected';
                 break;
-            
+
             default:
                 $name = 'All';
                 break;
@@ -80,11 +80,11 @@ class LoanRequestView extends Component
     public function setLoanID($id){
         $this->loan_id = $id;
     }
-    
+
 
     // This method is the actual approval process - Recommended
     public function accept($id){
-        
+
         DB::beginTransaction();
         try {
             $x = Application::find($id);
@@ -127,14 +127,14 @@ class LoanRequestView extends Component
             session()->flash('warning', 'Insuficient funds in the company account, please update funds.');
         }
     }
-    
+
     // This method places the loan request on hold
     public function stall($id){
         try {
             $x = Application::find($id);
             $x->status = 2;
             $x->save();
-            
+
             $mail = [
                 'user_id' => '',
                 'application_id' => $x->id,
@@ -163,7 +163,7 @@ class LoanRequestView extends Component
             $x = Application::find($id);
             $x->status = 3;
             $x->save();
-            
+
             $mail = [
                 'user_id' => '',
                 'application_id' => $x->id,
@@ -191,7 +191,7 @@ class LoanRequestView extends Component
             $x = Application::find($id);
             $x->status = 3;
             $x->save();
-            
+
             $mail = [
                 'user_id' => '',
                 'application_id' => $x->id,
@@ -214,14 +214,14 @@ class LoanRequestView extends Component
 
     public function reviewLoan()
     {
-        
+
         Application::where('id', $this->loan_id)->update(['status' => 2]);
         LoanManualApprover::where('user_id', auth()->id())->update(['is_processing' => 1]);
         // Redirect to other page here
         Redirect::route('loan-details',['id' => $this->loan_id]);
         session()->flash('success', 'Loan successfully set under review!');
         sleep(3);
-        
+
     }
 
     public function closeModal()

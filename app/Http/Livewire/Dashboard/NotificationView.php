@@ -13,7 +13,7 @@ class NotificationView extends Component
         try {
             $this->notifications = auth()->user()->notifications()->get();
             return view('livewire.dashboard.notification-view')
-            ->layout('layouts.dashboard');
+            ->layout('layouts.app');
         } catch (\Throwable $th) {
             dd($th);
         }

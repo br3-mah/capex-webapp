@@ -9,6 +9,6 @@ class PaymentPage extends Component
     public function render()
     {
         return view('livewire.dashboard.payment-page')
-        ->layout('layouts.dashboard');
+        ->layout('layouts.app');
     }
 }

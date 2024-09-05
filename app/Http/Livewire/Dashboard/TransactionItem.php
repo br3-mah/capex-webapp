@@ -12,6 +12,6 @@ class TransactionItem extends Component
     {
         $this->transactions = Transaction::with('application.user')->orderBy('created_at', 'desc')->get();
         return view('livewire.dashboard.transaction-item')
-        ->layout('layouts.dashboard');
+        ->layout('layouts.app');
     }
 }

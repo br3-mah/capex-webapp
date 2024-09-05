@@ -11,58 +11,22 @@ class Application extends Model
     use HasFactory;
 
     protected $fillable = [
-        'lname',
-        'fname',
-        'email',
-        'phone',
-        'gender',
-        'type',
-        'loan_product_id',
         'repayment_plan',
         'amount',
         'interest',
         'payback_amount',
-
-        'glname',
-        'gfname',
-        'gemail',
-        'gphone',
-        'g_gender',
-        'g_relation',
-        'gnrc_no',
-        'gdob',
-        'gphone2',
-        'gphonesp3',
-        'gaddress',
-
-        'g2lname',
-        'g2fname',
-        'g2email',
-        'g2phone',
-        'g2_gender',
-        'g2_relation',
-
-        'nrc_file',
-        'tpin_file',
-        'business_file',
-        'payslip_file',
-        'bank_trans_file',
-        'bill_file',
+        'old_amount',
         'status',
-
         'user_id',
         'guest_id',
         'payback_amount',
         'penalty_addition',
         'due_date',
         'can_change',
-
         'processed_by',
         'approved_by',
-
         'complete',
         'doa',
-
         'monthly_payments',
         'maximum_deductable',
         'net_pay_blr', //net before loan recovery
@@ -75,7 +39,18 @@ class Application extends Model
         'nationality',
         'continue',
         'is_assigned',
-        'plp_sent'
+        'plp_sent',
+        'closed',
+        'desc',
+        'date_paid',
+        'note',
+        'mou_loan',
+        'penalties',
+        'related_party',
+        'days_late',
+        'loan_product_id',
+        'loan_type_id', //loan_type
+        'loan_child_type_id' //loan_category
     ];
     protected $appends = [
         'done_by',
@@ -89,6 +64,22 @@ class Application extends Model
         static::addGlobalScope('withUser', function ($builder) {
             $builder->with('user');
         });
+
+
+        static::creating(function ($application) {
+            $application->uuid = static::generateNumericUUID(5); // Generate 5-digit numeric UUID
+            $application->source = 'Web Application'; // Generate 5-digit numeric UUID
+        });
+    }
+
+    protected static function generateNumericUUID($length = 5)
+    {
+        $digits = '0123456789';
+        $uuid = '';
+        for ($i = 0; $i < $length; $i++) {
+            $uuid .= $digits[rand(0, strlen($digits) - 1)];
+        }
+        return $uuid;
     }
 
     public function getDoneByAttribute(){
@@ -155,7 +146,6 @@ class Application extends Model
     public static function currentApplication(){
         return Application::where('user_id', auth()->user()->id)
         ->orderBy('created_at', 'desc')->first();
-        // ->where('status', 0)->where('complete', 0)->first();
     }
 
     // Pending for payback

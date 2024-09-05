@@ -16,6 +16,7 @@ use App\Http\Livewire\Dashboard\Accounting\LoanStatementView;
 use App\Http\Livewire\Dashboard\Accounts\AccountView;
 use App\Http\Livewire\Dashboard\Accounts\MakePaymentView;
 use App\Http\Livewire\Dashboard\Accounts\MyProfile;
+use App\Http\Livewire\Dashboard\Applications\FormApplication;
 use App\Http\Livewire\Dashboard\Borrowers\BorrowerView;
 use App\Http\Livewire\Dashboard\Borrowers\LoanStatementView as BorrowersLoanStatementView;
 use App\Http\Livewire\Dashboard\Borrowers\SendBorrowerMessageView;
@@ -36,6 +37,7 @@ use App\Http\Livewire\Dashboard\Loans\LoanRepaymentView;
 use App\Http\Livewire\Dashboard\Loans\LoanRequestView;
 use App\Http\Livewire\Dashboard\Loans\LoanTrackingView;
 use App\Http\Livewire\Dashboard\Loans\MissedRepaymentsView;
+use App\Http\Livewire\Dashboard\Loans\MyLoanHistory;
 use App\Http\Livewire\Dashboard\Loans\NewLoanView;
 use App\Http\Livewire\Dashboard\Loans\PastMaturityDateView;
 use App\Http\Livewire\Dashboard\Loans\UpdateLoanView;
@@ -80,6 +82,7 @@ use App\Http\Livewire\SuccessEmailPage;
 use App\Http\Livewire\SuccessPage;
 use App\Http\Livewire\TeamPage;
 use App\Http\Livewire\TermsConditionPage;
+use App\Http\Livewire\UpdateKyc;
 use App\Http\Livewire\WelcomePage;
 use App\Http\Livewire\WithdrawRequestView;
 use App\Models\LoanWallet;
@@ -111,6 +114,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('otp-verification', [OTPController::class, 'index'])->name('otp');
     Route::get('/dashboard', DashboardView::class)->name('dashboard');
     Route::get('/search', SearchEngineView::class)->name('search');
+
     // Administrator
     Route::get('approved-loans', ApprovedLoansView::class)->name('approved-loans');
     Route::get('new-loan-request', NewLoanView::class)->name('new-loan');
@@ -132,7 +136,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('loan-statement/{id}', BorrowersLoanStatementView::class)->name('loan-statement');
     Route::get('send-messages-to-borrowers', SendBorrowerMessageView::class)->name('notify-borrowers');
 
-    // ---- loans
+    // ---- Loans
+    Route::get('my-loan-history', MyLoanHistory::class)->name('history');
     Route::get('apply-for-a-loan/{id}', LoanApplicationStandaloneView::class)->name('apply-for');
     Route::get('loan-details/{id}', LoanDetailView::class)->name('loan-details');
     Route::get('past-maturity-date', PastMaturityDateView::class)->name('past-maturity-date');
@@ -187,16 +192,22 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('test-page', TestPage::class)->name('test-page');
 
     // ------ KYC Profile
-    Route::get('kyc-profile', KYCView::class)->name('kyc');
+    Route::get('kyc-profile-update', KYCView::class)->name('kyc');
+    Route::get('kyc-update', UpdateKyc::class)->name('kyc-update');
+
     Route::post('updating-file-uploads', [LoanApplicationController::class, 'updateFiles'])->name('update-file-uploads');
     Route::post('updating-kyc-uploads', [LoanApplicationController::class, 'updateKYCFiles'])->name('update-kyc-uploads');
     Route::post('update-prof-pic', [UserController::class, 'updatePic'])->name('update-prof-pic');
     Route::post('update-profile', [UserController::class, 'updateProfile'])->name('update-profile');
 
     Route::get('my-profile', MyProfile::class)->name('my-profile');
+    Route::get('privacy-and-policy', UpdateKyc::class)->name('privacy');
+    Route::get('support', UpdateKyc::class)->name('support');
+    
 
     // ------- Loan Continue Completion
     Route::post('continue-loan', [LoanApplicationController::class, 'continue_loan'])->name('continue-loan');
+    Route::get('application-form', FormApplication::class)->name('form');
 
     // -------Ticket
     Route::resource('tickets', TicketController::class);
