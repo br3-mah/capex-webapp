@@ -52,7 +52,7 @@
         </div>
         <!-- Account Number -->
         <div>
-            <label for="accountNumber" class="block text-sm font-medium text-gray-700">Your Account Number</label>
+            <label for="accountNumber" class="block text-sm font-medium text-gray-700">Your Account Number (#)</label>
             <input type="text"
                    value="{{ $util && $util->bank && $util->bank->first() ? $util->bank->first()->accountNumber : '' }}"
                    class="form-input mt-1 block w-full rounded-md border-2 border-sky-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
@@ -63,7 +63,7 @@
         </div>
         <!-- Account Names -->
         <div>
-            <label for="accountNames" class="block text-sm font-medium text-gray-700">Account Number</label>
+            <label for="accountNames" class="block text-sm font-medium text-gray-700">Account Name</label>
             <input type="text"
                    value="{{ $util && $util->bank && $util->bank->first() ? $util->bank->first()->accountNames : '' }}"
                    class="form-input mt-1 block w-full rounded-md border-2 border-sky-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"

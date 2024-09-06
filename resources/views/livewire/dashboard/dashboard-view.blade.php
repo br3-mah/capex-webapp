@@ -11,16 +11,22 @@
     <!-- End Breadcrumb -->
     <div class="flex flex-col gap-4 min-h-[calc(100vh-212px)]">
         @if ($my_loan)
+            {{-- Have application  --}}
             @if ($my_loan->complete == 1)
-                @include('livewire.dashboard.__parts._dashboard-pending')
+                @if ($my_loan->status == 1)
+                    @include('livewire.dashboard.__parts._dashboard-repayment')
+                @elseif($my_loan->status == 3)
+                    @include('livewire.dashboard.__parts._dashboard-pending')
+                @endif
             @else
                 @include('livewire.dashboard.__parts._dashboard-resume')
             @endif
         @else
+            {{-- Dont have application  --}}
             @if ($my_loan->status == 1)
-            @include('livewire.dashboard.__parts._dashboard-open')
+                @include('livewire.dashboard.__parts._dashboard-open')
             @else
-            @include('livewire.dashboard.__parts._dashboard-new')
+                @include('livewire.dashboard.__parts._dashboard-new')
             @endif
         @endif
 

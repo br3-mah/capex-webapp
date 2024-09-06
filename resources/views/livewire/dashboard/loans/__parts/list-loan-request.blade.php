@@ -33,7 +33,7 @@
                         <span class="inline-flex items-center rounded shadow-md shadow-danger/50 text-xs justify-center px-1.5 py-0.5 bg-danger text-white">Rejected</span>
                         @endif
                     </div>
-                    <button class="inline-flex items-center rounded text-xs justify-center px-1.5 py-0.5 border border-purple text-purple">View Details</button>
+                    <a href="{{ route('loan-details', ['id' => $loan->id]) }}" class="inline-flex items-center rounded text-xs justify-center px-1.5 py-0.5 border border-purple text-purple">View Details</a>
                 </div>
             </a>
             @empty

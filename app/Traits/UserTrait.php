@@ -311,7 +311,8 @@ trait UserTrait{
             $primaryPhotoPath = $request->file('primary_image_path')->store('users', 'public');
             UserPhoto::updateOrCreate(
                 ['name' => 'primary', 'user_id' => $user->id],
-                ['path' => $primaryPhotoPath]
+                ['path' => $primaryPhotoPath],
+                ['source' => 'web']
             );
         }
 
@@ -320,7 +321,8 @@ trait UserTrait{
             $secondaryPhotoPath = $request->file('secondary_image_path')->store('users', 'public');
             UserPhoto::updateOrCreate(
                 ['name' => 'secondary', 'user_id' => $user->id],
-                ['path' => $secondaryPhotoPath]
+                ['path' => $secondaryPhotoPath],
+                ['source' => 'web']
             );
         }
 
@@ -329,7 +331,8 @@ trait UserTrait{
             $tertiaryPhotoPath = $request->file('tertiary_image_path')->store('users', 'public');
             UserPhoto::updateOrCreate(
                 ['name' => 'tertiary', 'user_id' => $user->id],
-                ['path' => $tertiaryPhotoPath]
+                ['path' => $tertiaryPhotoPath],
+                ['source' => 'web']
             );
         }
     }

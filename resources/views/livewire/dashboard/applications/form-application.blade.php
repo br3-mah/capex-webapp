@@ -13,11 +13,11 @@
                         <div id="step1" class="step w-full max-w-6xl mx-auto bg-gradient-to-br from-blue-50 to-purple-50 shadow-xl rounded-2xl overflow-hidden">
                             <div class="p-12">
                                 <div class="flex justify-between items-center mb-8 py-4">
-                                    <h6 class="text-3xl font-bold text-primary">Application Basic Info</h6>
+                                    <h6 class="text-3xl font-bold text-info">Application Basic Info</h6>
                                     <div class="bg-indigo-100 text-indigo-800 text-base font-medium px-4 py-2 rounded-full shadow-sm">Step 1 of 6</div>
                                 </div>
 
-                                <div class="bg-white p-8 rounded-xl shadow-sm mb-8">
+                                <div class="bg-white p-8 shadow-sm mb-8">
                                     <!-- Assuming __basic_info component exists -->
                                     @include('livewire.dashboard.__parts.__basic_info')
                                 </div>
@@ -38,7 +38,7 @@
 
                         <div wire:ignore id="step2" class="step w-full">
                             <div class="flex justify-between items-center mb-8 py-4">
-                                <h6 class="text-3xl font-bold text-gray-800">NRC and/or TPin Upload (KYC)</h6>
+                                <h6 class="text-3xl font-bold text-info">NRC and/or TPin Upload (KYC)</h6>
                                 <div class="bg-indigo-100 text-indigo-800 text-base font-medium px-4 py-2 rounded-full shadow-sm">Step 2 of 6</div>
                             </div>
                             @include('livewire.dashboard.__parts.__kyc_uploads')
@@ -62,7 +62,7 @@
                         <!-- Next of Kin Info -->
                         <div wire:ignore class="step" id="step3">
                             <div class="flex justify-between items-center mb-8 py-4">
-                                <h6 class="text-3xl font-bold text-gray-800">Next Of Kin</h6>
+                                <h6 class="text-3xl font-bold text-info">Next Of Kin</h6>
                                 <div class="bg-indigo-100 text-indigo-800 text-base font-medium px-4 py-2 rounded-full shadow-sm">Step 3 of 6</div>
                             </div>
                             @include('livewire.dashboard.__parts.__next-of-kin')
@@ -85,7 +85,7 @@
                         <!-- References -->
                         <div wire:ignore class="step" id="step4">
                             <div class="flex justify-between items-center mb-8 py-4">
-                                <h6 class="text-3xl font-bold text-gray-800">Related Party</h6>
+                                <h6 class="text-3xl font-bold text-info">Related Party</h6>
                                 <div class="bg-indigo-100 text-indigo-800 text-base font-medium px-4 py-2 rounded-full shadow-sm">Step 4 of 6</div>
                             </div>
                             @include('livewire.dashboard.__parts.__references')
@@ -108,7 +108,7 @@
                         <!-- Bank Details -->
                         <div wire:ignore class="step" id="step5">
                             <div class="flex justify-between items-center mb-8 py-4">
-                                <h6 class="text-3xl font-bold text-gray-800">Your Bank Info</h6>
+                                <h6 class="text-3xl font-bold text-info">Your Bank Info</h6>
                                 <div class="bg-indigo-100 text-indigo-800 text-base font-medium px-4 py-2 rounded-full shadow-sm">Step 5 of 6</div>
                             </div>
                             @include('livewire.dashboard.__parts.__bank-info')
@@ -131,7 +131,7 @@
                         <!-- Bank Details -->
                         <div wire:ignore class="step" id="step6">
                             <div class="flex justify-between items-center mb-8 py-4">
-                                <h6 class="text-3xl font-bold text-gray-800">Support Documents</h6>
+                                <h6 class="text-3xl font-bold text-info">Support Documents</h6>
                                 <div class="bg-indigo-100 text-indigo-800 text-base font-medium px-4 py-2 rounded-full shadow-sm">Step 6 of 6</div>
                             </div>
                             @include('livewire.dashboard.__parts.__doc_upload')
@@ -155,7 +155,7 @@
                         <!-- Loan Details -->
                         <div class="step p-6 bg-white shadow-md rounded-lg" id="step7">
                             <div class="flex justify-between items-center mb-8 py-4">
-                                <h6 class="text-3xl font-bold text-gray-800">My Application Summary</h6>
+                                <h6 class="text-3xl font-bold text-info">My Application Summary</h6>
                                 <div class="bg-indigo-100 text-indigo-800 text-base font-medium px-4 py-2 rounded-full shadow-sm">Step 6 of 6</div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

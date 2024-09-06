@@ -43,7 +43,26 @@
           @endif
         </div>
       </div>
-  
+      <script>
+        function previewImages(event, previewContainerId) {
+            const fileInput = event.target;
+            const previewContainer = document.getElementById(previewContainerId);
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    // Set the image preview
+                    previewContainer.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover rounded-md" alt="Image Preview">`;
+                };
+
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                previewContainer.innerHTML = 'Upload your photo';
+            }
+        }
+
+      </script>
   
       <!-- Input Fields -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -113,7 +132,7 @@
       </div>
   
       <!-- Submit Button -->
-      <button type="submit" class="w-full py-3 bg-purple-600 text-white font-bold rounded-md hover:bg-purple-500 transition-colors">
+      <button type="submit" class="btn bg-purple border border-purple rounded-md text-white transition-all duration-300 hover:bg-purple/[0.85] hover:border-purple/[0.85]">
         Save Changes
       </button>
     </form>

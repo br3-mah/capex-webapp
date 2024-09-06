@@ -17,6 +17,7 @@ class UserPhoto extends Model
         'user_id',  // Foreign key referencing the user
         'name',     // Name of the photo (primary, secondary, tertiary)
         'path',     // Path to the photo file
+        'source'
     ];
 
     // Define any relationships, if necessary

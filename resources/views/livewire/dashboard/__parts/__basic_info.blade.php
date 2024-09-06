@@ -55,17 +55,17 @@
                 <label for="duration" class="form-label">Loan Duration</label>
                 <select name="duration" id="duration" class="form-input block w-full rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
                     @if ($loan)
-                        <option value="{{ $loan->repayment_plan ?? '' }}">K {{ $loan->repayment_plan ?? '' }} Month(s)</option>
+                        <option value="{{ $loan->repayment_plan ?? '' }}">{{ $loan->repayment_plan ?? '' }} Month(s)</option>
                     @endif
                     <option>Choose...</option>
                 </select>
                 <small id="durationError" class="text-danger text-xs"></small>
             </div>
-        </div>
-        <div class="flex-1 min-w-[calc(50%-1rem)]">
-            <label for="dob" class="block text-sm font-medium text-blue-700">Date of Birth</label>
-            <input type="date" value="{{ auth()->user()->dob ?? '' }}" id="dob" name="dob" class="form-input mt-1 block w-full rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
-            <small id="dobError" class="text-danger text-xs"></small>
+            <div class="flex-1 min-w-[calc(50%-1rem)]">
+                <label for="dob" class="block text-sm font-medium text-blue-700">Date of Birth</label>
+                <input type="date" value="{{ auth()->user()->dob ?? '' }}" id="dob" name="dob" class="form-input mt-1 block w-full rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
+                <small id="dobError" class="text-danger text-xs"></small>
+            </div>
         </div>
         <script>
             // Function to format the date as YYYY-MM-DD

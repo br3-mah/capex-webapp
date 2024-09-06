@@ -96,12 +96,17 @@
                         </div>
                     </div> --}}
                     <div class="flex items-center justify-end gap-4">
-                        <a href="{{ route('form') }}" class="transition-all duration-300 rounded-md btn bg-purple/20 text-purple hover:bg-purple hover:text-white">
+                       @if ($loan->status != 2 && $loan->status != 1)
+                       <a href="{{ route('form') }}" class="transition-all duration-300 rounded-md btn bg-purple/20 text-purple hover:bg-purple hover:text-white">
                             <span>Update Loan Application</span>
                         </a>
-                        <a href="{{ route('transaction.item', ['view'=>'payments']) }}" class="transition-all duration-300 rounded-md btn bg-danger/20 text-danger hover:bg-danger hover:text-white">
+                       @endif
+                       
+                       @if ($loan->status == 1)
+                       <a href="{{ route('transaction.item', ['view'=>'payments']) }}" class="transition-all duration-300 rounded-md btn bg-danger/20 text-danger hover:bg-danger hover:text-white">
                             <span>Make Repayment</span>
                         </a>
+                       @endif
                     </div>
                 </div>
             </div>

@@ -12,6 +12,7 @@ class UserFile extends Model
         'name',
         'path',
         'user_id',
+        'source'
     ];
 
     public function user(){

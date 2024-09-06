@@ -46,6 +46,7 @@ class User extends Authenticatable
         'ministry',
         'department',
         'about_me',
+        'usource',
         // ---------------- configs --------
         'loan_status',
         'id_type',
