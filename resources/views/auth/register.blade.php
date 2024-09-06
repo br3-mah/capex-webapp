@@ -100,7 +100,7 @@
                     </button>
                 </form>
 
-                <p class="mt-5 text-center text-muted dark:text-darkmuted">Already a member? <a href="login.php" class="text-black dark:text-white">Sign In</a></p>
+                <p class="mt-5 text-center text-muted dark:text-darkmuted">Already a member? <a href="{{ route('login') }}" class="text-black dark:text-white">Sign In</a></p>
             </div>
         </div>
         <!-- End Footer -->
