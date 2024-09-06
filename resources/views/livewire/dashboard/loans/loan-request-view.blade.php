@@ -1,7 +1,7 @@
 <div class="w-full">
     @if(!empty($loan_requests->toArray()))
     <div class="w-full">
-        <div style="background-color: rgb(2, 3, 129)" class="flex items-center justify-between p-5">
+        <div style="background-color: rgb(2, 3, 129)" class="flex items-center p-5 justtify-between text-warning">
             <h1 class="flex gap-4 text-[#db9326]">
                 <span class="text-3xl font-bold">All Application</span>
             </h1>
