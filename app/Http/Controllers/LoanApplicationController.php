@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Session;
 class LoanApplicationController extends Controller
 {
     use EmailTrait, LoanTrait, UserTrait, WalletTrait, FileTrait, SettingTrait;
+    public $loan;
     /**
      * Display a listing of the resource.
      *
@@ -507,6 +508,75 @@ class LoanApplicationController extends Controller
             dd($th);
         }
     }
+
+
+    public function completeApplication(Request $request)
+{
+    $request->validate([
+        'loan_id' => 'required|integer|exists:applications,id',
+    ]);
+
+    // Retrieve the loan using the provided loan_id
+    $loan = Application::find($request->input('loan_id'));
+    
+    if (!$loan) {
+        return back()->with('error', 'Loan not found.');
+    }
+
+    DB::beginTransaction();
+    try {
+        // Set the loan for further operations
+        $this->loan = $loan;
+        
+        $this->updateLoan();
+        $status = $this->getFirstLoanStatus();
+        if (!$status) {
+            throw new \Exception('Loan status not found for the given loan product.');
+        }
+        $this->insertApplicationStage($status);
+        DB::commit();
+
+        return redirect()->route('dashboard')->with('success', 'Application completed successfully.');
+    } catch (\Throwable $th) {
+        DB::rollBack();
+        Log::error('Failed to complete application: ' . $th->getMessage());
+        return back()->with('error', 'An error occurred while completing the application. Please try again.'); 
+    }
+}
+
+private function updateLoan()
+{
+    $this->loan->continue = 0;
+    $this->loan->complete = 1;
+    $this->loan->status = 0;
+    $this->loan->source = 'Web Application';
+    $this->loan->save();
+}
+
+private function getFirstLoanStatus()
+{
+    return DB::table('loan_statuses')
+        ->join('statuses', 'loan_statuses.status_id', '=', 'statuses.id')
+        ->select('loan_statuses.*', 'statuses.stage')
+        ->where('loan_statuses.loan_product_id', $this->loan->loan_product_id)
+        ->orderBy('loan_statuses.id', 'asc')
+        ->first();
+}
+
+private function insertApplicationStage($status)
+{
+    DB::table('application_stages')->insert([
+        'application_id' => $this->loan->id,
+        'loan_status_id' => $status->id ?? 1, // Fallback to 1 if status is not found
+        'state' => 'current',
+        'status' => $status->stage ?? 'processing', // Default to 'processing' if stage is not available
+        'stage' => 'processing',
+        'prev_status' => 'current',
+        'curr_status' => '',
+        'position' => 1
+    ]);
+}
+
     public function destroy($id)
     {
         //

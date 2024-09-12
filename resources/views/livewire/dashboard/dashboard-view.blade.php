@@ -15,18 +15,22 @@
             @if ($my_loan->complete == 1)
                 @if ($my_loan->status == 1)
                     @include('livewire.dashboard.__parts._dashboard-repayment')
+                @elseif($my_loan->status == 2)
+                    @include('livewire.dashboard.__parts._dashboard-processing')
                 @elseif($my_loan->status == 3)
+                    @include('livewire.dashboard.__parts._dashboard-rejected')
+                @else
                     @include('livewire.dashboard.__parts._dashboard-pending')
                 @endif
             @else
                 @include('livewire.dashboard.__parts._dashboard-resume')
             @endif
         @else
-            {{-- Dont have application  --}}
-            @if ($my_loan->status == 1)
-                @include('livewire.dashboard.__parts._dashboard-open')
-            @else
+            {{-- Dont have current requested application  --}}
+            @if ($my_loan->closed == 1)
                 @include('livewire.dashboard.__parts._dashboard-new')
+            @else
+                @include('livewire.dashboard.__parts._dashboard-open')
             @endif
         @endif
 
@@ -136,7 +140,7 @@
                             </div>
                         @endforeach
                     @else
-                        <p class="text-gray-600 dark:text-gray-400 py-20 my-10">You have no recent loan repayments.</p>
+                        <p class="py-20 my-10 text-gray-600 dark:text-gray-400">You have no recent loan repayments.</p>
                     @endif
                 </div>
             </div>

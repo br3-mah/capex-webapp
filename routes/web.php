@@ -211,6 +211,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
     // -------Ticket
     Route::resource('tickets', TicketController::class);
+    Route::post('/complete-application', [LoanApplicationController::class, 'completeApplication'])->name('completeApplication');
 
 });
 
