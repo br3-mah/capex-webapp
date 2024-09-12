@@ -1,5 +1,5 @@
 <div>
-    <div class="w-full" style="overflow-y: scroll; overflow-x:hidden; height:full">
+    <div class="w-full px-2" style="overflow-y: scroll; overflow-x:hidden; height:full">
 
             <div class="w-full py-2 pb-2 "  id="wizard" enctype="multipart/form-data">
                 @csrf
@@ -11,7 +11,7 @@
                 <!-- Personal Info -->
                 <div id="step1" class="w-full max-w-6xl mx-auto overflow-hidden shadow-xl step bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl">
                     <div class="p-12">
-                        <div class="flex items-center justify-between py-4 mb-8">
+                        <div class="items-center justify-between py-4 mb-8 lg:flex">
                             <h6 class="text-3xl font-bold text-info">Application Basic Info</h6>
                             <div class="px-4 py-2 text-base font-medium text-indigo-800 bg-indigo-100 rounded-full shadow-sm">Step 1 of 6</div>
                         </div>
@@ -33,7 +33,7 @@
                 </div>
 
                 <div wire:ignore id="step2" class="w-full step">
-                    <div class="flex items-center justify-between py-4 mb-8">
+                    <div class="items-center justify-between py-4 mb-8 lg:flex">
                         <h6 class="text-3xl font-bold text-info">Upload NRC (Back and Front)</h6>
                         <div class="px-4 py-2 text-base font-medium text-indigo-800 bg-indigo-100 rounded-full shadow-sm">Step 2 of 6</div>
                     </div>
@@ -57,7 +57,7 @@
 
                 <!-- Next of Kin Info -->
                 <div wire:ignore class="step" id="step3">
-                    <div class="flex items-center justify-between py-4 mb-8">
+                    <div class="items-center justify-between py-4 mb-8 lg:flex">
                         <h6 class="text-3xl font-bold text-info">Next Of Kin</h6>
                         <div class="px-4 py-2 text-base font-medium text-indigo-800 bg-indigo-100 rounded-full shadow-sm">Step 3 of 6</div>
                     </div>
@@ -80,7 +80,7 @@
 
                 <!-- References -->
                 <div wire:ignore class="step" id="step4">
-                    <div class="flex items-center justify-between py-4 mb-8">
+                    <div class="items-center justify-between py-4 mb-8 lg:flex">
                         <h6 class="text-3xl font-bold text-info">Related Party</h6>
                         <div class="px-4 py-2 text-base font-medium text-indigo-800 bg-indigo-100 rounded-full shadow-sm">Step 4 of 6</div>
                     </div>
@@ -103,7 +103,7 @@
 
                 <!-- Bank Details -->
                 <div wire:ignore class="step" id="step5">
-                    <div class="flex items-center justify-between py-4 mb-8">
+                    <div class="items-center justify-between py-4 mb-8 lg:flex">
                         <h6 class="text-3xl font-bold text-info">Your Bank Info</h6>
                         <div class="px-4 py-2 text-base font-medium text-indigo-800 bg-indigo-100 rounded-full shadow-sm">Step 5 of 6</div>
                     </div>
@@ -126,7 +126,7 @@
 
                 <!-- Bank Details -->
                 <div wire:ignore class="step" id="step6">
-                    <div class="flex items-center justify-between py-4 mb-8">
+                    <div class="items-center justify-between py-4 mb-8 lg:flex">
                         <h6 class="text-3xl font-bold text-info">Support Documents</h6>
                         <div class="px-4 py-2 text-base font-medium text-indigo-800 bg-indigo-100 rounded-full shadow-sm">Step 6 of 6</div>
                     </div>
@@ -150,7 +150,7 @@
 
                 <!-- Loan Details -->
                 <div class="p-6 bg-white rounded-lg shadow-md step" id="step7">
-                    <div class="flex items-center justify-between py-4 mb-8">
+                    <div class="items-center justify-between py-4 mb-8 lg:flex">
                         <h6 class="text-3xl font-bold text-info">My Application Summary</h6>
                         <div class="px-4 py-2 text-base font-medium text-indigo-800 bg-indigo-100 rounded-full shadow-sm">Step 6 of 6</div>
                     </div>
