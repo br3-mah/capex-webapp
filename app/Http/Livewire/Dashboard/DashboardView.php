@@ -29,6 +29,8 @@ class DashboardView extends Component
         if (auth()->user()->hasRole('user')) {
             return view('livewire.dashboard.dashboard-view')
             ->layout('layouts.app');
+        }else{
+            return view('livewire.dashboard.not-user-view')->layout('layouts.guest');
         }
     }
 }

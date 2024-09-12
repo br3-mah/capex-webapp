@@ -1,11 +1,11 @@
 {{-- This is the components.__basic_info --}}
 <div wire:ignore.self class="space-y-6">
     <div class="flex flex-wrap gap-4 mb-4">
-        <div class="flex w-full justify-between gap-4">
+        <div class="flex justify-between w-full gap-4">
             <div class="flex-1 min-w-[calc(50%-1rem)]">
                 <label for="loanType" class="form-label">Type of Loan</label>
                 
-                <select name="loan_type_id" id="loanType" class="form-input block w-full rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
+                <select name="loan_type_id" id="loanType" class="block w-full border-2 border-blue-500 rounded-md shadow-sm form-input focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
                     @if ($loan)
                     <option selected value="{{ $type->first()->id }}">{{ $type->first()->name }}</option>
                     @endif
@@ -14,155 +14,152 @@
                         <option value="{{ $lt->id }}">{{ $lt->name }}</option>
                     @endforeach
                 </select>
-                <small id="loanTypeError" class="text-danger text-xs"></small>
+                <small id="loanTypeError" class="text-xs text-danger"></small>
             </div>
 
             <div class="flex-1 min-w-[calc(50%-1rem)]">
                 <label for="loanCategory" class="form-label">Loan Category</label>
-                <select name="loan_child_type_id" id="loanCategory" class="form-input block w-full rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm" disabled>
+                <select name="loan_child_type_id" id="loanCategory" class="block w-full border-2 border-blue-500 rounded-md shadow-sm form-input focus:border-blue-700 focus:ring-blue-700 sm:text-sm" disabled>
                     @if ($loan)
                     <option selected value="{{ $category->first()->id }}">{{ $category->first()->name }}</option>
                     @endif
                     <option>Choose...</option>
                 </select>
-                <small id="loanCategoryError" class="text-danger text-xs"></small>
+                <small id="loanCategoryError" class="text-xs text-danger"></small>
             </div>
 
             <div class="flex-1 min-w-[calc(50%-1rem)]">
                 <label for="loanPackage" class="form-label">Choose a Package</label>
-                <select name="loan_product_id" id="loanPackage" class="form-input block w-full rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm" disabled>
+                <select name="loan_product_id" id="loanPackage" class="block w-full border-2 border-blue-500 rounded-md shadow-sm form-input focus:border-blue-700 focus:ring-blue-700 sm:text-sm" disabled>
                     @if ($loan)
                     <option selected value="{{ $loan->loan_product->id }}">{{ $loan->loan_product->name }}</option>
                     @endif
                     <option>Choose...</option>
                 </select>
-                <small id="loanPackageError" class="text-danger text-xs"></small>
+                <small id="loanPackageError" class="text-xs text-danger"></small>
             </div>
         </div>
-        <div class="flex w-full justify-between gap-4">
+        <div class="flex justify-between w-full gap-4">
             <div class="flex-1 min-w-[calc(50%-1rem)]">
                 <label for="amount" class="form-label">How much do you want to Borrow?</label>
-                <select name="amount" id="amount"  class="form-input block w-full rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
+                <select name="amount" id="amount"  class="block w-full border-2 border-blue-500 rounded-md shadow-sm form-input focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
                     @if ($loan)
                         <option value="{{ $loan->amount ?? '' }}">K {{ $loan->amount ?? '' }}</option>
                     @endif
                     <option>Choose...</option>
                 </select>
-                <small id="amountError" class="text-danger text-xs"></small>
+                <small id="amountError" class="text-xs text-danger"></small>
             </div>
 
             <div class="flex-1 min-w-[calc(50%-1rem)]">
                 <label for="duration" class="form-label">Loan Duration</label>
-                <select name="duration" id="duration" class="form-input block w-full rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
+                <select name="duration" id="duration" class="block w-full border-2 border-blue-500 rounded-md shadow-sm form-input focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
                     @if ($loan)
                         <option value="{{ $loan->repayment_plan ?? '' }}">{{ $loan->repayment_plan ?? '' }} Month(s)</option>
                     @endif
                     <option>Choose...</option>
                 </select>
-                <small id="durationError" class="text-danger text-xs"></small>
+                <small id="durationError" class="text-xs text-danger"></small>
             </div>
             <div class="flex-1 min-w-[calc(50%-1rem)]">
                 <label for="dob" class="block text-sm font-medium text-blue-700">Date of Birth</label>
-                <input type="date" value="{{ auth()->user()->dob ?? '' }}" id="dob" name="dob" class="form-input mt-1 block w-full rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
-                <small id="dobError" class="text-danger text-xs"></small>
+                <input type="text" id="dob" name="dob" class="block w-full mt-1 border-2 border-blue-500 rounded-md shadow-sm form-input focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
+                <small id="dobError" class="text-xs text-danger"></small>
             </div>
+
+            <!-- Include Flatpickr CSS and JS -->
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+            <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+            <script>
+                // Initialize Flatpickr on the date input
+                flatpickr("#dob", {
+                    dateFormat: "Y-m-d",
+                    minDate: "1900-01-01",
+                    maxDate: new Date().fp_incr(-16 * 365), // Max date 16 years ago
+                    defaultDate: new Date(new Date().setFullYear(new Date().getFullYear() - 16))
+                });
+            </script>
+
         </div>
-        <script>
-            // Function to format the date as YYYY-MM-DD
-            function formatDate(date) {
-                var year = date.getFullYear();
-                var month = ('0' + (date.getMonth() + 1)).slice(-2);
-                var day = ('0' + date.getDate()).slice(-2);
-                return `${year}-${month}-${day}`;
-            }
-
-            // Calculate the date 16 years ago
-            var currentDate = new Date();
-            var dobDate = new Date(currentDate.getFullYear() - 16, currentDate.getMonth(), currentDate.getDate());
-
-            // Set the default value for the date input
-            var dobInput = document.getElementById('dob');
-            dobInput.value = formatDate(dobDate);
-        </script>
 
         <div class="flex-1 min-w-[calc(50%-1rem)]">
             <label for="phone" class="block text-sm font-medium text-blue-700">Contact Phone Number</label>
             <div class="relative mt-1">
-                <input id="phone" value="{{ auth()->user()->phone }}" type="text" data-mask='0000 000 000' name="phone" class="form-input block w-full rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm" placeholder="0977 --- ---">
+                <input id="phone" value="{{ auth()->user()->phone }}" type="text" data-mask='0000 000 000' name="phone" class="block w-full border-2 border-blue-500 rounded-md shadow-sm form-input focus:border-blue-700 focus:ring-blue-700 sm:text-sm" placeholder="0977 --- ---">
             </div>
-            <small id="phoneError" class="text-danger text-xs"></small>
+            <small id="phoneError" class="text-xs text-danger"></small>
         </div>
 
         <div class="flex-1 min-w-[calc(50%-1rem)]">
             <label for="jobTitle" class="block text-sm font-medium text-blue-700">Job Title</label>
-            <input value="{{ auth()->user()->occupation ?? auth()->user()->jobTitle }}" type="text" id="jobTitleInput" name="jobTitle" class="form-input mt-1 block w-full rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm" placeholder="e.g., Teacher">
-            <small id="jobTitleError" class="text-danger text-xs"></small>
+            <input value="{{ auth()->user()->occupation ?? auth()->user()->jobTitle }}" type="text" id="jobTitleInput" name="jobTitle" class="block w-full mt-1 border-2 border-blue-500 rounded-md shadow-sm form-input focus:border-blue-700 focus:ring-blue-700 sm:text-sm" placeholder="e.g., Teacher">
+            <small id="jobTitleError" class="text-xs text-danger"></small>
         </div>
 
         <div class="flex-1 min-w-[calc(50%-1rem)]">
             <label for="employeeNo" class="block text-sm font-medium text-blue-700">Employee Number</label>
-            <input value="{{ auth()->user()->employeeNo }}" type="text" id="employeeNo" name="employeeNo" class="form-input mt-1 block w-full rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm" placeholder="Employee No." maxlength="8">
-            <small id="employeeNoError" class="text-danger text-xs"></small>
+            <input value="{{ auth()->user()->employeeNo }}" type="text" id="employeeNo" name="employeeNo" class="block w-full mt-1 border-2 border-blue-500 rounded-md shadow-sm form-input focus:border-blue-700 focus:ring-blue-700 sm:text-sm" placeholder="Employee No." maxlength="8">
+            <small id="employeeNoError" class="text-xs text-danger"></small>
         </div>
     </div>
     
     <div class="flex flex-wrap gap-4 mb-4">
         <div class="flex-1 min-w-[calc(50%-1rem)]">
             <label for="id_type" class="block text-sm font-medium text-blue-700">Identification Card Type</label>
-            <div class="flex space-x-2 mt-1">
-                <select id="id_type" name="id_type" class="form-select block w-full rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
+            <div class="flex mt-1 space-x-2">
+                <select id="id_type" name="id_type" class="block w-full border-2 border-blue-500 rounded-md shadow-sm form-select focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
                     <option value="">Choose ...</option>
                     <option {{ auth()->user()->id_type == 'NRC' ? 'selected' : ''}} value="NRC">NRC</option>
                     <option {{ auth()->user()->id_type == 'Passport' ? 'selected' : ''}} value="Passport">Passport</option>
                     <option {{ auth()->user()->id_type == 'Driver Liecense' ? 'selected' : ''}} value="Driver Liecense">Driver Liecense</option>
                 </select>
-                <input value="{{auth()->user()->nrc_no ?? auth()->user()->nrc}}" type="text" placeholder="ID Number" class="form-input block w-full rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm" id="nrc" name="nrc">
+                <input value="{{auth()->user()->nrc_no ?? auth()->user()->nrc}}" type="text" placeholder="ID Number" class="block w-full border-2 border-blue-500 rounded-md shadow-sm form-input focus:border-blue-700 focus:ring-blue-700 sm:text-sm" id="nrc" name="nrc">
             </div>
-            <small id="nrcError" class="text-danger text-xs"></small>
-            <small id="nrcIDError" class="text-danger text-xs"></small>
+            <small id="nrcError" class="text-xs text-danger"></small>
+            <small id="nrcIDError" class="text-xs text-danger"></small>
         </div>
 
         <div class="flex-1 min-w-[calc(50%-1rem)]">
             <label for="ministry" class="block text-sm font-medium text-blue-700">Ministry</label>
-            <input value="{{ auth()->user()->ministry }}" placeholder="e.g., Ministry of Health" type="text" id="ministry" name="ministry" class="form-input mt-1 block w-full rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
+            <input value="{{ auth()->user()->ministry }}" placeholder="e.g., Ministry of Health" type="text" id="ministry" name="ministry" class="block w-full mt-1 border-2 border-blue-500 rounded-md shadow-sm form-input focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
         </div>
 
         <div class="flex-1 min-w-[calc(50%-1rem)]">
             <label for="department" class="block text-sm font-medium text-blue-700">Department</label>
-            <input value="{{ auth()->user()->department }}" type="text" id="department" name="department" class="form-input mt-1 block w-full rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm" placeholder="Department">
+            <input value="{{ auth()->user()->department }}" type="text" id="department" name="department" class="block w-full mt-1 border-2 border-blue-500 rounded-md shadow-sm form-input focus:border-blue-700 focus:ring-blue-700 sm:text-sm" placeholder="Department">
         </div>
     </div>
 
     <div class="flex flex-wrap gap-4">
         <div class="flex-1 min-w-[calc(50%-1rem)]">
             <label for="address" class="block text-sm font-medium text-blue-700">Physical Address</label>
-            <textarea id="address" name="address" cols="10" rows="2" class="form-input mt-1 block w-full text-left rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm">{{ auth()->user()->address }}</textarea>
-            <small id="addressError" class="text-danger text-xs"></small>
+            <textarea id="address" name="address" cols="10" rows="2" class="block w-full mt-1 text-left border-gray-300 rounded-md shadow-sm form-input focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm">{{ auth()->user()->address }}</textarea>
+            <small id="addressError" class="text-xs text-danger"></small>
         </div>
 
         <div class="flex-1 min-w-[calc(50%-1rem)]">
             <label for="gender" class="block text-sm font-medium text-blue-700">Gender</label>
-            <select id="gender" name="gender" class="form-select block w-full mt-1 rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
+            <select id="gender" name="gender" class="block w-full mt-1 border-2 border-blue-500 rounded-md shadow-sm form-select focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
                 <option value="">--Select One--</option>
                 <option value="Male" {{ auth()->user()->gender == 'Male' ? 'selected' : '' }}>Male</option>
                 <option value="Female" {{ auth()->user()->gender == 'Female' ? 'selected' : '' }}>Female</option>
             </select>
-            <small id="genderError" class="text-danger text-xs"></small>
+            <small id="genderError" class="text-xs text-danger"></small>
         </div>
 
         <div class="flex-1 min-w-[calc(50%-1rem)]">
             <label for="yearsOfWork" class="block text-sm font-medium text-blue-700">Years of Working</label>
-            <select id="yearsOfWork" name="yearsOfWork" class="form-select block w-full mt-1 rounded-md border-blue-500 border-2 shadow-sm focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
+            <select id="yearsOfWork" name="yearsOfWork" class="block w-full mt-1 border-2 border-blue-500 rounded-md shadow-sm form-select focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
                 <option value="1" {{ auth()->user()->employeeNo == 1 ? 'selected' : '' }}>1 Year</option>
                 <option value="2" {{ auth()->user()->employeeNo == 2 ? 'selected' : '' }}>2 Years</option>
                 <option value="3" {{ auth()->user()->employeeNo == 3 ? 'selected' : '' }}>3 Years</option>
                 <option value="4" {{ auth()->user()->employeeNo == 4 ? 'selected' : '' }}>4 Years</option>
                 <option value="5" {{ auth()->user()->employeeNo == 5 ? 'selected' : '' }}>5+ Years</option>
             </select>
-            <small id="yearsOfWorkError" class="text-danger text-xs"></small>
+            <small id="yearsOfWorkError" class="text-xs text-danger"></small>
         </div>
     </div>
-</div>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const loanTypeSelect = document.getElementById('loanType');
@@ -255,3 +252,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+
+</div>
