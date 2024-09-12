@@ -13,7 +13,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-xxl-12 col-xl-12">
-                        <div class="page-title text-3xl items-center p-5" style="background-color:rgb(2,3,129); display: flex; gap:3%; color:#db9326">
+                        <div class="items-center p-5 text-3xl page-title" style="background-color:rgb(2,3,129); display: flex; gap:3%; color:#db9326">
                             <span>
                                 <a href="{{ route('transactions') }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="27" height="26" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
@@ -46,7 +46,7 @@
 
 
                         <div class="col-xxl-12 col-xl-12">
-                            <div class="col-xxl-12 col-xl-12 col-lg-12 px-4">
+                            <div class="px-4 col-xxl-12 col-xl-12 col-lg-12">
                                 @if (session('success'))
                                     <div class="alert alert-success">
                                         {{ session('success') }}

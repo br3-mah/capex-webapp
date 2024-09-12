@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Api\LoanRequestController;
 use App\Http\Controllers\Auth\OTPController;
 use App\Http\Controllers\LoanApplicationController;
+use App\Http\Controllers\ProofOfPaymentController;
 use App\Http\Controllers\LoanProductController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\TicketController;
@@ -207,8 +208,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
     // ------- Loan Continue Completion
     Route::post('continue-loan', [LoanApplicationController::class, 'continue_loan'])->name('continue-loan');
+    Route::post('proof-of-payment', [ProofOfPaymentController::class, 'store'])->name('proof-of-payment');
     Route::get('application-form', FormApplication::class)->name('form');
-
+    
     // -------Ticket
     Route::resource('tickets', TicketController::class);
     Route::post('/complete-application', [LoanApplicationController::class, 'completeApplication'])->name('completeApplication');
