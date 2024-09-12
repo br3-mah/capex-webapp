@@ -1,7 +1,7 @@
 <div style="margin-top: -2svh;" class="profile_log dropdown">
     <div class="user" data-toggle="dropdown">
         <span style="">
-            @if (auth()->user()->profile_photo_path)
+            {{-- @if (auth()->user()->profile_photo_path)
                 @if ($route == 'profile.show' || $route == 'loan-details' || $route == 'loan-statement')
                     <img width="50" height="50" style="border-radius:50%;"
                         src="{{ '../public/' . Storage::url(auth()->user()->profile_photo_path) }}"
@@ -15,7 +15,7 @@
                 <img width="45" style="border-radius:50%"
                     src="https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg"
                     alt="" />
-            @endif
+            @endif --}}
         </span>
         <span class="arrow"><i class="icofont-angle-down"></i></span>
     </div>

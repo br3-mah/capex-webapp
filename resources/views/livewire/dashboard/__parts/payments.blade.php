@@ -203,12 +203,12 @@ document.getElementById('uploadModal').addEventListener('click', function(event)
                 </div>
                 <div class="col-md-4 col-xs-3">
                     <div class="btn-group">
-                        <a href="{{ route('loan-details',['id' => $data->application->id]) }}" class="btn btn-info sharp tp-btn">
+                        {{-- <a href="{{ route('loan-details',['id' => $data->application->id]) }}" class="btn btn-info sharp tp-btn">
                             <i style="color: rgb(241, 233, 233)" class="fa fa-eye"></i>
-                        </a>
-                        <a target="_blank" title="View Loan Statement" href="{{ route('loan-statement', ['id'=>$data->application->id]) }}" class="shadow btn btn-primary btn-xs sharp">
+                        </a> --}}
+                        {{-- <a target="_blank" title="View Loan Statement" href="{{ route('loan-statement', ['id'=>$data->application->id]) }}" class="shadow btn btn-primary btn-xs sharp">
                             <i class="bi bi-file-earmark-ruled"></i>
-                        </a>
+                        </a> --}}
                     </div>
                 </div>
             </div>

@@ -17,9 +17,9 @@
 
 </style>
 <div wire:ignore class="col-xl-12 col-md-12 col-sm-12">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8 p-2">
+    <div class="grid grid-cols-1 gap-4 p-2 mt-8 md:grid-cols-2 lg:grid-cols-3">
         @forelse($transactions as $data)
-        <div class="animate-slide-fade bg-white rounded p-2" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;">
+        <div class="p-2 bg-white rounded animate-slide-fade" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;">
             <div class="row flex-column flex-md-row justify-content-even">
                 <div class="col-md-5 col-xs-12 row">
                     <div class="col-3">
@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-8">
                         <div class="flex items-center">
-                            <span class="h-3 w-3 mr-2 rounded-full bg-green-500"></span>
+                            <span class="w-3 h-3 mr-2 bg-green-500 rounded-full"></span>
                             <span class="font-bold"> <b>K{{ number_format($data->amount_settled, 2, '.', ',') }}</b> </span>
                             <span>
                                 <span class="badge badge-sm text-info light badge-success">
@@ -39,22 +39,22 @@
                                 </span>
                             </span>
                             <br>
-                            <small class="text-gray-600 text-xs">Date: {{ $data->created_at->toFormattedDateString() }}</small>
+                            <small class="text-xs text-gray-600">Date: {{ $data->created_at->toFormattedDateString() }}</small>
                         </div>
                         <p class="text-gray-600">{{ $data->application->loan_product->name }} Loan</p>
                     </div>
                 </div>
                 <div class="col-md-3 col-xs-12">
-                    <small class="text-gray-600 text-xs">Process by: {{ $data->proccess_by ?? 'System' }}</small>
+                    <small class="text-xs text-gray-600">Process by: {{ $data->proccess_by ?? 'System' }}</small>
                 </div>
                 <div class="col-md-4 col-xs-3">
                     <div class="btn-group">
-                        <a href="{{ route('loan-details',['id' => $data->application->id]) }}" class="btn btn-info sharp tp-btn">
+                        {{-- <a href="{{ route('loan-details',['id' => $data->application->id]) }}" class="btn btn-info sharp tp-btn">
                             <i style="color: rgb(241, 233, 233)" class="fa fa-eye"></i>
                         </a>
-                        <a target="_blank" title="View Loan Statement" href="{{ route('loan-statement', ['id'=>$data->application->id]) }}" class="btn btn-primary shadow btn-xs sharp">
+                        <a target="_blank" title="View Loan Statement" href="{{ route('loan-statement', ['id'=>$data->application->id]) }}" class="shadow btn btn-primary btn-xs sharp">
                             <i class="bi bi-file-earmark-ruled"></i>
-                        </a>
+                        </a> --}}
                     </div>
                 </div>
             </div>
