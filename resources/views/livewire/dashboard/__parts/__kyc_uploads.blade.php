@@ -109,7 +109,7 @@
                 @if ($nrcBPath !== null)
                     <p class="inline-flex items-center rounded shadow-md shadow-success/50 text-xs justify-center px-1.5 py-0.5 bg-success text-white">
                         You uploaded your ID Card (Back) on
-                        {{ $util->uploads->where('name', 'nrc_b_file')->first()->created_at->toFormattedDateString() }}
+                        {{  $util &&  $util->uploads->where('name', 'nrc_b_file')->first() ?  $util->uploads->where('name', 'nrc_b_file')->first()->created_at->toFormattedDateString() : '' }}
                     </p>
                 @else
                 <p>Empty NRC</p>

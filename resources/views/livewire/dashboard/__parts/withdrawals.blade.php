@@ -18,52 +18,47 @@
 </style>
 <div wire:ignore class="col-xl-12 col-md-12 col-sm-12">
     <div class="grid grid-cols-1 gap-4 p-2 mt-8 md:grid-cols-2 lg:grid-cols-3">
+        <div class="container px-4 py-8 mx-auto">
+    <h2 class="mb-6 text-2xl font-bold">Transactions</h2>
+    
+    <div class="w-full space-y-4">
         @forelse($transactions as $data)
-        <div class="p-2 bg-white rounded animate-slide-fade" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;">
-            <div class="row flex-column flex-md-row justify-content-even">
-                <div class="col-md-5 col-xs-12 row">
-                    <div class="col-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-receipt-cutoff" viewBox="0 0 16 16">
-                            <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5M11.5 4a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
-                            <path d="M2.354.646a.5.5 0 0 0-.801.13l-.5 1A.5.5 0 0 0 1 2v13H.5a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1H15V2a.5.5 0 0 0-.053-.224l-.5-1a.5.5 0 0 0-.8-.13L13 1.293l-.646-.647a.5.5 0 0 0-.708 0L11 1.293l-.646-.647a.5.5 0 0 0-.708 0L9 1.293 8.354.646a.5.5 0 0 0-.708 0L7 1.293 6.354.646a.5.5 0 0 0-.708 0L5 1.293 4.354.646a.5.5 0 0 0-.708 0L3 1.293zm-.217 1.198.51.51a.5.5 0 0 0 .707 0L4 1.707l.646.647a.5.5 0 0 0 .708 0L6 1.707l.646.647a.5.5 0 0 0 .708 0L8 1.707l.646.647a.5.5 0 0 0 .708 0L10 1.707l.646.647a.5.5 0 0 0 .708 0L12 1.707l.646.647a.5.5 0 0 0 .708 0l.509-.51.137.274V15H2V2.118l.137-.274z"/>
-                        </svg>
-                    </div>
-                    <div class="col-8">
-                        <div class="flex items-center">
-                            <span class="w-3 h-3 mr-2 bg-green-500 rounded-full"></span>
-                            <span class="font-bold"> <b>K{{ number_format($data->amount_settled, 2, '.', ',') }}</b> </span>
-                            <span>
-                                <span class="badge badge-sm text-info light badge-success">
-                                    <i class="fa fa-circle text-success me-1"></i>
-                                    Balance: K{{ App\Models\Loans::loan_balance( $data->application->id) }}
-                                </span>
-                            </span>
-                            <br>
-                            <small class="text-xs text-gray-600">Date: {{ $data->created_at->toFormattedDateString() }}</small>
+            <div class="overflow-hidden transition-all duration-300 ease-in-out bg-white rounded-lg shadow-md hover:shadow-lg">
+                <div class="flex flex-col items-start justify-between w-full p-4 md:p-6 md:flex-row md:items-center">
+                    <div class="flex items-center mb-4 md:mb-0">
+                        <div class="mr-4 text-blue-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
                         </div>
-                        <p class="text-gray-600">{{ $data->application->loan_product->name }} Loan</p>
+                        <div>
+                            <div class="flex items-center">
+                                <span class="w-3 h-3 mr-2 bg-green-500 rounded-full"></span>
+                                <span class="text-lg font-bold">K{{ number_format($data->amount_settled, 2, '.', ',') }}</span>
+                            </div>
+                            <p class="text-sm text-gray-600">{{ $data->application->loan_product->name }} Loan</p>
+                            <p class="text-xs text-gray-500">Date: {{ $data->created_at->format('M d, Y') }}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3 col-xs-12">
-                    <small class="text-xs text-gray-600">Process by: {{ $data->proccess_by ?? 'System' }}</small>
-                </div>
-                <div class="col-md-4 col-xs-3">
-                    <div class="btn-group">
-                        {{-- <a href="{{ route('loan-details',['id' => $data->application->id]) }}" class="btn btn-info sharp tp-btn">
-                            <i style="color: rgb(241, 233, 233)" class="fa fa-eye"></i>
-                        </a>
-                        <a target="_blank" title="View Loan Statement" href="{{ route('loan-statement', ['id'=>$data->application->id]) }}" class="shadow btn btn-primary btn-xs sharp">
-                            <i class="bi bi-file-earmark-ruled"></i>
-                        </a> --}}
+                    
+                    <div class="flex flex-col items-start md:flex-row md:items-center">
+                        <div class="mb-2 md:mb-0 md:mr-4">
+                            <p class="text-sm text-gray-600">Processed by:</p>
+                            <p class="font-semibold">{{ $data->proccess_by ?? 'System' }}</p>
+                        </div>
+                        
+              
                     </div>
                 </div>
             </div>
-            
-        </div>
-        
         @empty
-            <p>No Withdrawal Transactions</p>
+            <div class="p-4 text-yellow-700 bg-yellow-100 border-l-4 border-yellow-500 rounded-md">
+                <p class="font-bold">No Withdrawal Transactions</p>
+                <p>There are currently no transactions to display.</p>
+            </div>
         @endforelse
+    </div>
+</div>
     </div>
     <script>
         // Wait for the page to fully load

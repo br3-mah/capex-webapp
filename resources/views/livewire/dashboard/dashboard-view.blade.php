@@ -9,7 +9,7 @@
         </nav>
     </div>
     <!-- End Breadcrumb -->
-    <div class="flex flex-col gap-4 min-h-[calc(100vh-212px)]">
+    <div class="flex flex-col gap-4 ">
         @if ($my_loan)
             {{-- Have application  --}}
             @if ($my_loan->complete == 1)
@@ -27,11 +27,11 @@
             @endif
         @else
             {{-- Dont have current requested application  --}}
-            @if ($my_loan->closed == 1)
+            {{-- @if ($my_loan->closed == 1) --}}
                 @include('livewire.dashboard.__parts._dashboard-new')
-            @else
+            {{-- @else
                 @include('livewire.dashboard.__parts._dashboard-open')
-            @endif
+            @endif --}}
         @endif
 
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
@@ -81,7 +81,7 @@
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
     
             <!-- Recent Loan Applications -->
-            <div class="gap-6 bg-white rounded-lg dark:bg-darklight border-black/10 dark:border-darkborder">
+            <div class="gap-6 p-5 bg-white rounded-lg dark:bg-darklight border-black/10 dark:border-darkborder">
                 <h2 class="mb-4 text-base font-semibold text-black capitalize dark:text-white/80">My Recent Loan Applications</h2>
                 <div class="flex flex-col gap-4">
                     @if (!empty($this->all_applications()->toArray()))

@@ -15,17 +15,17 @@
     @else
         <div class="container flex items-center justify-center min-h-screen">
             <div class="text-center">
-                <img class="w-[300px] mx-auto" src="{{ asset('public/mfs/admin/assets/media/illustrations/sigma-1/loan.png')}}" alt="">
+                <img width="400" class="w-[100px] mx-auto" src="{{ asset('public/mfs/admin/assets/media/illustrations/sigma-1/loan.png')}}" alt="">
                 @role('user')
                 <div class="my-4">
-                    <a href="{{ route('form') }}" class="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700">
-                        <strong>Get a Loan</strong>
+                    <a href="{{ route('form') }}" class="px-5 py-4 font-bold text-white bg-info rounded hover:bg-success">
+                        <strong>Apply for a Loan</strong>
                     </a>
                 </div>
         
-                <div class="mt-3">
+                {{-- <div class="mt-3">
                     <p class="text-gray-600">Need help or have questions? <a href="{{ route('contact') }}" class="text-blue-500 hover:text-blue-700">Contact us</a>.</p>
-                </div>
+                </div> --}}
                 @endrole
             </div>
         </div>
