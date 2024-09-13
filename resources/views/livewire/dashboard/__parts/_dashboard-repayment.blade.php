@@ -10,12 +10,12 @@
             <div class="items-start justify-between p-4 md:flex-row gap-7">
                 <div class="mt-4 shrink-0">
                     <div>
-                        <h5 class="text-4xl font-bold text-white">Welcome to </h5>
+                        <h5 class="text-4xl font-bold text-white">Welcome</h5>
                         {{-- <p class="text-muted dark:text-darkmuted">Manage your loan</p> --}}
                     </div>
                 </div>
                 <div class="px-8 ml-4">
-                    <h3 class="text-4xl font-bold text-white">Capex</h3>
+                    <h3 class="text-4xl font-bold text-white">to Capex Financial Services</h3>
                     <h3 class="text-4xl font-bold text-white">manage your Loans</h3>
                     <p class="max-w-4xl mt-2 text-base text-white dark:text-darkmuted">
                         Here you can feel free and enjoy the amazing life with Capex

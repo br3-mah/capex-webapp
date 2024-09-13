@@ -19,14 +19,17 @@
 <div wire:ignore class="px-2 col-xl-12 col-md-12 col-sm-12">
     
     <!-- Button to open modal -->
-<button class="mt-2 button inline-flex items-center rounded text-xs justify-center px-1.5 py-2.5 bg-info text-white " onclick="openModal()">
-    Add Proof of Payment
-</button>
+    @if ($current_loan->amount)
+        <button class="mt-2 button inline-flex items-center rounded text-xs justify-center px-1.5 py-2.5 bg-info text-white " onclick="openModal()">
+            Add Proof of Payment
+        </button>
+    @endif
+
 
 <!-- Modal -->
-<div id="uploadModal" class="fixed inset-0 flex items-center justify-center hidden transition-opacity duration-300 bg-gray-800 bg-opacity-75 shadow-lg z-100">
-    <div class="max-w-lg p-6 transition-all duration-300 transform scale-90 bg-white rounded-lg shadow-2xl opacity-0 w-60 " id="modalContent">
-        <h2 class="mb-6 text-2xl font-semibold text-gray-800">Upload Proof of Payment</h2>
+<div id="uploadModal" class="fixed inset-0 flex items-center justify-center hidden transition-opacity duration-300 bg-info/30 backdrop-blur-sm z-50">
+    <div style="width:50%" class="shadow-md max-w-2xl p-6 transition-all duration-300 transform scale-95 bg-white dark:bg-gray-800 rounded-lg shadow-2xl opacity-0" id="modalContent">
+        <h2 class="mb-6 text-2xl font-semibold text-gray-800 dark:text-white">Upload Proof of Payment</h2>
 
         <!-- Form to submit documents -->
         <form action="{{ route('proof-of-payment') }}" method="POST" enctype="multipart/form-data" id="paymentForm">
@@ -36,17 +39,19 @@
 
             <!-- Upload Documents -->
             <div class="mb-6">
-                <label class="block mb-2 text-sm font-medium text-gray-700">Upload Documents</label>
+                <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200">Upload Documents</label>
                 <div class="flex items-center justify-center w-full">
-                    <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                    <label for="file-upload" class="flex items-center justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+                        <span class="flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                             </svg>
-                            <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                            <p class="text-xs text-gray-500">PNG, JPG, PDF (MAX. 10MB)</p>
-                        </div>
-                        <input id="dropzone-file" type="file" name="proofs[]" class="hidden" multiple onchange="handleFileSelect(event)" />
+                            <span class="font-medium text-gray-600">
+                                Drop files to Attach, or
+                                <span class="text-blue-600 underline">browse</span>
+                            </span>
+                        </span>
+                        <input id="file-upload" type="file" name="proofs[]" class="hidden" multiple onchange="handleFileSelect(event)" />
                     </label>
                 </div>
                 <div id="file-preview" class="grid grid-cols-2 gap-4 mt-4"></div>
@@ -56,15 +61,15 @@
             </div>
 
             <div class="mb-6">
-                <label for="loan_id" class="block mb-2 text-sm font-medium text-gray-700">Loan Info</label>
-                <p>{{ $current_loan->product_name->name }}</p>
-                <input type="text" value="{{ $current_loan->amount }}" id="loan_id" name="loan_id" class="block w-full p-3 mt-1 text-gray-700 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="You have no Open Loan">
-              
+                <label for="loan_id" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200">Loan Info</label>
+                <p class="text-sm text-gray-600 dark:text-gray-400">{{ $current_loan->product_name->name }}</p>
+                <input type="text" value="{{ $current_loan->amount }}" id="loan_id" name="loan_id" class="form-input block w-full p-3 mt-1 text-gray-700 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="You have no Open Loan" readonly>
             </div>
+
             <!-- Payment Amount -->
             <div class="mb-6">
-                <label for="amount" class="block mb-2 text-sm font-medium text-gray-700">Payment Amount</label>
-                <input type="text" id="amount" name="amount" class="block w-full p-3 mt-1 text-gray-700 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter amount">
+                <label for="amount" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200">Payment Amount</label>
+                <input type="text" id="amount" name="amount" class="form-input block w-full p-3 mt-1 text-gray-700 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter amount">
                 @error('amount')
                     <span class="text-sm text-red-500">{{ $message }}</span>
                 @enderror
@@ -72,8 +77,8 @@
 
             <!-- Payment Method -->
             <div class="mb-6">
-                <label for="method" class="block mb-2 text-sm font-medium text-gray-700">Payment Method</label>
-                <select id="method" name="method" class="block w-full p-3 mt-1 text-gray-700 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label for="method" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200">Payment Method</label>
+                <select id="method" name="method" class="form-input block w-full p-3 mt-1 text-gray-700 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="bank_transfer">Bank Transfer</option>
                     <option value="credit_card">Credit Card</option>
                     <option value="mobile_money">Mobile Money</option>
@@ -85,8 +90,8 @@
 
             <!-- Payment Details -->
             <div class="mb-6">
-                <label for="payment_details" class="block mb-2 text-sm font-medium text-gray-700">Payment Details</label>
-                <textarea id="payment_details" name="payment_details" class="block w-full p-3 mt-1 text-gray-700 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" rows="3" placeholder="Enter any relevant details"></textarea>
+                <label for="payment_details" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200">Payment Details</label>
+                <textarea id="payment_details" name="payment_details" class="form-input block w-full p-3 mt-1 text-gray-700 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" rows="3" placeholder="Enter any relevant details"></textarea>
                 @error('payment_details')
                     <span class="text-sm text-red-500">{{ $message }}</span>
                 @enderror
@@ -94,8 +99,8 @@
 
             <!-- Action Buttons -->
             <div class="flex justify-end space-x-4">
-                <button type="button" class="mt-2 button inline-flex items-center rounded text-xs justify-center px-1.5 py-2.5 bg-light text-dark " onclick="closeModal()">Cancel</button>
-                <button type="submit" class="mt-2 button inline-flex items-center rounded text-xs justify-center px-1.5 py-2.5 bg-info text-white">Submit</button>
+                <button type="button" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Submit</button>
             </div>
         </form>
     </div>
@@ -170,8 +175,8 @@ document.getElementById('uploadModal').addEventListener('click', function(event)
     }
 });
 </script>
-    
-    <div class="grid grid-cols-1 gap-4 p-2 mt-8 md:grid-cols-2 lg:grid-cols-3">
+    {{-- md:grid-cols-2 lg:grid-cols-3 --}}
+    <div class="grid grid-cols-1 gap-4 p-2 mt-8 ">
         @forelse($transactions as $data)
         <div class="p-2 bg-white rounded animate-slide-fade" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;">
             <div class="row flex-column flex-md-row justify-content-even">
@@ -216,7 +221,14 @@ document.getElementById('uploadModal').addEventListener('click', function(event)
         </div>
         
         @empty
-            <p>No Payment Transactions</p>
+            <div class="pl-6 flex flex-col items-center justify-center">
+                <img src="public/app/img/no-loan.jpg" alt="No transactions" class="w-32 h-32 rounded-full mb-8">
+                <h3 class="mb-2 text-xl font-semibold text-muted dark:text-white">No Payment Transactions</h3>
+                <p class="mb-6 text-base text-muted dark:text-muted">You have no open or active loan.</p>
+                <button onclick="openPaymentModal()" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                    Make a Payment
+                </button>
+            </div>
         @endforelse
     </div>
     <script>

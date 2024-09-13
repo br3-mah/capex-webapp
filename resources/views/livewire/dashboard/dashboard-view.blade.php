@@ -81,74 +81,70 @@
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
     
             <!-- Recent Loan Applications -->
-            <div class="gap-6 p-5 bg-white rounded-lg dark:bg-darklight border-black/10 dark:border-darkborder">
+            <div class="gap-6 p-5 shadow-md bg-white rounded-lg dark:bg-darklight border-black/10 dark:border-darkborder">
                 <h2 class="mb-4 text-base font-semibold text-black capitalize dark:text-white/80">My Recent Loan Applications</h2>
-                <div class="flex flex-col gap-4">
-                    @if (!empty($this->all_applications()->toArray()))
-                        @foreach ($this->all_applications()->take(5) as $application)
-                            <div class="p-4 bg-gray-100 rounded-lg dark:bg-gray-800">
-                                <div class="flex justify-between">
-                                    <div>
-                                        <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200">Loan #{{ $application->id }}</h3>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ $application->loan_product->name }}</p>
+                <div class="bg-white dark:bg-gray-800 rounded-lg space-y-6">
+                        @if (!empty($this->all_applications()->toArray()))
+                            @foreach ($this->all_applications()->take(5) as $application)
+                                <div class="bg-gray-50 dark:bg-gray-700 border rounded-lg p-4 transition-all duration-300">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200">Loan #{{ $application->id }}</h3>
+                                            <p class="text-xs text-gray-600 dark:text-gray-400">{{ $application->loan_product->name }}</p>
+                                        </div>
+                                        <span class="text-sm font-bold text-blue-600 dark:text-blue-400">K{{ number_format($application->amount, 2) }}</span>
                                     </div>
-                                    <span class="text-sm font-bold text-blue-600 dark:text-blue-400">K{{ number_format($application->amount, 2) }}</span>
+                                    <div class="mt-3">
+                                        @switch($application->status)
+                                            @case(0)
+                                                <span class="px-2 py-1 text-xs font-medium text-warning-700 bg-warning rounded-full dark:bg-warning-600/20 dark:text-warning-400">Pending</span>
+                                                @break
+                                            @case(1)
+                                                <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full dark:bg-green-600/20 dark:text-green-400">Open</span>
+                                                @break
+                                            @case(2)
+                                                <span class="px-2 py-1 text-xs font-medium text-warning-700 bg-warning-100 rounded-full dark:bg-warning-600/20 dark:text-warning-400">Pending (Processing)</span>
+                                                @break
+                                            @case(3)
+                                                <span class="px-2 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full dark:bg-red-600/20 dark:text-red-400">Rejected</span>
+                                                @break
+                                            @case(4)
+                                                <span class="px-2 py-1 text-xs font-medium text-blue-700 bg-blue-100 rounded-full dark:bg-blue-600/20 dark:text-blue-400">Incomplete KYC</span>
+                                                @break
+                                            @default
+                                                <span class="px-2 py-1 text-xs font-medium text-gray-700 bg-gray-100 rounded-full dark:bg-gray-600/20 dark:text-gray-400">Hold</span>
+                                        @endswitch
+                                    </div>
                                 </div>
-                                <div class="mt-2">
-                                    @switch($application->status)
-                                        @case(0)
-                                            <span class="px-2 py-1 text-xs font-semibold text-yellow-600 bg-yellow-100 rounded-full dark:bg-yellow-500/10">Pending</span>
-                                            @break
-                                        @case(1)
-                                            <span class="px-2 py-1 text-xs font-semibold text-green-600 bg-green-100 rounded-full dark:bg-green-500/10">Open</span>
-                                            @break
-                                        @case(2)
-                                            <span class="px-2 py-1 text-xs font-semibold text-yellow-600 bg-yellow-100 rounded-full dark:bg-yellow-500/10">Pending (Processing)</span>
-                                            @break
-                                        @case(3)
-                                            <span class="px-2 py-1 text-xs font-semibold text-red-600 bg-red-100 rounded-full dark:bg-red-500/10">Rejected</span>
-                                            @break
-                                        @case(4)
-                                            <span class="px-2 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full dark:bg-blue-500/10">Incomplete KYC</span>
-                                            @break
-                                        @default
-                                            <span class="px-2 py-1 text-xs font-semibold text-gray-600 bg-gray-100 rounded-full dark:bg-gray-500/10">Hold</span>
-                                    @endswitch
-                                </div>
-                            </div>
-                        @endforeach
-                    @else
-                        <p class="text-gray-600 dark:text-gray-400">You have no loan applications.</p>
-                    @endif
+                            @endforeach
+                        @else
+                            <p class="text-gray-600 dark:text-gray-400">You have no loan applications.</p>
+                        @endif
                 </div>
             </div>
     
             <!-- Recent Loan Repayments -->
-            <div class="gap-6 p-5 bg-white rounded-lg dark:bg-darklight border-black/10 dark:border-darkborder">
-                <h2 class="mb-4 text-base font-semibold text-black capitalize dark:text-white/80">My Recent Loan Repayments</h2>
-                <div class="flex flex-col gap-4">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-5 space-y-6">
+                <h2 class="text-lg font-semibold text-gray-800 dark:text-white">My Recent Loan Repayments</h2>
+                <div class="space-y-4">
                     @if (!empty($this->all_transactions()->toArray()))
                         @foreach ($this->all_transactions()->take(5) as $repayment)
-                            <div class="p-4 bg-gray-100 rounded-lg dark:bg-gray-800">
-                                <div class="flex justify-between">
+                            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 transition-all duration-300 border">
+                                <div class="flex justify-between items-center">
                                     <div>
-                                        <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200">Loan #{{ $repayment->id }}</h3>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">Principal: K{{ number_format($repayment->amount, 2) }}</p>
+                                        <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200">Loan #{{ $repayment->id }}</h3>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">Principal: K{{ number_format($repayment->amount, 2) }}</p>
                                     </div>
                                     <span class="text-sm font-bold text-green-600 dark:text-green-400">{{ $repayment->created_at->toFormattedDateString() }}</span>
                                 </div>
                             </div>
                         @endforeach
                     @else
-                        <p class="py-20 my-10 text-gray-600 dark:text-gray-400">You have no recent loan repayments.</p>
+                        <p class="text-gray-600 dark:text-gray-400 py-8 pt-4">You have no recent loan repayments.</p>
                     @endif
                 </div>
             </div>
             
         </div>
     </div>
-    
-
-    
-    @include('components.continue-application')
 </div>

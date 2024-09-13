@@ -5,7 +5,7 @@
       @if (!empty(auth()->user()->photos))
         <div class="flex flex-row space-x-3 mb-8 gap-3 mt-4">
           @foreach (auth()->user()->photos as $photo)
-            <img src="{{ url('public/storage/' . $photo->path) }}" alt="user-img" class="w-1/3 h-32 object-cover rounded-md shadow-md">
+            <img src="{{ url('/storage/app/public/' . $photo->path) }}" alt="user-img" class="w-1/3 h-32 object-cover rounded-md shadow-md">
           @endforeach
         </div>
       @endif

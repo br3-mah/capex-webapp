@@ -16,7 +16,10 @@ class MyLoanHistory extends Component
     public function render()
     {
         $this->users = User::role('user')->without('applications')->get();
-        $this->loan_requests = Application::with('loan')->where('user_id', auth()->user()->id)->orderBy('id', 'desc')->get();
+        $this->loan_requests = Application::with('loan')
+        ->where('user_id', auth()->user()->id)
+        ->where('closed', 1)
+        ->orderBy('id', 'desc')->get();
         return view('livewire.dashboard.loans.my-loan-history');
     }
 }

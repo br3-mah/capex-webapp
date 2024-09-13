@@ -7,63 +7,58 @@
     </div>
 
     <!-- Content Section -->
-    <div class="flex flex-col gap-6 p-4">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Recent Successful Loans</h2>
-        <p class="text-gray-700 dark:text-gray-300">
-            Stay up-to-date with your loan applications, current statuses, and deadlines. Manage and track each of your loans with ease.
-        </p>
-        <!-- Loan List -->
-        <div class="space-y-4">
-            @forelse($loan_requests as $loan)
-            <a href="{{ route('loan-details', ['id' => $loan->id]) }}" class="block p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+    <div class="space-y-4">
+    @forelse($loan_requests as $loan)
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+            <a href="{{ route('loan-details', ['id' => $loan->id]) }}" class="block p-4 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors duration-150">
                 <div class="flex items-center gap-4">
-                    <img src="public/app/img/loan.jpg" alt="Loan Product" class="w-14 h-14 rounded-full object-cover shadow-md">
-                    <div class="w-full">
+                    <img src="public/app/img/loan.jpg" alt="Loan Product" class="w-12 h-12 rounded-full object-cover">
+                    <div class="flex-grow">
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
                                 {{ $loan->loan_product->name ?? 'Personal Loan' }}
                             </h3>
-                            <span class="text-xl font-bold text-purple-600 dark:text-purple-400">
+                            <span class="text-lg font-bold text-purple-600 dark:text-purple-400">
                                 K{{ number_format($loan->amount, 2, '.', ',') }}
                             </span>
                         </div>
                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                            {{ $this->get_loan_type($loan->loan_child_type_id)->first()->name }}
-                            <br>
+                            {{ $this->get_loan_type($loan->loan_child_type_id)->first()->name }} -
                             {{ $this->get_loan_category($loan->loan_child_type_id)->first()->name }}
                         </p>
-                        <ul class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
-                            <li>Applied On: {{ $loan->created_at->toFormattedDateString() }}</li>
-                            <li>Due Date: {{ $loan->due_date ?? 'N/A' }}</li>
-                        </ul>
+                        <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                            <span>Applied: {{ $loan->created_at->toFormattedDateString() }}</span>
+                            <span>Due: {{ $loan->due_date ?? 'N/A' }}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="mt-4 flex justify-between items-center">
-                    @if($loan->status == 0)
-                    <span class="inline-flex items-center rounded shadow-md shadow-warning/50 text-xs justify-center px-1.5 py-0.5 bg-warning text-white">Pending</span>
-                    @elseif($loan->status == 1)
-                    <span class="inline-flex items-center rounded shadow-md shadow-success/50 text-xs justify-center px-1.5 py-0.5 bg-success text-white">Approved</span>
-                    @elseif($loan->status == 2)
-                    <span class="inline-flex items-center rounded shadow-md shadow-warning/20 text-xs justify-center px-1.5 py-0.5 bg-warning text-white">Processing</span>
-                    @else
-                    <span class="inline-flex items-center rounded shadow-md shadow-danger/50 text-xs justify-center px-1.5 py-0.5 bg-danger text-white">Rejected</span>
-                    @endif
-                    <a href="{{ route('loan-details', ['id' => $loan->id]) }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                    @switch($loan->status)
+                        @case(0)
+                            <span class="px-2 py-1 text-xs font-medium text-white bg-warning rounded-full dark:bg-warning dark:text-warning">Pending</span>
+                            @break
+                        @case(1)
+                            <span class="px-2 py-1 text-xs font-medium text-white bg-success rounded-full dark:bg-success dark:text-success">Approved</span>
+                            @break
+                        @case(2)
+                            <span class="px-2 py-1 text-xs font-medium text-white bg-info rounded-full dark:bg-info dark:text-info">Processing</span>
+                            @break
+                        @default
+                            <span class="px-2 py-1 text-xs font-medium text-white bg-danger rounded-full dark:bg-danger dark:text-danger">Rejected</span>
+                    @endswitch
+                    <span class="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline">
                         View Details
-                    </a>
+                    </span>
                 </div>
             </a>
-            @empty
-            <!-- Empty State -->
-            <div class="flex items-center gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-                <img src="assets/images/no-loan.png" alt="No Loan Applications" class="w-14 h-14 object-cover rounded-full">
-                <div class="flex flex-col">
-                    <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200">No Loan Applications Yet</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Start applying for loans now and secure your financial future.</p>
-                </div>
-                <button class="px-4 py-2 text-sm font-semibold text-white bg-purple-600 rounded-lg hover:bg-purple-500">Apply Now</button>
-            </div>
-            @endforelse
         </div>
-    </div>
+    @empty
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6 text-center">
+            <img src="public/app/img/no-loan.jpg" alt="No Loan Applications" class="w-16 h-16 object-cover rounded-full mx-auto mb-4">
+            <h3 class="text-lg font-bold text-muted dark:muted mb-2">No Loan Applications Yet</h3>
+            <p class="text-sm text-muted dark:text-muted mb-4">Start applying for loans now and secure your financial future.</p>
+            <a href="{{ route('form') }}" class="px-4 py-4 text-sm font-semibold text-white bg-info rounded-lg hover:bg-purple-700 transition-colors duration-150">Apply Now</a>
+        </div>
+    @endforelse
+</div>
 </div>

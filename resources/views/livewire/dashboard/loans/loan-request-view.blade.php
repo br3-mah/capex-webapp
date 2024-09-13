@@ -7,7 +7,7 @@
             </h1>
         </div>
 
-        <div class="p-5 pb-[30%]">
+        <div class="">
             @include('livewire.dashboard.loans.__parts.list-loan-request')
         </div>
     </div>

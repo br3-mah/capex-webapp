@@ -1,21 +1,21 @@
+
 <div class="grid grid-cols-1 gap-4">
     <div style="background: #d7b3ff;" class="p-10 shadow-lg rounded-2xl">
         <div class="relative flex px-10 mt-10">
-            <div class="flex items-center justify-between gap-5">
+            <div class="flex xs:block items-center justify-between gap-5">
                 <div class="relative">
                     <img src="public/app/img/welcome.jpg" width="300" class="" alt="">
-                    {{-- <span class="absolute w-5 h-5 rounded-full bg-success bottom-2 ltr:right-4 rtl:left-4"></span> --}}
                 </div>
             </div>
             <div class="items-start justify-between p-4 md:flex-row gap-7">
                 <div class="mt-4 shrink-0">
                     <div>
-                        <h5 class="text-4xl font-bold text-white">Welcome to </h5>
+                        <h5 class="text-4xl font-bold text-white">Welcome  </h5>
                         {{-- <p class="text-muted dark:text-darkmuted">Manage your loan</p> --}}
                     </div>
                 </div>
                 <div class="px-8 ml-4">
-                    <h3 class="text-4xl font-bold text-white">Capex</h3>
+                    <h3 class="text-4xl font-bold text-white">to Capex Financial Services</h3>
                     <h3 class="text-4xl font-bold text-white">manage your Loans</h3>
                     <p class="max-w-4xl mt-2 text-base text-white dark:text-darkmuted">
                         Here you can feel free and enjoy the amazing life with Capex

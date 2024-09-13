@@ -235,10 +235,10 @@
                         <div class="profile" x-data="dropdown" @click.outside="open = false">
                             <button type="button" class="flex items-center gap-1.5 xl:gap-0 dark:text-white/80" @click="toggle()">
                                 @if (!empty(auth()->user()->photos->toArray()))
-                                    @if (auth()->user()->photos[0]->source == 'admin')
-                                        <img class="rounded-full h-7 w-7 ltr:xl:mr-2 rtl:xl:ml-2" src="{{ url('public/storage/' . auth()->user()->photos[0]->path) }}" alt="{{ auth()->user()->fname[0] }}" />
+                                    @if (auth()->user()->photos[0]->source !== 'admin')
+                                        <img class="rounded-full h-7 w-7 ltr:xl:mr-2 rtl:xl:ml-2" src="{{ url('/storage/app/public/' . auth()->user()->photos[0]->path) }}" alt="{{ auth()->user()->fname[0] }}" />
                                     @else
-                                        <img class="rounded-full h-7 w-7 ltr:xl:mr-2 rtl:xl:ml-2" src="{{ 'https://app.capexfinancialservices.org/' . auth()->user()->photos[0]->path }}" alt="{{ auth()->user()->fname[0] }}" />
+                                        <img class="rounded-full h-7 w-7 ltr:xl:mr-2 rtl:xl:ml-2" src="{{ 'https://app.capexfinancialservices.org/storage/app/public/' . auth()->user()->photos[0]->path }}" alt="{{ auth()->user()->fname[0] }}" />
                                     @endif
                                 @else
                                     <img class="rounded-full h-7 w-7 ltr:xl:mr-2 rtl:xl:ml-2" src="public/app/img/user.avif" alt="{{ auth()->user()->fname[0] }}" />
