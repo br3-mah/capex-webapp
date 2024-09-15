@@ -1377,7 +1377,7 @@
     border-radius: 9999px;
     content: var(--tw-content);
     --tw-bg-opacity: 1;
-    background-color: rgb(106 105 245 / var(--tw-bg-opacity));
+    background-color: rgb(30 50 120 / var(--tw-bg-opacity))
   }
 
   .sidebar ul.sub-menu li a:where([dir="ltr"], [dir="ltr"] *) {
@@ -1413,7 +1413,7 @@
     border-radius: 9999px;
     content: var(--tw-content);
     --tw-bg-opacity: 1;
-    background-color: rgb(106 105 245 / var(--tw-bg-opacity));
+    background-color: rgb(30 50 120 / var(--tw-bg-opacity))
   }
 
   .sidebar ul.sub-menu li a.active:where([dir="ltr"], [dir="ltr"] *)::before {
@@ -2028,7 +2028,7 @@
 
   .togglebutton input:checked ~ .band {
     --tw-bg-opacity: 1;
-    background-color: rgb(106 105 245 / var(--tw-bg-opacity));
+    background-color: rgb(30 50 120 / var(--tw-bg-opacity))
   }
 
   .togglebutton input:checked ~ .dot {
@@ -2048,7 +2048,7 @@
     --tw-translate-x: 100%;
     transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
     --tw-bg-opacity: 1;
-    background-color: rgb(106 105 245 / var(--tw-bg-opacity));
+    background-color: rgb(30 50 120 / var(--tw-bg-opacity))
   }
 
   /* 14. CHART */
@@ -3620,7 +3620,7 @@
 
   .bg-purple {
     --tw-bg-opacity: 1;
-    background-color: rgb(106 105 245 / var(--tw-bg-opacity));
+    background-color: rgb(30 50 120 / var(--tw-bg-opacity))
   }
 
   .bg-purple\/10 {
@@ -4639,7 +4639,7 @@
 
   .hover\:bg-purple:hover {
     --tw-bg-opacity: 1;
-    background-color: rgb(106 105 245 / var(--tw-bg-opacity));
+    background-color: rgb(30 50 120 / var(--tw-bg-opacity))
   }
 
   .hover\:bg-purple\/10:hover {
@@ -4773,7 +4773,7 @@
 
   :is(.dark .dark\:bg-purple) {
     --tw-bg-opacity: 1;
-    background-color: rgb(106 105 245 / var(--tw-bg-opacity));
+    background-color: rgb(30 50 120 / var(--tw-bg-opacity))
   }
 
   :is(.dark .dark\:bg-transparent) {
@@ -4894,7 +4894,7 @@
 
   :is(.dark .dark\:hover\:bg-purple:hover) {
     --tw-bg-opacity: 1;
-    background-color: rgb(106 105 245 / var(--tw-bg-opacity));
+    background-color: rgb(30 50 120 / var(--tw-bg-opacity))
   }
 
   :is(.dark .dark\:hover\:bg-white\/10:hover) {

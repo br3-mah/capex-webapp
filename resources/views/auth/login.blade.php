@@ -24,10 +24,13 @@
 
 
     <!-- Start Layout -->
-    <div class="bg-[#f9fbfd] dark:bg-dark text-black min-h-screen relative z-10">
+    <div class="bg-[#fff] dark:bg-dark text-black min-h-screen relative z-10">
 
         <!-- Start Background Images -->
-        <div class="bg-[url('../images/bg-main.png')] bg-black dark:bg-purple min-h-[220px] sm:min-h-[50vh] bg-bottom w-full -z-10 absolute"></div>
+  <div style="
+  background: linear-gradient(135deg, #0b1551 0%, #053956 100%);
+" class="min-h-[420px] sm:min-h-[50vh] bg-bottom w-full -z-10 absolute">
+</div>
         <!-- End Background Images -->
 
         <!-- Start Header -->

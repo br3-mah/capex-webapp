@@ -1,4 +1,4 @@
-<div x-data="modals" class="h-[calc(100vh-60px)]  relative overflow-y-auto overflow-x-hidden p-4 space-y-4 detached-content">
+<div x-data="modals" class="relative p-4 detached-content">
     <!-- Start Breadcrumb -->
     <div>
         <nav class="w-full">
