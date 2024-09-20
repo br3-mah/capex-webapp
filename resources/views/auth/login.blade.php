@@ -88,7 +88,7 @@
                         <span class="text-danger"></span>
                     </div>
                     <div class="ltr:text-right rtl:text-left">
-                        <a href="{{ route('password.request') }}" class="text-black dark:text-white">Forgot Password?</a>
+                        {{-- <a href="{{ route('password.request') }}" class="text-black dark:text-white">Forgot Password?</a> --}}
                     </div>
                     <button type="submit" class="btn w-full py-3.5 text-base bg-purple border border-purple rounded-md text-white transition-all duration-300 hover:bg-purple/[0.85] hover:border-purple/[0.85]">
                         Sign In
