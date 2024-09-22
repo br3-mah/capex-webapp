@@ -16,7 +16,7 @@
                 </div>
                 <div class="px-8 ml-4">
                     <h3 class="text-4xl font-bold text-white">to Capex Financial Services</h3>
-                    <h3 class="text-4xl font-bold text-white">manage your Loans</h3>
+                    <h3 class="text-4xl font-bold text-white">Manage my Loans</h3>
                     <p class="max-w-4xl mt-2 text-base text-white dark:text-darkmuted">
                         Here you can feel free and enjoy the amazing life with Capex
                     </p>
