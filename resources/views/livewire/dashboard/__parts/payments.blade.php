@@ -27,7 +27,7 @@
 
 
 <!-- Modal -->
-<div id="uploadModal" class="fixed inset-0 flex items-center justify-center hidden transition-opacity duration-300 bg-info/30 backdrop-blur-sm z-50">
+<div id="uploadModal" class="fixed inset-0 shadow-xl flex items-center justify-center hidden transition-opacity duration-300 bg-info/30 backdrop-blur-sm z-50">
     <div style="width:50%" class="shadow-md max-w-2xl p-6 transition-all duration-300 transform scale-95 bg-white dark:bg-gray-800 rounded-lg shadow-2xl opacity-0" id="modalContent">
         <h2 class="mb-6 text-2xl font-semibold text-gray-800 dark:text-white">Upload Proof of Payment</h2>
 
@@ -100,7 +100,7 @@
             <!-- Action Buttons -->
             <div class="flex justify-end space-x-4">
                 <button type="button" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" onclick="closeModal()">Cancel</button>
-                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Submit</button>
+                <button type="submit"  id="submitButton"  class="px-4 py-2 text-sm font-medium text-white bg-info rounded-md hover:info focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Submit</button>
             </div>
         </form>
     </div>
@@ -231,6 +231,10 @@ document.getElementById('uploadModal').addEventListener('click', function(event)
             </div>
         @endforelse
     </div>
+    <div id="successMessage" class="hidden mt-4 p-4 bg-success text-white rounded-lg">
+        Proof of payment submitted successfully!
+    </div>
+    
     <script>
         // Wait for the page to fully load
         document.addEventListener("DOMContentLoaded", function () {
@@ -240,5 +244,29 @@ document.getElementById('uploadModal').addEventListener('click', function(event)
                 card.style.animationDelay = `${index * 300}ms`; // Use backticks (`) for string interpolation
             });
         });
+            
+        // Function to handle form submission
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const submitButton = document.getElementById('submitButton');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Show loading state on button
+            submitButton.disabled = true;
+            submitButton.innerHTML = 'Submitting...';
+            
+            // Simulate a delay (e.g., for actual form submission) and show success message
+            setTimeout(() => {
+                submitButton.disabled = false;
+                submitButton.innerHTML = 'Submit';
+                
+                // Show success message
+                successMessage.classList.remove('hidden');
+                successMessage.classList.add('animate-slide-fade');
+                
+                // Optionally close the modal
+                closeModal();
+            }, 2000); // Simulate delay
+        }
     </script>
 </div>

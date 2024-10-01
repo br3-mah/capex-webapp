@@ -129,7 +129,7 @@
             if (file && file.type.startsWith('image/')) {
                 const img = document.createElement('img');
                 img.src = URL.createObjectURL(file);
-                img.classList.add('w-full', 'h-auto', 'rounded-md', 'shadow-md');
+                img.classList.add('w-1/2', 'h-auto', 'rounded-md', 'shadow-md');
                 fileList.appendChild(img);
             } else {
                 const listItem = document.createElement('li');
