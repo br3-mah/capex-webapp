@@ -49,6 +49,7 @@
         </header>
         <!-- End Header -->
 
+        <x-jet-validation-errors class="alert text-center alert-danger text-danger text-xs" />
         <!-- Start Main Content -->
         <div class="min-h-[calc(100vh-134px)] py-4 px-4 sm:px-12 flex justify-center items-center max-w-[1440px] mx-auto">
             <div class="max-w-[550px] flex-none w-full bg-white border border-black/10 p-6 sm:p-10 lg:px-10 lg:py-14 rounded-2xl loginform dark:bg-darklight dark:border-darkborder">

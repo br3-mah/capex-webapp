@@ -176,31 +176,31 @@
                             <p class="text-sm text-gray-600">Email: <span class="font-bold text-gray-800">{{ auth()->user()->email }}</span></p>
                         </div>
                     </div>
-                
-          <form action="{{ route('completeApplication') }}" method="post" class="flex items-center justify-between mt-6">
-    @csrf
-    <input type="hidden" name="loan_id" value="{{ $loan->id }}">
-    <br>
-    <button type="button" onclick="prevStep(7)" id="backicon" class="flex items-center px-4 py-2 text-white transition duration-300 border bg-muted border-muted hover:bg-muted/80 hover:border-muted/80 dark:text-white dark:border-darkmuted dark:hover:text-white">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-arrow-left" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-        </svg>
-        Back
-    </button>
-    
-    <button type="submit" class="relative flex items-center px-4 py-2 text-white transition duration-300 border bg-success border-success hover:bg-success/80 hover:border-success/80">
-        <!-- Loading Indicator -->
-        <div wire:loading class="absolute inset-0 z-10 flex items-center justify-center bg-opacity-50 rounded-lg bg-success">
-            <svg class="w-5 h-5 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 1 1 16 0A8 8 0 0 1 4 12z"></path>
-            </svg>
-        </div>
-        <div id="finishicon" class="flex items-center">
-            Finish
-        </div>
-    </button>
-</form>
+                            
+                    <form action="{{ route('completeApplication') }}" method="post" class="flex items-center justify-between mt-6">
+                            @csrf
+                            <input type="hidden" name="loan_id" value="{{ $loan->id }}">
+                            <br>
+                            <button type="button" onclick="prevStep(7)" id="backicon" class="flex items-center px-4 py-2 text-white transition duration-300 border bg-muted border-muted hover:bg-muted/80 hover:border-muted/80 dark:text-white dark:border-darkmuted dark:hover:text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="mr-2 bi bi-arrow-left" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                                </svg>
+                                Back
+                            </button>
+                            
+                            <button type="submit" class="relative flex items-center px-4 py-2 text-white transition duration-300 border bg-success border-success hover:bg-success/80 hover:border-success/80">
+                                <!-- Loading Indicator -->
+                                <div wire:loading class="absolute inset-0 z-10 flex items-center justify-center bg-opacity-50 rounded-lg bg-success">
+                                    <svg class="w-5 h-5 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 1 1 16 0A8 8 0 0 1 4 12z"></path>
+                                    </svg>
+                                </div>
+                                <div id="finishicon" class="flex items-center">
+                                    Finish
+                                </div>
+                            </button>
+                        </form>
 
                 </div>
                 
@@ -208,15 +208,19 @@
             </div>
     </div>
     <script>
-        let currentStep = 1;
-        showStep(1);
+        
+        // Check if the URL contains the 'step' parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentStep = urlParams.has('step') ? parseInt(urlParams.get('step')) : 1;
+        // let currentStep = 1;
+        showStep(currentStep);
 
         function showStep(step) {
-        const steps = document.querySelectorAll('.step');
-        steps.forEach((stepElem) => stepElem.style.display = 'none');
+            const steps = document.querySelectorAll('.step');
+            steps.forEach((stepElem) => stepElem.style.display = 'none');
 
-        const currentStep = document.getElementById('step' + step);
-        currentStep.style.display = 'block';
+            const currentStep = document.getElementById('step' + step);
+            currentStep.style.display = 'block';
         }
 
         function nextStep(step) {
@@ -243,6 +247,7 @@
             if (_validate_step4()) {
                 currentStep += 1;
                 showStep(currentStep);
+
             }
             break;
             case 5:
@@ -254,8 +259,16 @@
             case 6:
 
             if (_validate_step6()) {
-                currentStep += 1;
-                showStep(currentStep);
+                // currentStep += 1;
+                // showStep(currentStep);
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('step', step + 1);  // Increase the step number and set it as a parameter
+
+                // Optionally, you can add more parameters here
+                urlParams.set('p', 'summary');  // Example of adding a custom parameter
+
+                // Reload the page with the new URL parameters
+                window.location.href = `${window.location.pathname}?${urlParams.toString()}`;
             }
             break;
 

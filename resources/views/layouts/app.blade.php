@@ -11,6 +11,8 @@
     <title>My Capex App </title>
     <!-- Favicon Icon -->
     <link rel="shortcut icon" href="public/app/img/fav.png">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
     <!-- Style Css -->
     <link rel="stylesheet" href="public/app/assets/css/style.css">
     @livewireStyles
@@ -334,6 +336,50 @@
     {{-- <script src="public/app/assets/js/appexchart-app.js"></script> --}}
 
     <!-- Custom js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        toastr.options = {
+            "closeButton": true,             // Adds a close button to the notifications
+            "debug": false,                  // Disable debugging
+            "newestOnTop": true,             // Display the newest notifications on top
+            "progressBar": false,             // Show a progress bar
+            "positionClass": "toast-bottom-right",  // Positioning of the toast on the page
+            "preventDuplicates": true,       // Prevent showing duplicate notifications
+            "onclick": null,                 // Callback when a toast is clicked
+            "showDuration": "300",           // Animation duration when showing the notification
+            "hideDuration": "1000",          // Animation duration when hiding the notification
+            "timeOut": "5000",               // Time in milliseconds before the notification disappears
+            "extendedTimeOut": "1000",       // Time in milliseconds after hovering over the toast
+            "showEasing": "swing",           // Easing function when showing the toast
+            "hideEasing": "linear",          // Easing function when hiding the toast
+            "showMethod": "fadeIn",          // Method used to show the toast
+            "hideMethod": "fadeOut"          // Method used to hide the toast
+        };
+        @if(Session::has('success'))
+            toastr.success("{{ Session::get('success') }}");
+        @endif
+
+        @if(Session::has('error'))
+            toastr.error("{{ Session::get('error') }}");
+        @endif
+
+        @if(Session::has('info'))
+            toastr.info("{{ Session::get('info') }}");
+        @endif
+
+        @if(Session::has('warning'))
+            toastr.warning("{{ Session::get('warning') }}");
+        @endif
+
+        // User Input validation
+        @if ($errors->has('nrc_no'))
+            toastr.error("{{ $errors->first('nrc_no') }}", "Validation Error");
+        @endif
+
+        @if ($errors->has('phone'))
+            toastr.error("{{ $errors->first('phone') }}", "Validation Error");
+        @endif
+    </script>
     <script src="public/app/assets/js/custom.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>

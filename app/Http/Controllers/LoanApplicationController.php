@@ -510,39 +510,39 @@ class LoanApplicationController extends Controller
     }
 
 
-    public function completeApplication(Request $request)
-{
-    $request->validate([
-        'loan_id' => 'required|integer|exists:applications,id',
-    ]);
+    public function completeApplication(Request $request){
+        $request->validate([
+            'loan_id' => 'required|integer|exists:applications,id',
+        ]);
 
-    // Retrieve the loan using the provided loan_id
-    $loan = Application::find($request->input('loan_id'));
-    
-    if (!$loan) {
-        return back()->with('error', 'Loan not found.');
-    }
+        // Retrieve the loan using the provided loan_id
+        $loan = Application::find($request->input('loan_id'));
 
-    DB::beginTransaction();
-    try {
-        // Set the loan for further operations
-        $this->loan = $loan;
-        
-        $this->updateLoan();
-        $status = $this->getFirstLoanStatus();
-        if (!$status) {
-            throw new \Exception('Loan status not found for the given loan product.');
+        if (!$loan) {
+            return back()->with('error', 'Loan not found.');
         }
-        $this->insertApplicationStage($status);
-        DB::commit();
 
-        return redirect()->route('dashboard')->with('success', 'Application completed successfully.');
-    } catch (\Throwable $th) {
-        DB::rollBack();
-        Log::error('Failed to complete application: ' . $th->getMessage());
-        return back()->with('error', 'An error occurred while completing the application. Please try again.'); 
+        // DB::beginTransaction();
+        try {
+            // Set the loan for further operations
+            $this->loan = $loan;
+
+            $this->updateLoan();
+            $status = $this->getFirstLoanStatus();
+            if (!$status) {
+                $this->insertApplicationStage('processing');
+            }else{
+                $this->insertApplicationStage($status);
+            }
+            // DB::commit();
+
+            return redirect()->route('dashboard')->with('success', 'Application completed successfully.');
+        } catch (\Throwable $th) {
+            dd($th);
+            // DB::rollBack();
+            return back()->with('error', 'An error occurred while completing the application. Please try again.');
+        }
     }
-}
 
 private function updateLoan()
 {

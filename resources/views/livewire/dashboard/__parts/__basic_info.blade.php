@@ -4,7 +4,7 @@
         <div class="flex justify-between w-full gap-4">
             <div class="flex-1 min-w-[calc(50%-1rem)]">
                 <label for="loanType" class="form-label">Type of Loan</label>
-                
+
                 <select name="loan_type_id" id="loanType" class="block w-full border-2 border-blue-500 rounded-md shadow-sm form-input focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
                     @if ($loan)
                     <option selected value="{{ $type->first()->id }}">{{ $type->first()->name }}</option>
@@ -42,15 +42,9 @@
         <div class="flex justify-between w-full gap-4">
             <div class="flex-1 min-w-[calc(50%-1rem)]">
                 <label for="amount" class="form-label">How much do you want to Borrow?</label>
-                <select name="amount" id="amount"  class="block w-full border-2 border-blue-500 rounded-md shadow-sm form-input focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
-                    @if ($loan)
-                        <option value="{{ $loan->amount ?? '' }}">K {{ $loan->amount ?? '' }}</option>
-                    @endif
-                    <option>Choose...</option>
-                </select>
+                <input name="amount" id="amount" class="block w-full border-2 border-blue-500 rounded-md shadow-sm form-input focus:border-blue-700 focus:ring-blue-700 sm:text-sm" />
                 <small id="amountError" class="text-xs text-danger"></small>
             </div>
-
             <div class="flex-1 min-w-[calc(50%-1rem)]">
                 <label for="duration" class="form-label">Loan Duration</label>
                 <select name="duration" id="duration" class="block w-full border-2 border-blue-500 rounded-md shadow-sm form-input focus:border-blue-700 focus:ring-blue-700 sm:text-sm">
@@ -103,7 +97,7 @@
             <small id="employeeNoError" class="text-xs text-danger"></small>
         </div>
     </div>
-    
+
     <div class="flex flex-wrap gap-4 mb-4">
         <div class="flex-1 min-w-[calc(50%-1rem)]">
             <label for="id_type" class="block text-sm font-medium text-blue-700">Identification Card Type</label>
@@ -220,6 +214,7 @@ document.addEventListener('DOMContentLoaded', function () {
         loanDurationSelect.disabled = true;
     });
 
+    
     loanPackageSelect.addEventListener('change', function () {
         const loanPackageId = this.value;
 
@@ -227,12 +222,38 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch(`api/get-loan-package-item/${loanPackageId}`)
                 .then(response => response.json())
                 .then(data => {
-                    // Populate loan amounts
-                    loanAmountSelect.innerHTML = '<option>Choose...</option>';
-                    loanAmountSelect.disabled = false;
+                    const minAmount = Math.min(...data.amounts);
+                    const maxAmount = Math.max(...data.amounts);
 
-                    data.amounts.forEach(amount => {
-                        loanAmountSelect.innerHTML += `<option value="${amount}">${amount}</option>`;
+                    const loanAmountInput = document.getElementById('amount');
+
+                    // Set input field attributes for min, max, and placeholder
+                    loanAmountInput.setAttribute('min', minAmount);
+                    loanAmountInput.setAttribute('max', maxAmount);
+                    loanAmountInput.setAttribute('placeholder', `Enter an amount between ${minAmount} and ${maxAmount}`);
+                    loanAmountInput.disabled = false;
+
+                    // Allow only number inputs and validate range
+                    loanAmountInput.addEventListener('input', function () {
+                        this.value = this.value.replace(/[^0-9]/g, ''); // Replace non-numeric characters
+
+                        const inputValue = parseInt(this.value, 10);
+
+                        if (inputValue > maxAmount || inputValue < minAmount) {
+                            this.style.borderColor = 'red'; // Set border to red
+                            document.getElementById('amountError').textContent = `Amount must be between ${minAmount} and ${maxAmount}`;
+                        } else {
+                            this.style.borderColor = ''; // Reset border color
+                            document.getElementById('amountError').textContent = ''; // Clear error message
+                        }
+                    });
+
+                    loanAmountInput.addEventListener('blur', function () {
+                        const inputValue = parseInt(this.value, 10);
+
+                        if (inputValue > maxAmount || inputValue < minAmount) {
+                            this.value = ''; // Clear the input if it's out of range
+                        }
                     });
 
                     // Populate loan durations
@@ -242,15 +263,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     data.durations.forEach(duration => {
                         loanDurationSelect.innerHTML += `<option value="${duration}">${duration} months</option>`;
                     });
+                })
+                .catch(error => {
+                    console.error('Error fetching loan package data:', error);
                 });
         } else {
-            loanAmountSelect.innerHTML = '<option>Choose...</option>';
-            loanAmountSelect.disabled = true;
+            const loanAmountInput = document.getElementById('amount');
+            loanAmountInput.value = '';
+            loanAmountInput.disabled = true;
+
             loanDurationSelect.innerHTML = '<option>Choose...</option>';
             loanDurationSelect.disabled = true;
         }
     });
+
+
+
 });
 </script>
 
 </div>
+
