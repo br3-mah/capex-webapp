@@ -50,7 +50,8 @@ class Application extends Model
         'days_late',
         'loan_product_id',
         'loan_type_id', //loan_type
-        'loan_child_type_id' //loan_category
+        'loan_child_type_id', //loan_category
+        'email' //loan_category
     ];
     protected $appends = [
         'done_by',
@@ -65,17 +66,20 @@ class Application extends Model
             $builder->with('user');
         });
 
+        // Automatically generate a numeric UUID and set the email on application creation
         static::creating(function ($application) {
-            $application->uuid = static::generateNumericUUID(5); // Generate 5-digit numeric UUID
-            $application->source = 'Web Application'; // Generate 5-digit numeric UUID
+            // Generate 5-digit numeric UUID
+            $application->uuid = static::generateNumericUUID(5);
+            $application->usource = 'Web App';
+            // Set the email based on the associated user's email
+            $user = User::find($application->user_id);
+
+            // If a user is found, set the email
+            if ($user) {
+                $application->email = $user->email;
+            }
         });
 
-        static::created(function ($user) {
-            // Update all applications with the same email to have this user's user_id
-            Application::where('email', $user->email)->update([
-                'user_id' => $user->id,
-            ]);
-        });
     }
 
     protected static function generateNumericUUID($length = 5)
