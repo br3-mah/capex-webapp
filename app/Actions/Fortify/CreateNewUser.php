@@ -40,6 +40,7 @@ class CreateNewUser implements CreatesNewUsers
                 'lname' => $input['lname'],
                 'email' => $input['email'],
                 'phone' => $input['phone'],
+                'usource' => 'Web App',
                 'password' => Hash::make($input['password']),
             ]);
             $user->assignRole('user');

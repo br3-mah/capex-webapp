@@ -522,7 +522,7 @@ class LoanApplicationController extends Controller
             return back()->with('error', 'Loan not found.');
         }
 
-        // DB::beginTransaction();
+        DB::beginTransaction();
         try {
             // Set the loan for further operations
             $this->loan = $loan;
@@ -534,12 +534,12 @@ class LoanApplicationController extends Controller
             }else{
                 $this->insertApplicationStage($status);
             }
-            // DB::commit();
+            DB::commit();
 
             return redirect()->route('dashboard')->with('success', 'Application completed successfully.');
         } catch (\Throwable $th) {
             dd($th);
-            // DB::rollBack();
+            DB::rollBack();
             return back()->with('error', 'An error occurred while completing the application. Please try again.');
         }
     }
