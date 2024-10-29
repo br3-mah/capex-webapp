@@ -56,29 +56,29 @@ trait LoanTrait{
 
     public function loan_product($id){
         return DB::table('loan_products')
-        ->where('id', $id)
-        ->leftJoin('disbursed_by', 'loan_products.disbursed_by_id', '=', 'disbursed_by.id')
-        ->leftJoin('interest_methods', 'loan_products.interest_method_id', '=', 'interest_methods.id')
-        ->leftJoin('interest_types', 'loan_products.interest_type_id', '=', 'interest_types.id')
-        ->leftJoin('loan_accounts', 'loan_products.id', '=', 'loan_accounts.loan_product_id')
-        ->leftJoin('loan_status', 'loan_products.loan_status_id', '=', 'loan_status.id')
-        ->leftJoin('loan_decimal_places', 'loan_products.id', '=', 'loan_decimal_places.loan_product_id')
-        ->leftJoin('service_fees', 'loan_products.id', '=', 'service_fees.loan_product_id')
-        ->leftJoin('loan_products', 'institutions', 'loan_products.id', '=', 'institutions.loan_product_id')
-        ->select(
-            'loan_products.*',
-            'disbursed_by.*',
-            'interest_methods.*',
-            'interest_types.*',
-            'loan_accounts.account_payment',
-            'loan_status.status',
-            'loan_decimal_places.*',
-            'service_fees.service_charge',
-            'institutions.*'
-        )
-        ->first();
-
+            ->where('loan_products.id', $id)
+            ->leftJoin('disbursed_bies', 'loan_products.disbursed_by_id', '=', 'disbursed_bies.id')
+            ->leftJoin('interest_methods', 'loan_products.interest_method_id', '=', 'interest_methods.id')
+            ->leftJoin('interest_types', 'loan_products.interest_type_id', '=', 'interest_types.id')
+            // ->leftJoin('loan_payment_accounts', 'loan_products.id', '=', 'loan_accounts.loan_product_id')
+            // ->leftJoin('loan_statuses', 'loan_products.loan_status_id', '=', 'loan_statuses.id')
+            ->leftJoin('loan_decimal_places', 'loan_products.id', '=', 'loan_decimal_places.loan_product_id')
+            // ->leftJoin('service_fees', 'loan_products.id', '=', 'service_fees.loan_product_id')
+            ->leftJoin('institutions', 'loan_products.institution_id', '=', 'institutions.id') // Adjusted the join here
+            ->select(
+                'loan_products.*',
+                'disbursed_bies.*',
+                'interest_methods.*',
+                'interest_types.*',
+                // 'loan_payment_accounts.account_payment',
+                // 'loan_statuses.status',
+                'loan_decimal_places.*',
+                // 'service_fees.service_charge',
+                'institutions.*'
+            )
+            ->first();
     }
+
 
     public function get_loan_category($id){
         return DB::table('loan_child_types')
@@ -200,7 +200,6 @@ trait LoanTrait{
         }
     }
 
-    //!mportant
     public function getCurrentLoan(){
         return Application::with('loan_product')->orWhere('status', 0)
         ->orWhere('status', 2)
@@ -211,12 +210,14 @@ trait LoanTrait{
     }
 
     public function get_loan_details($id){
-        return Application::with('user.uploads')->where('id', $id)->first(); 
+        return Application::with('user.uploads')->where('id', $id)->first();
     }
 
     public function createUpdateTemporalLoan($data)
     {
+
         $application = $this->getCurrentLoan();
+        $pl = $this->get_loan_product((int)$data['loan_type']);
         if ($application) {
             // Update the existing application
             $application->update([
@@ -225,6 +226,8 @@ trait LoanTrait{
                 'loan_product_id' => $data['loan_package'],
                 'loan_type_id' => $data['loan_type'], // Loan type
                 'loan_child_type_id' => $data['loan_category'],
+                'interest' => $pl->def_loan_interest,
+                'interest_type' => $pl->interest_types->first()->interest_type->name,
                 'status' => 100,
                 'user_id' => auth()->user()->id
             ]);
@@ -236,6 +239,8 @@ trait LoanTrait{
                 'loan_product_id' => $data['loan_package'],
                 'loan_type_id' => $data['loan_type'], // Loan type
                 'loan_child_type_id' => $data['loan_category'],
+                'interest' => $pl->def_loan_interest,
+                'interest_type' => $pl->interest_types->first()->interest_type->name,
                 'status' => 100,
                 'user_id' => auth()->user()->id
             ]);

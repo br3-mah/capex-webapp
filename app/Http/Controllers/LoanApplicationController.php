@@ -467,7 +467,6 @@ class LoanApplicationController extends Controller
                 $this->createUpdateTemporalLoan($data);
             }
 
-
             if (isset($data['nokfname'])) {
                 $this->updateKinUser($data);
             }

@@ -7,7 +7,7 @@
                 <input type="hidden" name="application_id" value="{{ App\Models\Application::currentApplication()->id }}">
                 <input type="hidden" name="borrower_id" value="{{ auth()->user()->id }}">
                 <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-                
+
                 <!-- Personal Info -->
                 <div id="step1" class="w-full max-w-6xl mx-auto overflow-hidden shadow-xl step bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl">
                     <div class="p-12">
@@ -165,7 +165,7 @@
                             <p class="text-sm text-gray-600">Tenure: <span class="font-bold text-gray-800">{{ $loan->repayment_plan }} Month(s)</span></p>
                             <input type="hidden" name="final" value="1">
                         </div>
-                
+
                         <!-- Right Column -->
                         <div class="p-4 border border-gray-200 rounded-lg bg-gray-50">
                             {{-- <p class="text-sm text-gray-600">You Will Receive: <span class="font-bold text-gray-800">K{{ App\Models\Application::receiveAmount($loan->amount, $loan->repayment_plan) }}</span></p> --}}
@@ -176,7 +176,7 @@
                             <p class="text-sm text-gray-600">Email: <span class="font-bold text-gray-800">{{ auth()->user()->email }}</span></p>
                         </div>
                     </div>
-                            
+
                     <form action="{{ route('completeApplication') }}" method="post" class="flex items-center justify-between mt-6">
                             @csrf
                             <input type="hidden" name="loan_id" value="{{ $loan->id }}">
@@ -187,7 +187,7 @@
                                 </svg>
                                 Back
                             </button>
-                            
+
                             <button type="submit" class="relative flex items-center px-4 py-2 text-white transition duration-300 border bg-success border-success hover:bg-success/80 hover:border-success/80">
                                 <!-- Loading Indicator -->
                                 <div wire:loading class="absolute inset-0 z-10 flex items-center justify-center bg-opacity-50 rounded-lg bg-success">
@@ -203,12 +203,12 @@
                         </form>
 
                 </div>
-                
+
 
             </div>
     </div>
     <script>
-        
+
         // Check if the URL contains the 'step' parameter
         const urlParams = new URLSearchParams(window.location.search);
         let currentStep = urlParams.has('step') ? parseInt(urlParams.get('step')) : 1;

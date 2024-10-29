@@ -13,7 +13,8 @@ class Application extends Model
     protected $fillable = [
         'repayment_plan',
         'amount',
-        'interest',
+        'interest',  //loan_category,
+        'interest_type',
         'payback_amount',
         'old_amount',
         'status',
