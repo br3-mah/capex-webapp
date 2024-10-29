@@ -1,119 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" dir="ltr" x-data="{ direction: 'ltr' }" x-bind:dir="direction">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Mighty Finance Solution | Reset Password</title>
-    <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('public/web/images/favicon.png') }}" />
-    <!-- Custom Stylesheet -->
-    <link href="{{ asset('public/theme/css/style.css') }}" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-        }
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Capex App - Forgot Password Page" />
+    <title>Forgot Password - Capex App</title>
 
-        .auth-form .btn {
-            height: 50px;
-            font-weight: 700;
-            border-radius: 2.5rem;
-            box-shadow: none !important;
-        }
+    <!-- Favicon Icon -->
+    <link rel="shortcut icon" href="public/app/img/fav.png">
 
-        #background-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(102, 45, 145, 0.8), rgba(145, 45, 115, 0.8)),
-                url('https://cdn03.allafrica.com/download/pic/main/main/csiid/00611742:63e77387f56223a1509fb944791b01eb:arc614x376:w735:us1.jpg');
-            background-size: cover;
-            background-position: center;
-        }
-
-        .authincation {
-            position: relative;
-        }
-
-        .authincation-content {
-            background-color: rgba(255, 255, 255, 0.8);
-            /* Adjust the transparency level as needed */
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .auth-form {
-            padding: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            margin-bottom: 5px;
-        }
-
-        @media (max-width: 767px) {
-            .authincation-content {
-                margin: 20px;
-            }
-        }
-    </style>
+    <!-- Icon CSS and Style CSS -->
+    <link rel="stylesheet" href="public/app/assets/css/remixicon.css" />
+    <link rel="stylesheet" href="public/app/assets/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="@@dashboard">
-    <div id="background-container"></div>
-    <div id="main-wrapper">
-        <div class="authincation section-padding">
-            <div class="container">
-
-                <div class="row justify-content-center align-items-center">
-
-                    {{-- <small>
-                        <x-jet-validation-errors class="text-sm text-danger w-full" />
-                    </small> --}}
-                    <div class="col-xl-4 col-md-5">
-                        <div class="mini-logo text-center my-3">
-                            <a href="{{ route('welcome') }}">
-                                <img width="100" src="{{ asset('/public/web/images/01-ft-logo.png') }}"
-                                    alt="" />
-                            </a>
-                            <h4 class="card-title text-white mt-5">Reset Password</h4>
-                        </div>
-                        <div class="auth-form card" style="border-radius:1.3rem">
-                            <x-jet-validation-errors class="text-danger text-sm text-center w-full" />
-                            <div class="card-body">
-                                <form class="row g-3" method="POST" action="{{ route('password.email') }}">
-                                    @csrf
-                                    <div class="form-group col-12">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" name="email" class="form-control"
-                                            placeholder="Your Email">
-                                    </div>
-                                    <div class="text-center  col-12 mt-4">
-                                        <button type="submit" class="btn btn-primary btn-block">Email Password Reset
-                                            Link</button>
-                                    </div>
-                                </form>
-                                {{-- <div class="new-account mt-3">
-                                    <p>Didn't get code? <a class="text-primary" href="">Resend</a></p>
-                                </div> --}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
+        <div class="text-center mb-6">
+            <a href="{{ route('welcome') }}" class="flex justify-center">
+                <img src="public/app/img/logo.png" alt="Capex App Logo" class="w-20">
+            </a>
+            <h2 class="text-2xl font-semibold text-gray-700 mt-4">Reset Password</h2>
         </div>
+
+        <form method="POST" action="{{ route('password.email') }}" class="space-y-4">
+            @csrf
+            <x-jet-validation-errors class="text-red-500 text-sm text-center mb-4" />
+
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-600">Email Address</label>
+                <input type="email" name="email" id="email" required
+                       class="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                       placeholder="Enter your email" />
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md font-medium">
+                    Send Password Reset Link
+                </button>
+            </div>
+
+            <p class="text-center text-sm text-gray-600 mt-4">
+                Didn’t get the email? <a href="#" class="text-indigo-600 hover:text-indigo-500">Resend</a>
+            </p>
+        </form>
     </div>
-
-    <script src="{{ asset('public/mfs/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('public/mfs/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('public/mfs/js/scripts.js') }}"></script>
 </body>
-
 </html>

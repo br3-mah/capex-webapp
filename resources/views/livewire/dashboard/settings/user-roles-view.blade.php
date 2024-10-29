@@ -60,8 +60,8 @@
                     <!--end::Card-->
                 </div>
                 @endforeach
-                
-                
+
+
                 <!--end::Col-->
                 <!--begin::Add new card-->
                 <div class="col-md-4">
@@ -172,11 +172,11 @@
                                                                 <!--begin::Checkbox-->
                                                                 @foreach($p as $key => $perm)
                                                                 <label class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-20">
-                                                                    <input 
-                                                                        class="form-check-input" 
-                                                                        type="checkbox" 
+                                                                    <input
+                                                                        class="form-check-input"
+                                                                        type="checkbox"
                                                                         wire:model.defer="permission.{{ $key }}"
-                                                                        value="{{ $perm->name }}" 
+                                                                        value="{{ $perm->name }}"
                                                                         name="user_management_read" />
                                                                     <small class="form-check-label">{{ ucwords($perm->permission) }}</small>                                                               <span class="form-check-label">{{ $permission->permission }}</span>
                                                                 </label>
@@ -188,8 +188,8 @@
                                                         <!--end::Options-->
                                                     </tr>
                                                     @endforeach
-                                                    
-                                                    
+
+
                                                     {{-- <tr>
                                                         <!--begin::Label-->
                                                         <td class="text-gray-800">Loan Management</td>
@@ -202,11 +202,11 @@
                                                                 @foreach($permissions as $key => $perm)
                                                                 @
                                                                 <label class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-20">
-                                                                    <input 
-                                                                        class="form-check-input" 
-                                                                        type="checkbox" 
+                                                                    <input
+                                                                        class="form-check-input"
+                                                                        type="checkbox"
                                                                         wire:model.defer="permission.{{ $key }}"
-                                                                        value="{{ $perm->name }}" 
+                                                                        value="{{ $perm->name }}"
                                                                         name="user_management_read" />
                                                                     <small class="form-check-label">{{ ucwords($perm->name) }}</small>
                                                                 </label>
@@ -491,7 +491,7 @@
                                     </div>
                                     <!--end::Permissions-->
                                 </div>
-                                
+
                                 <div wire:loading wire:target="reviewLoan" class="text-center">
                                     <div class="d-flex justify-content-center align-items-center gap-4 text-center items-center">
                                         <span class="spinner-border text-primary" role="status"></span>
@@ -504,8 +504,6 @@
                                     <button type="reset" class="btn btn-light me-3" data-kt-roles-modal-action="cancel">Discard</button>
                                     <button type="submit" class="btn btn-primary"  data-bs-dismiss="modal"  data-kt-roles-modal-action="submit">
                                         <span class="indicator-label">Submit</span>
-                                        <span class="indicator-progress">Please wait...
-                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                                     </button>
                                 </div>
                                 <!--end::Actions-->
@@ -545,7 +543,7 @@
                         <div class="modal-body scroll-y mx-5 my-7">
                             <!--begin::Form-->
                             <form id="updateRoleForm" class="form" method="POST" action="{{ route('update-role') }}">
-                                
+
                                 @csrf
                                 <input type="hidden" name="role_id" value="{{$role_id}}">
                                 <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_update_role_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_update_role_header" data-kt-scroll-wrappers="#kt_modal_update_role_scroll" data-kt-scroll-offset="300px">
@@ -583,16 +581,16 @@
                                                             <div class="d-flex">
                                                                 @foreach($p as $key => $perm)
                                                                     <label for="{{ $perm->name.''.$perm->id }}" class="form-check form-check-sm form-check-custom form-check-solid me-5 me-lg-20">
-                                                                        <input 
+                                                                        <input
                                                                             id="{{ $perm->name.''.$perm->id }}"
-                                                                            class="form-check-input" 
-                                                                            type="checkbox" 
+                                                                            class="form-check-input"
+                                                                            type="checkbox"
                                                                             name="permission[]"
                                                                             @if(!empty($rolePermissions))
-                                                                            value="{{ $perm->name }}" 
-                                                                            {{ 
-                                                                                in_array($perm->name, $rolePermissions) ? 'checked' : '' 
-                                                                            }} 
+                                                                            value="{{ $perm->name }}"
+                                                                            {{
+                                                                                in_array($perm->name, $rolePermissions) ? 'checked' : ''
+                                                                            }}
                                                                             @endif
                                                                             value="{{ $perm->name }}"
 
@@ -610,7 +608,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="text-center pt-15">
                                     <button type="reset" class="btn btn-light me-3" data-kt-roles-modal-action="cancel">Discard</button>
                                     <button onclick="submitForm()" type="button" class="btn btn-primary" data-kt-roles-modal-action="cancel">

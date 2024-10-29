@@ -95,6 +95,9 @@
                         Sign In
                     </button>
                 </form>
+                <p class="text-center items-center justify-center text-muted dark:text-darkmuted">
+                <a align="center" href="{{ route('password.request') }}">Forgot Your Password?</a>
+                </p>
                 <p class="mt-5 text-center text-muted dark:text-darkmuted">Not a Member yet? <a href="{{ route('register') }}" class="text-black dark:text-white">Create an Account</a></p>
             </div>
         </div>

@@ -1,21 +1,26 @@
 
-
 <!DOCTYPE html>
-<html lang="en">
-
-<!-- Mirrored from tende.vercel.app/reset.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 17 Nov 2023 16:22:14 GMT -->
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<html lang="en" dir="ltr" x-data="{ direction: 'ltr' }" x-bind:dir="direction">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Mighty Finance Solution | Reset Password</title>
-    <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('public/mfs/images/logoi.png')}}" />
-    <!-- Custom Stylesheet -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium Tailwind CSS Admin & Dashboard Template" />
+    <meta name="author" content="SRBThemes" />
 
-    <link rel="stylesheet" href="{{ asset('public/mfs/css/style.css')}}" />
-  </head>
+    <!-- Site Tiltle -->
+    <title>Capex App - SignIn</title>
+
+    <!-- Favicon Icon -->
+    <link rel="shortcut icon" href="public/app/img/fav.png">
+
+    <!-- Icon Css -->
+    <link rel="stylesheet" href="public/app/assets/css/remixicon.css" />
+
+    <!-- Style Css -->
+    <link rel="stylesheet" href="public/app/assets/css/style.css">
+</head>
+
 
   <body class="@@dashboard">
 
