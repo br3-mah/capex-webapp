@@ -53,7 +53,7 @@
   a {
     text-decoration: none;
   }
-  
+
   .-btn {
     display: flex;
     justify-content: center;
@@ -63,19 +63,19 @@
     text-align: center;
     border-radius: 12px;
   }
-  
+
   .-btn:hover {
     opacity: .8;
   }
-  
+
   .-bg {
     background: #ffee00;
   }
-  
+
   .-txt {
     color: #fff;
   }
-  
+
   .-xs {
     font-size: 12px;
   }
@@ -97,8 +97,8 @@
             <tr>
               <td style="padding:30px 20px 20px 20px;text-align:center;font-size:1.5em;font-weight:bold; background: #ffffff;">
                 <a href="https://mightyfinance.co.zm" style=" text-decoration:none;">
-                  Might Finance Solution
-                  <!-- <img style="width:120px; height:90px" alt="Mighty Finance Solutions" src="https://mightyfinance.co.zm/web/images/01-ft-logo.png'"> -->
+                    Capex Financial Services
+                  <!-- <img style="width:120px; height:90px" alt="Capex Financial Services Solutions" src="https://mightyfinance.co.zm/web/images/01-ft-logo.png'"> -->
                 </a>
               </td>
             </tr>
@@ -118,7 +118,7 @@
               </td>
             </tr>
             <tr>
-              <td style="padding:30px;text-align:center;font-size: 0.75em;background-color:#500d6c;color:#384049;color:white;border: 1em solid #fff;">
+              <td style="padding:30px;text-align:center;font-size: 0.75em;background-color:#0d236c;color:#384049;color:white;border: 1em solid #fff;">
                 <p style="margin:0 0 0.75em 0;line-height: 0;">
                   <!--      LinkedIn logo            -->
                   <a href="{{App\Models\ContactSetting::linkedin()}}" style="display:inline-block;text-decoration:none;margin: 0 5px;">
@@ -138,7 +138,7 @@
                 <p style="margin:0;font-size:.75rem;line-height:1.5em;text-align: center;">
                   {{App\Models\ContactSetting::name()}}, {{App\Models\ContactSetting::address()}}, {{App\Models\ContactSetting::place()}}.
                   <br>
-                  <a class="unsub" href="https://mightyfinance.co.zm" style="color:#bcc9d8;text-decoration:underline;">Unsubscribe</a>
+                  <a class="unsub" href="" style="color:#bcc9d8;text-decoration:underline;">Unsubscribe</a>
                 </p>
               </td>
             </tr>

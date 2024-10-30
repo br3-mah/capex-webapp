@@ -215,7 +215,6 @@ trait LoanTrait{
 
     public function createUpdateTemporalLoan($data)
     {
-
         $application = $this->getCurrentLoan();
         $pl = $this->get_loan_product((int)$data['loan_type']);
         if ($application) {

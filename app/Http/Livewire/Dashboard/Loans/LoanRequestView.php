@@ -33,7 +33,7 @@ class LoanRequestView extends Component
             // Retrieve users with the 'user' role, excluding their applications
             $this->users = User::role('user')->without('applications')->get();
             // Check OTP
-            $this->VerifyOTP();
+            // $this->VerifyOTP();
             // Retrieve loan requests for the authenticated user and paginate the results (5 items per page)
             $this->loan_requests = Application::with('loan')->where('user_id', auth()->user()->id)->orderBy('id', 'desc')->get();
             $requests = Application::with('loan')->where('user_id', auth()->user()->id)->orderBy('id', 'desc')->paginate(5);

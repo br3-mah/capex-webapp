@@ -67,7 +67,7 @@
   a {
     text-decoration: none;
   }
-  
+
   .-btn {
     display: flex;
     justify-content: center;
@@ -77,19 +77,19 @@
     text-align: center;
     border-radius: 12px;
   }
-  
+
   .-btn:hover {
     opacity: .8;
   }
-  
+
   .-bg {
     background: #ffee00;
   }
-  
+
   .-txt {
     color: #fff;
   }
-  
+
   .-xs {
     font-size: 12px;
   }
@@ -111,7 +111,7 @@
             <tr>
               <td style="padding:30px 20px 20px 20px;text-align:center;font-size:1.5em;font-weight:bold; background: #ffffff;">
                 <a href="https://mightyfinance.co.zm" style=" text-decoration:none;">
-                  <img style="width:120px; height:90px" alt="Mighty Finance Solutions" src="https://mightyfinance.co.zm/public/web/images/01-ft-logo.png">
+                  <img style="width:120px; height:90px" alt="Capex Financial Services" src="https://mightyfinance.co.zm/public/web/images/01-ft-logo.png">
                 </a>
               </td>
             </tr>
@@ -121,19 +121,19 @@
                 <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">
                    {{  $data['type']  }} Loan Request
                 </h1>
-                
+
                 <p style="text-align: left;">
-                    {{  $data['name']  }} expresses interest in obtaining a {{  $data['type']  }} Loan with Mighty Finance. 
+                    {{  $data['name']  }} expresses interest in obtaining a {{  $data['type']  }} Loan with Capex Financial Services.
                     <br>
                     <br>
                     <br>
-                    Hi, I would like to know more about the loan application process, eligibility 
-                    requirements, interest rates, and any other relevant information that 
+                    Hi, I would like to know more about the loan application process, eligibility
+                    requirements, interest rates, and any other relevant information that
                     would help me make an informed decision.
                     <br>
                     <br>
                     <br>
-                    Please call me on {{  $data['phone']  }} 
+                    Please call me on {{  $data['phone']  }}
 
                 </p>
                 <br>
@@ -164,7 +164,7 @@
                 <p style="margin:0;font-size:.75rem;line-height:1.5em;text-align: center;">
                   {{App\Models\ContactSetting::name()}}, {{App\Models\ContactSetting::address()}}, {{App\Models\ContactSetting::place()}}.
                   <br>
-                  <a class="unsub" href="https://mightyfinance.co.zm" style="color:#384049;text-decoration:underline;">Unsubscribe</a>
+                  {{-- <a class="unsub" href="https://mightyfinance.co.zm" style="color:#384049;text-decoration:underline;">Unsubscribe</a> --}}
                 </p>
               </td>
             </tr>
