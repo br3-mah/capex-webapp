@@ -13,7 +13,8 @@
                 <option selected value="{{ $util->bank->first()->bankName }}">{{ $util && $util->bank && $util->bank->first() ? $util->bank->first()->bankName : '' }}</option>
                 @endif
                 <option value="">Select a Bank</option>
-                <option value="Zambia National Commercial Bank">Zambia National Commercial Bank (Zananco)</option>
+                <option value="Zambia National Building Society">Zambia National Building Society (Zananco)</option>
+                <option value="Zambia National Commercial Bank">Zambia National Commercial Bank (ZNBS)</option>
                 <option value="Standard Chartered Bank Zambia">Standard Chartered Bank Zambia</option>
                 <option value="Stanbic Bank Zambia">Stanbic Bank Zambia</option>
                 <option value="Barclays Bank Zambia">Barclays Bank Zambia</option>
@@ -39,7 +40,7 @@
             </select>
             <small id="bankNameError" class="text-danger text-xs"></small>
         </div>
-        
+
         <!-- Branch Name -->
         <div>
             <label for="branchName" class="block text-sm font-medium text-gray-700">Branch Name</label>
@@ -92,5 +93,5 @@
             <p class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow hover:bg-blue-600 transition duration-200"> {{ $util && $util->bank && $util->bank->first() ? $util->bank->first()->created_at->toFormattedDateString() : '' }}</p>
         </div>
     </div> --}}
-    
+
 </div>
