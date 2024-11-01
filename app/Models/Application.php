@@ -52,7 +52,8 @@ class Application extends Model
         'loan_product_id',
         'loan_type_id', //loan_type
         'loan_child_type_id', //loan_category
-        'email' //loan_category
+        'email',
+        'source'
     ];
     protected $appends = [
         'done_by',
@@ -71,7 +72,7 @@ class Application extends Model
         static::creating(function ($application) {
             // Generate 5-digit numeric UUID
             $application->uuid = static::generateNumericUUID(5);
-            $application->usource = 'Web App';
+            $application->source = 'Web App';
             // Set the email based on the associated user's email
             $user = User::find($application->user_id);
 
