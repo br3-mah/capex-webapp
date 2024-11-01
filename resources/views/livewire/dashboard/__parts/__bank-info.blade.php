@@ -13,8 +13,8 @@
                 <option selected value="{{ $util->bank->first()->bankName }}">{{ $util && $util->bank && $util->bank->first() ? $util->bank->first()->bankName : '' }}</option>
                 @endif
                 <option value="">Select a Bank</option>
-                <option value="Zambia National Building Society">Zambia National Building Society (Zananco)</option>
-                <option value="Zambia National Commercial Bank">Zambia National Commercial Bank (ZNBS)</option>
+                <option value="Zambia National Commercial Bank">Zambia National Commercial Bank (Zananco)</option>
+                <option value="Zambia National Building Society">Zambia National Building Society (ZNBS)</option>
                 <option value="Standard Chartered Bank Zambia">Standard Chartered Bank Zambia</option>
                 <option value="Stanbic Bank Zambia">Stanbic Bank Zambia</option>
                 <option value="Barclays Bank Zambia">Barclays Bank Zambia</option>
