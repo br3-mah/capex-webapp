@@ -175,7 +175,7 @@
                         function getFileUrl($upload) {
                             return $upload->source === 'admin'
                                 ? url('public/' . Storage::url($upload->path))
-                                : env('APP_URL') . Storage::url($upload->path);
+                                : 'https://app.capexfinancialservices.org/public/' . Storage::url($upload->path);
                         }
 
                         function renderFileBlock($upload, $label, $user) {
