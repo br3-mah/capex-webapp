@@ -11,7 +11,7 @@
     <title>My Capex App </title>
     <!-- Favicon Icon -->
     <link rel="shortcut icon" href="public/app/img/fav.png">
-    
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
     <!-- Style Css -->
     <link rel="stylesheet" href="public/app/assets/css/style.css">
@@ -36,7 +36,7 @@
             <nav class="sidebar fixed z-[9999] flex-none w-[240px] ltr:border-r rtl:border-l dark:bg-darkborder border-black/10 transition-all duration-300 overflow-hidden">
                 <div class="h-full bg-white dark:bg-darklight">
                     <div class="p-4">
-                        <a href="index.php" class="w-full main-logo">
+                        <a href="{{ route('dashboard') }}" class="w-full main-logo">
                             <img src="public/app/img/logo-2.png" class="mx-auto dark-logo h-7 logo dark:hidden" alt="logo" />
                             <img src="public/app/img/logo-2.png" class="hidden mx-auto light-logo h-7 logo dark:block" alt="logo" />
                             <img src="public/app/img/logo-2.png" class="hidden mx-auto logo-icon h-7" alt="">
