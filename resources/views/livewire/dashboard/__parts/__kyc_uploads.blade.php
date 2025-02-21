@@ -12,7 +12,7 @@
     .file-preview-item img {
         border-radius: 4px;
     }
-    </style>
+</style>
 <div class="space-y-6">
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <!-- NRC File Upload -->
@@ -57,20 +57,6 @@
             </div>
             <small id="nrcFileError" class="text-xs text-danger"></small>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         <!-- TPIN File Upload -->
         <div class="p-4 border border-gray-300 rounded-md">
