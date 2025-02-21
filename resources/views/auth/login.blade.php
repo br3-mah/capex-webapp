@@ -120,7 +120,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 1rem;
             position: relative;
             z-index: 1;
         }
@@ -305,6 +305,64 @@
                 font-size: 1.3rem;
             }
         }
+
+        /* alert danger */
+        .alert-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 1rem auto;
+            max-width: 400px; /* Reduced max-width for smaller appearance */
+            list-style: none;
+            text-decoration: none;
+        }
+
+        .alert-message {
+            position: relative; /* For positioning the close button */
+            background-color: #fff; /* Clean white background */
+            color: #e74c3c; /* Modern red text */
+            padding: 0.75rem 1rem; /* Reduced padding */
+            border-left: 3px solid #e74c3c; /* Left accent border instead of full border */
+            border-radius: 4px; /* Smoother corners */
+            font-size: 0.8rem; /* Smaller font */
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Softer shadow */
+            transition: all 0.3s ease; /* Smooth transition for animations */
+            list-style: none;
+            text-decoration: none;
+        }
+
+        /* Close button styling */
+        .alert-close {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+
+        .alert-close:hover {
+            opacity: 1;
+        }
+
+        /* Optional animation for closing */
+        .alert-closing {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
     </style>
 </head>
 
@@ -342,7 +400,9 @@
                 <button type="submit" class="sign-in-btn">
                     Sign In <i class="fas fa-arrow-right ml-2"></i>
                 </button>
-                <x-jet-validation-errors class="badge text-center badge-danger text-red text-xs" />
+                <div class="alert-container">
+                    <x-jet-validation-errors class="alert-message" />
+                </div>
                 <div class="separator">or</div>
 
                 <div class="register-link">
