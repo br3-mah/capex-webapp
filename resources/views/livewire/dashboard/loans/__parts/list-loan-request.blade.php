@@ -26,10 +26,12 @@
                 <span class="inline-flex items-center rounded text-xs justify-center px-1.5 py-0.5 bg-success/20 text-success">Approved</span>
                 @elseif($loan->status == 2)
                 <span class="inline-flex items-center rounded text-xs justify-center px-1.5 py-0.5 bg-warning/20 text-warning">Processing</span>
+                @elseif($loan->status == 100)
+                <span class="inline-flex items-center rounded text-xs justify-center px-1.5 py-0.5 bg-light/20 text-default">Unfinished</span>
                 @else
                 <span class="inline-flex items-center rounded text-xs justify-center px-1.5 py-0.5 bg-danger/20 text-danger">Rejected</span>
                 @endif
-                <a href="{{ route('loan-details', ['id' => $loan->id]) }}" class="flex items-center text-sm font-medium text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300">
+                <a href="{{ route('loan-details', ['id' => $loan->id]) }}" class="flex items-center text-sm font-medium text-purple hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300">
                     View Details
                     <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </a>

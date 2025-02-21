@@ -8,7 +8,7 @@
             </ul>
         </nav>
     </div>
-    
+
     <div class="flex flex-col gap-4 min-h-[calc(100vh-212px)]">
         <div class="grid grid-cols-1 gap-4">
             <div class="bg-white rounded border-black/10 dark:bg-darklight dark:border-darkborder">
@@ -36,29 +36,35 @@
                             <p class="text-muted">Amount</p>
                             <h3 class="mb-4 text-xl font-semibold dark:text-white">K {{ $loan->amount }}</h3>
                             <div class="dark:text-darkmuted">
-                                <p>Date Applied:  <b>{{ $loan->created_at->toFormattedDateString() }}</b> </p>
-                                <p>Application Status: 
+                                <p>Date Applied:  <b>{{ $loan->created_at->toFormattedDateString() }}</b></p>
+                                <br>
+                                <p>Application Status:
                                     @if ($loan->status == 0)
                                         @if($loan->complete == 0)
-                                            <span class="font-bold text-warning">
+                                            <span class="font-bold text-warning p-2 rounded-xl">
                                                 Incomplete KYC
                                             </span>
                                         @else
-                                            <span class="font-bold text-warning">
+                                            <span class="font-bold text-warning p-2 rounded-xl">
                                                 Processing
                                             </span>
                                         @endif
                                     @endif
                                     @if ($loan->status == 1)
-                                        <span class="font-bold text-success">
+                                        <span class="font-bold text-success p-2 rounded-xl">
                                             Accepted
                                         </span>
                                     @endif
                                     @if ($loan->status == 2)
-                                        <span class="font-bold text-info">
+                                        <span class="font-bold text-info p-2 rounded-xl">
                                             Processing
                                         </span>
-                                    @endif  
+                                    @endif
+                                    @if ($loan->status == 100)
+                                        <span class="font-bold text-muted bg-light p-2 rounded-xl">
+                                            Unfinished (Please finish up loan application process wizard till final submission)
+                                        </span>
+                                    @endif
                                     @if ($loan->status == 3)
                                         <span class="font-bold text-danger">
                                             Loan Request Rejected
@@ -77,14 +83,14 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="flex items-center justify-end gap-4">
                        @if ($loan->status != 2 && $loan->status != 1)
                        <a href="{{ route('form') }}" class="transition-all duration-300 rounded-md btn bg-purple/20 text-purple hover:bg-purple hover:text-white">
                             <span>Update Loan Application</span>
                         </a>
                        @endif
-                       
+
                        @if ($loan->status == 1)
                        <a href="{{ route('transaction.item', ['view'=>'payments']) }}" class="transition-all duration-300 rounded-md btn bg-danger/20 text-danger hover:bg-danger hover:text-white">
                             <span>Make Repayment</span>
