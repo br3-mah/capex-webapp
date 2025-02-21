@@ -4,17 +4,17 @@
       if (isset($_GET['view'])) {
           // Retrieve the value of the 'view' parameter
           $param = $_GET['view'];
-    
+
           // Use the $view variable as needed
           $view = htmlspecialchars($param);
       }
     //   if (isset($_GET['loan'])) {
     //       // Retrieve the value of the 'view' parameter
     //       $param2 = $_GET['loan'];
-    
+
     //       // Use the $view variable as needed
     //       $loan_id = htmlspecialchars($param2);
-    //   } 
+    //   }
       @endphp
         <div class="content-body">
             <div class="container">
@@ -47,18 +47,18 @@
                         @default
                           <h4>Profile</h4>
                           @break
-                            
+
                     @endswitch
                   </div>
                   <div class="">
-         
+
                     <div class="col-xxl-12 col-xl-12 col-lg-12 px-4">
                       @if (session('success'))
                           <div class="alert alert-success">
                               {{ session('success') }}
                           </div>
                       @endif
-    
+
                       @if (session('error'))
                           <div class="alert alert-danger">
                               {{ session('error') }}
@@ -91,7 +91,7 @@
                         </div>
                       </div>
                     </div>
-    
+
                     <div id="docUploads" class="">
                         <div class="row">
                           @include('livewire.dashboard.__parts.p-invest')
@@ -104,15 +104,15 @@
                           </div>
                         </div>
                       </div>
-    
-    
+
+
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <script>
-            
+
               document.getElementById('twoFactor').style.display = "none";
               document.getElementById('browserSession').style.display = "none";
               var view = '{{$view}}';
@@ -132,7 +132,7 @@
                 case 'payback':
                     paybackTab();
                     break;
-                
+
                 default:
                     profileTab();
                     break;
@@ -174,8 +174,7 @@
             document.getElementById('payback').style.display = "block";
             }
           </script>
-          <script src="{{ asset('public/mfs/vendor/jquery/jquery.min.js')}}"></script>
-          <script src="{{ asset('public/mfs/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+         
     </div>
 </div>
-    
+

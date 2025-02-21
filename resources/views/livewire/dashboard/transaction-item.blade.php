@@ -158,8 +158,7 @@
                 document.getElementById('transfers').style.display = "block";
             }
         </script>
-        <script src="{{ asset('public/mfs/vendor/jquery/jquery.min.js')}}"></script>
-        <script src="{{ asset('public/mfs/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+        
     </div>
 </div>
 

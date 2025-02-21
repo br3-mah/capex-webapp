@@ -8,8 +8,8 @@
                 <!-- Card header -->
                 <header class="text-center px-5 pb-5">
                     <!-- Avatar -->
-                    <img width="20" class="inline-flex -mt-9 w-[72px] h-[72px] fill-current rounded-full border-4 border-white box-content shadow mb-3" src="{{ asset('public/mfs/images/j.png') }}">
-                        
+                    <img width="20" class="inline-flex -mt-9 w-[72px] h-[72px] fill-current rounded-full border-4 border-white box-content shadow mb-3" src="">
+
                     <!-- Card name -->
                     <h3 class="text-xl font-bold text-gray-900 mb-1">Make payments for utilize & bills.</h3>
                     <div class="text-sm font-medium text-gray-500">PAYN #00224</div>

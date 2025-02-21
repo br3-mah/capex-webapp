@@ -25,16 +25,16 @@ class LoanApplication extends Mailable
     {
         $this->data = $data;
         $this->files = [
-            [
-                'file_path' => public_path('forms/preapproval-mfs.docx'),
-                'file_name' => 'MFS -  Pre-approval Form.docx',
-                'file_mime' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            ],
-            [
-                'file_path' => public_path('forms/letter-of-introduction-mfs.docx'),
-                'file_name' => 'MRS - Letter of Introduction.pdf',
-                'file_mime' => 'application/pdf'
-            ],
+            // [
+            //     'file_path' => public_path('forms/preapproval.docx'),
+            //     'file_name' => 'C -  Pre-approval Form.docx',
+            //     'file_mime' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            // ],
+            // [
+            //     'file_path' => public_path('forms/letter-of-introduction.docx'),
+            //     'file_name' => 'MRS - Letter of Introduction.pdf',
+            //     'file_mime' => 'application/pdf'
+            // ],
         ];
 
         $this->sms = [

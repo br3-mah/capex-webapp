@@ -19,7 +19,7 @@ class EmployeeSeeder extends Seeder
             'fname' => 'Karen',
             'lname' => 'Doe',
             'phone' => '68770022',
-            'email' => 'employee@mfs.com',
+            'email' => 'employee@capex.com',
             'password' => bcrypt('mighty.@123'),
         ])->assignRole('loan officer');
 
@@ -27,7 +27,7 @@ class EmployeeSeeder extends Seeder
             'fname' => 'Dan',
             'lname' => 'Maxwell',
             'phone' => '77000022',
-            'email' => 'employee2@mfs.com',
+            'email' => 'employee2@capex.com',
             'password' => bcrypt('mighty.@123'),
         ])->assignRole('operations manager');
     }

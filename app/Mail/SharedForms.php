@@ -55,8 +55,8 @@ class SharedForms extends Mailable
     public function attachments()
     {
         return [
-            public_path('forms/preapproval-mfs.docx'),
-            public_path('forms/letter-of-introduction-mfs.docx'),
+            // public_path('forms/preapproval.docx'),
+            // public_path('forms/letter-of-introduction.docx'),
         ];
     }
 }
