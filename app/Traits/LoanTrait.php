@@ -201,12 +201,15 @@ trait LoanTrait{
     }
 
     public function getCurrentLoan(){
-        return Application::with('loan_product')->orWhere('status', 0)
-        ->orWhere('status', 2)
-        ->where('complete', 0)
-        ->orWhere('user_id', auth()->user()->id)
-        ->orderBy('created_at', 'desc') // Add this line to order by 'created_at' column in descending order
+
+        $current = Application::with('loan_product')
+        ->where('user_id', auth()->user()->id)
+        ->where(function ($query) {
+            $query->where('complete', 0)
+                  ->orWhereIn('status', [0, 2]);
+        })
         ->first();
+        return $current;
     }
 
     public function get_loan_details($id){

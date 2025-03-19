@@ -2,7 +2,7 @@
 $product->name
 
 {{-- Default Interest Value --}}
-$product->def_loan_interest 
+$product->def_loan_interest
 
 {{-- Default Duration --}}
 $product->default_loan_duration
@@ -12,3 +12,11 @@ $product->interest_types->first()->interest_type->name
 
 {{-- Release Date bool --}}
 $product->auto_payment
+
+
+-------Statuses--------
+1 - Approved
+2 - Processing
+3 - Rejected
+4 
+5

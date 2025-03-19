@@ -537,7 +537,6 @@ class LoanApplicationController extends Controller
 
             return redirect()->route('dashboard')->with('success', 'Application completed successfully.');
         } catch (\Throwable $th) {
-            dd($th);
             DB::rollBack();
             return back()->with('error', 'An error occurred while completing the application. Please try again.');
         }
@@ -548,7 +547,7 @@ private function updateLoan()
     $this->loan->continue = 0;
     $this->loan->complete = 1;
     $this->loan->status = 0;
-    $this->loan->source = 'Web Application';
+    $this->loan->source = 'Web App';
     $this->loan->save();
 }
 
