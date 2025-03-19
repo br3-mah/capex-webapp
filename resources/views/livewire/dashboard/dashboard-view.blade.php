@@ -10,8 +10,8 @@
     </div>
     <!-- End Breadcrumb -->
     <div class="flex flex-col gap-4 ">
+        {{-- @dd($my_loan) --}}
         @if ($my_loan)
-            {{-- Have application  --}}
             @if ($my_loan->complete == 1)
                 @if ($my_loan->status == 1)
                     @include('livewire.dashboard.__parts._dashboard-repayment')
@@ -26,12 +26,25 @@
                 @include('livewire.dashboard.__parts._dashboard-resume')
             @endif
         @else
-            {{-- Dont have current requested application  --}}
-            {{-- @if ($my_loan->closed == 1) --}}
-                @include('livewire.dashboard.__parts._dashboard-new')
-            {{-- @else
-                @include('livewire.dashboard.__parts._dashboard-open')
-            @endif --}}
+            @if ($my_loan->complete == 1)
+                @if ($my_loan->status == 1)
+                    @include('livewire.dashboard.__parts._dashboard-repayment')
+                @elseif($my_loan->status == 2)
+                    @include('livewire.dashboard.__parts._dashboard-processing')
+                @elseif($my_loan->status == 3)
+                    @include('livewire.dashboard.__parts._dashboard-rejected')
+                @elseif($my_loan->status == 100)
+                    @include('livewire.dashboard.__parts._dashboard-resume')
+                @else
+                    @include('livewire.dashboard.__parts._dashboard-pending')
+                @endif
+            @else
+                @if ($my_loan->closed == 1)
+                    @include('livewire.dashboard.__parts._dashboard-new')
+                @else
+                    @include('livewire.dashboard.__parts._dashboard-open')
+                @endif
+            @endif
         @endif
 
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
@@ -79,15 +92,15 @@
     <!-- Start All Card -->
     <div class="flex flex-col gap-4 min-h-[calc(100vh-212px)]">
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-    
+
             <!-- Recent Loan Applications -->
-            <div class="gap-6 p-5 shadow-md bg-white rounded-lg dark:bg-darklight border-black/10 dark:border-darkborder">
+            <div class="gap-6 p-5 bg-white rounded-lg shadow-md dark:bg-darklight border-black/10 dark:border-darkborder">
                 <h2 class="mb-4 text-base font-semibold text-black capitalize dark:text-white/80">My Recent Loan Applications</h2>
-                <div class="bg-white dark:bg-gray-800 rounded-lg space-y-6">
+                <div class="space-y-6 bg-white rounded-lg dark:bg-gray-800">
                         @if (!empty($this->all_applications()->toArray()))
                             @foreach ($this->all_applications()->take(5) as $application)
-                                <div class="bg-gray-50 dark:bg-gray-700 border rounded-lg p-4 transition-all duration-300">
-                                    <div class="flex justify-between items-center">
+                                <div class="p-4 transition-all duration-300 border rounded-lg bg-gray-50 dark:bg-gray-700">
+                                    <div class="flex items-center justify-between">
                                         <div>
                                             <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200">Loan #{{ $application->id }}</h3>
                                             <p class="text-xs text-gray-600 dark:text-gray-400">{{ $application->loan_product->name }}</p>
@@ -97,13 +110,13 @@
                                     <div class="mt-3">
                                         @switch($application->status)
                                             @case(0)
-                                                <span class="px-2 py-1 text-xs font-medium text-warning-700 bg-warning rounded-full dark:bg-warning-600/20 dark:text-warning-400">Pending</span>
+                                                <span class="px-2 py-1 text-xs font-medium rounded-full text-warning-700 bg-warning dark:bg-warning-600/20 dark:text-warning-400">Pending</span>
                                                 @break
                                             @case(1)
                                                 <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full dark:bg-green-600/20 dark:text-green-400">Open</span>
                                                 @break
                                             @case(2)
-                                                <span class="px-2 py-1 text-xs font-medium text-warning-700 bg-warning-100 rounded-full dark:bg-warning-600/20 dark:text-warning-400">Pending (Processing)</span>
+                                                <span class="px-2 py-1 text-xs font-medium rounded-full text-warning-700 bg-warning-100 dark:bg-warning-600/20 dark:text-warning-400">Pending (Processing)</span>
                                                 @break
                                             @case(3)
                                                 <span class="px-2 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full dark:bg-red-600/20 dark:text-red-400">Rejected</span>
@@ -122,15 +135,15 @@
                         @endif
                 </div>
             </div>
-    
+
             <!-- Recent Loan Repayments -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-5 space-y-6">
+            <div class="p-5 space-y-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <h2 class="text-lg font-semibold text-gray-800 dark:text-white">My Recent Loan Repayments</h2>
                 <div class="space-y-4">
                     @if (!empty($this->all_transactions()->toArray()))
                         @foreach ($this->all_transactions()->take(5) as $repayment)
-                            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 transition-all duration-300 border">
-                                <div class="flex justify-between items-center">
+                            <div class="p-4 transition-all duration-300 border rounded-lg bg-gray-50 dark:bg-gray-700">
+                                <div class="flex items-center justify-between">
                                     <div>
                                         <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200">Loan #{{ $repayment->id }}</h3>
                                         <p class="text-xs text-gray-600 dark:text-gray-400">Principal: K{{ number_format($repayment->amount, 2) }}</p>
@@ -140,11 +153,11 @@
                             </div>
                         @endforeach
                     @else
-                        <p class="text-gray-600 dark:text-gray-400 py-8 pt-4">You have no recent loan repayments.</p>
+                        <p class="py-8 pt-4 text-gray-600 dark:text-gray-400">You have no recent loan repayments.</p>
                     @endif
                 </div>
             </div>
-            
+
         </div>
     </div>
 </div>

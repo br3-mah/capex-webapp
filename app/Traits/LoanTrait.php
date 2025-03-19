@@ -219,10 +219,20 @@ trait LoanTrait
     public function getCurrentLoan()
     {
         //Get a my loan that is not completed for application
-        return Application::with('loan_product')
+        $running_loan = Application::with('loan_product')
             ->where('user_id', auth()->user()->id)
             ->where('complete', 0)
             ->first();
+
+        if($running_loan){
+            return $running_loan;
+        }else{
+            return Application::with('loan_product')
+            ->where('user_id', auth()->user()->id)
+            ->where('complete', 1)
+            ->first();
+        }
+
     }
 
     public function get_loan_details($id)
