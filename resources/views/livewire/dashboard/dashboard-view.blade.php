@@ -102,7 +102,7 @@
                                 <div class="p-4 transition-all duration-300 border rounded-lg bg-gray-50 dark:bg-gray-700">
                                     <div class="flex items-center justify-between">
                                         <div>
-                                            <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200">Loan #{{ $application->id }}</h3>
+                                            <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200">Loan #{{ $application->loan_number }}</h3>
                                             <p class="text-xs text-gray-600 dark:text-gray-400">{{ $application->loan_product->name }}</p>
                                         </div>
                                         <span class="text-sm font-bold text-blue-600 dark:text-blue-400">K{{ number_format($application->amount, 2) }}</span>
@@ -145,7 +145,7 @@
                             <div class="p-4 transition-all duration-300 border rounded-lg bg-gray-50 dark:bg-gray-700">
                                 <div class="flex items-center justify-between">
                                     <div>
-                                        <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200">Loan #{{ $repayment->id }}</h3>
+                                        <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200">Loan #{{ $repayment->loan_number }}</h3>
                                         <p class="text-xs text-gray-600 dark:text-gray-400">Principal: K{{ number_format($repayment->amount, 2) }}</p>
                                     </div>
                                     <span class="text-sm font-bold text-green-600 dark:text-green-400">{{ $repayment->created_at->toFormattedDateString() }}</span>
