@@ -35,7 +35,7 @@
                 @role('user')
                 <!-- Title and description -->
                 <h2 class="display-6 fw-bold text-[#6a11cb] mb-3">Ready for Financial Freedom?</h2>
-                <p class="text-light opacity-75 mb-4">Complete our streamlined application process and receive your personalized offer in minutes.</p>
+                <p class="text-muted  mb-4">Complete our streamlined application process and receive your personalized offer in minutes.</p>
 
                 <!-- Button with gradient background and hover animation -->
                 <a href="{{ route('form') }}"
@@ -46,7 +46,7 @@
 
                 <!-- Footer link -->
                 <div class="mt-5 pt-4 border-top border-light">
-                  <p class="text-light small opacity-75">
+                  <p class="text-muted small opacity-75">
                     Need assistance?
                     <a href="{{ route('contact') }}"
                        class="text-warning text-decoration-none fw-bold d-flex align-items-center gap-1"

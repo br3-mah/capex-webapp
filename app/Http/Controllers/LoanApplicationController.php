@@ -126,9 +126,9 @@ class LoanApplicationController extends Controller
             $user->save();
 
             $this->isKYCComplete();
-            return redirect()->route('dashboard')->with('success', 'KYC Updated successfully');
+            return redirect()->back()->with('success', 'Documents uploaded successfully');
         } catch (\Throwable $th) {
-            return redirect()->route('dashboard')->with('success', 'KYC Update failed');
+            return redirect()->back()->with('error', 'Documents uploading failed');
         }
     }
 

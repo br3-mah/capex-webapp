@@ -6,7 +6,7 @@ use Illuminate\Support\File;
 trait FileTrait{
 
     public function uploadCommonFiles($request){
-        // dd($request);
+
         if ($request->hasFile('preapproval')) {
             $preapproval = $request->file('preapproval')->store('preapproval', 'public');
             UserFile::updateOrCreate(
@@ -28,6 +28,14 @@ trait FileTrait{
             UserFile::updateOrCreate(
                 ['name' => 'bankstatement', 'user_id' => auth()->user()->id],
                 ['path' => $bankstatement],
+                ['source' => 'web']
+            );
+        }
+        if ($request->hasFile('bankstatement_file')) {
+            $bankstatement_file = $request->file('bankstatement_file')->store('bankstatement', 'public');
+            UserFile::updateOrCreate(
+                ['name' => 'bankstatement', 'user_id' => auth()->user()->id],
+                ['path' => $bankstatement_file],
                 ['source' => 'web']
             );
         }

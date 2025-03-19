@@ -35,7 +35,7 @@ class LoanRequestView extends Component
             // Check OTP
             // $this->VerifyOTP();
             // Retrieve loan requests for the authenticated user and paginate the results (5 items per page)
-            $this->loan_requests = Application::with('loan')->where('user_id', auth()->user()->id)->orderBy('id', 'desc')->get();
+            $this->loan_requests = Application::with('loan')->whereNot('closed',1)->where('user_id', auth()->user()->id)->orderBy('id', 'desc')->get();
             $requests = Application::with('loan')->where('user_id', auth()->user()->id)->orderBy('id', 'desc')->paginate(5);
             return view('livewire.dashboard.loans.loan-request-view',[
                 'requests' => $requests

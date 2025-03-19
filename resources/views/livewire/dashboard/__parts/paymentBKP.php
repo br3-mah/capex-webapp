@@ -271,101 +271,112 @@
 </style>
 
 <div wire:ignore class="px-4 py-6 col-xl-12 col-md-12 col-sm-12">
-    <br><br>
-    @if ($paymentProofs['status'] !== null || $paymentProofs['status'] !== 'pending')
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-bold text-gray-800">Payment Transactions</h2>
-            @if ($current_loan->amount)
-                <button class="btn-primary flex items-center gap-2 animate-pulse-glow" onclick="openModal()">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                    </svg>
-                    Add Proof of Payment
-                </button>
-            @endif
-        </div>
-        <br>
-    @endif
-    <div class="px-8 bg-gradient-to-br from-indigo-50 to-sky-50">
-        <div class="grid gap-6">
-            @foreach($paymentProofs as $proof)
-                <div class="bg-muted/20 rounded-xl overflow-hidden p-2 shadow-md hover:shadow-xl transition-all duration-300 border border-indigo-50 transform hover:-translate-y-1">
-                    <div class="relative">
-                        <!-- Status Badge - Positioned at the top right corner -->
-                        <div class="absolute top-4 right-4">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
-                                style="
-                                    background-color: {{ $proof->status == 'accepted' ? '#D1FAE5' : ($proof->status == 'pending' ? '#FEF3C7' : '#FEE2E2') }};
-                                    color: {{ $proof->status == 'accepted' ? '#065F46' : ($proof->status == 'pending' ? '#92400E' : '#B91C1C') }};
-                                ">
-                                <span class="mr-1.5 w-2 h-2 rounded-full"
-                                    style="
-                                        background-color: {{ $proof->status == 'accepted' ? '#10B981' : ($proof->status == 'pending' ? '#FBBF24' : '#EF4444') }};
-                                    ">
-                                </span>
-                                &nbsp;
-                                {{ ucfirst($proof->status ?? 'Pending') }} proof of payment
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Payment Transactions</h2>
+        @if ($current_loan->amount)
+            <button class="btn-primary flex items-center gap-2 animate-pulse-glow" onclick="openModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                Add Proof of Payment
+            </button>
+        @endif
+    </div>
 
-                            </span>
+    <!-- Modal for payment proof upload -->
+    <div id="uploadModal" class="fixed inset-0 modal-overlay flex items-center justify-center hidden z-50 opacity-0 transition-opacity duration-300">
+        <div class="modal-content bg-white dark:bg-gray-800 p-6 transition-all duration-300 transform scale-95 opacity-0" id="modalContent">
+            <div class="modal-header">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Upload Proof of Payment</h2>
+            </div>
+
+            <form action="{{ route('proof-of-payment') }}" method="POST" enctype="multipart/form-data" id="paymentForm" class="space-y-6">
+                @csrf
+                <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+
+                <div class="space-y-4">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">Upload Documents</label>
+                    <div class="file-upload-area">
+                        <label for="file-upload" class="flex flex-col items-center justify-center cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <span class="font-medium text-gray-600 mb-1">Drop files to Attach</span>
+                            <span class="text-sm text-gray-500">or <span class="text-blue-600 underline">browse files</span></span>
+                            <span class="mt-2 text-xs text-gray-500">Accepted formats: JPEG, PNG, PDF (Max 10MB)</span>
+                            <input id="file-upload" type="file" name="proofs[]" class="hidden" multiple onchange="handleFileSelect(event)" />
+                        </label>
+                    </div>
+                    <div id="file-preview" class="grid grid-cols-3 gap-4 mt-4"></div>
+                    @error('proofs.*')
+                        <span class="text-sm text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <label for="loan_id" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Loan Information</label>
+                    <div class="mt-2 flex items-center justify-between bg-white p-3 rounded-lg border border-gray-200">
+                        <div>
+                            <h4 class="font-medium text-gray-900">{{ $current_loan->product_name->name }}</h4>
+                            <p class="text-sm text-gray-500">Loan #{{ $current_loan->id }}</p>
                         </div>
-
-                        <div class="px-4">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                <div class="bg-indigo-50 rounded-lg p-4">
-                                    <h6 class="text-xs font-semibold text-indigo-500 uppercase tracking-wider mb-2">Amount</h6>
-                                    <p class="text-xl font-bold text-gray-800 flex items-center">
-                                        <span class="inline-block mr-2">
-                                            <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
-                                        </span>
-                                        ZMW {{ $proof->amount }}
-                                    </p>
-                                    <p class="text-md font-bold text-gray-800 flex items-center">
-                                        <span>PPID</span>
-                                        <span class="inline-block mr-2">
-                                            <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path>
-                                            </svg>
-                                        </span>
-                                        &nbsp;
-                                        {{ $proof->id }}
-                                    </p>
-                                </div>
-
-                                <div class="bg-indigo-50 rounded-lg p-6">
-                                    <h6 class="text-xs font-semibold text-indigo-500 uppercase tracking-wider mb-2">Payment Method</h6>
-                                    <p class="text-lg font-bold text-gray-800 flex items-center">
-                                        <span class="inline-block mr-2">
-                                            <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                                            </svg>
-                                        </span>
-                                        {{ $proof->method }}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- Details Section -->
-                            <div class="p-4">
-                                <h6 class="text-xs font-semibold text-muted uppercase tracking-wider mb-2">Details</h6>
-                                <div class="bg-gray-50 rounded-lg p-4 border border-gray-100">
-                                    <p class="text-gray-700 leading-relaxed">{{ $proof->details ?? 'No Details Available' }}</p>
-                                </div>
-                            </div>
-
-                            <!-- Action Buttons -->
-
-                        </div>
+                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">Active</span>
+                        <input type="hidden" value="{{ $current_loan->id }}" id="loan_id" name="loan_id">
                     </div>
                 </div>
-            @endforeach
+
+                <div>
+                    <label for="amount" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Payment Amount</label>
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="text-gray-500 sm:text-sm">K</span>
+                        </div>
+                        <input type="text" id="amount" name="amount" class="form-input pl-8 block w-full" placeholder="0.00">
+                    </div>
+                    @error('amount')
+                        <span class="text-sm text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="method" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Payment Method</label>
+                    <select id="method" name="method" class="form-input mt-1 block w-full">
+                        <option value="" disabled selected>Select payment method</option>
+                        <option value="bank_transfer">Bank Transfer</option>
+                        <option value="credit_card">Credit Card</option>
+                        <option value="airtel_mobile_money">Mobile Money (Airtel)</option>
+                        <option value="mtn_mobile_money">Mobile Money (MTN)</option>
+                    </select>
+                    @error('method')
+                        <span class="text-sm text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="payment_details" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Payment Details</label>
+                    <textarea id="payment_details" name="payment_details" class="form-input mt-1 block w-full" rows="3" placeholder="Enter transaction reference number, sender details, or any other relevant information"></textarea>
+                    @error('payment_details')
+                        <span class="text-sm text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="flex justify-end space-x-4 pt-4 border-t border-gray-200">
+                    <button type="button" class="btn-outline" onclick="closeModal()">Cancel</button>
+                    <button type="submit" id="submitButton" class="btn-primary">
+                        <span class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            Submit Payment
+                        </span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-    <hr>
-    <br>
-    <h2 class="text-xl font-bold text-muted">My Recent Completed Payments</h2>
-    <div class="grid grid-cols-1 gap-4 staggered-animation">
+
+    <!-- Transactions List -->
+    <div class="grid grid-cols-1 gap-4 mt-8 staggered-animation">
         @forelse($transactions as $data)
             <div class="payment-card">
                 <div class="flex flex-col md:flex-row justify-between">
@@ -425,107 +436,6 @@
             </div>
         @endforelse
     </div>
-
-    <!-- Modal for payment proof upload -->
-    <div id="uploadModal" class="fixed inset-0 modal-overlay flex items-center justify-center hidden z-50 opacity-0 transition-opacity duration-300">
-        <div class="modal-content bg-white dark:bg-gray-800 p-6 transition-all duration-300 transform scale-95 opacity-0" id="modalContent">
-            <div class="modal-header">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Upload Proof of Payment</h2>
-            </div>
-
-            <form action="{{ route('proof-of-payment') }}" method="POST" enctype="multipart/form-data" id="paymentForm" class="space-y-6">
-                @csrf
-                <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-
-                <div class="space-y-4">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">Upload Documents</label>
-                    <div class="file-upload-area">
-                        <label for="file-upload" class="flex flex-col items-center justify-center cursor-pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                            </svg>
-                            <span class="font-medium text-gray-600 mb-1">Drop files to Attach</span>
-                            <span class="text-sm text-gray-500">or <span class="text-blue-600 underline">browse files</span></span>
-                            <span class="mt-2 text-xs text-gray-500">Accepted formats: JPEG, PNG, PDF (Max 10MB)</span>
-                            <input id="file-upload" type="file" name="proofs[]" class="hidden" multiple onchange="handleFileSelect(event)" />
-                        </label>
-                    </div>
-                    <div id="file-preview" class="grid grid-cols-3 gap-4 mt-4"></div>
-                    @error('proofs.*')
-                        <span class="text-sm text-red-500">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                <div class="bg-gray-50 rounded-lg">
-                    <label for="loan_id" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Loan Information</label>
-                    <div class="mt-2 flex items-center justify-between bg-white p-3 rounded-lg border border-gray-200">
-                        <div>
-                            <h4 class="font-medium text-gray-900">{{ $current_loan->product_name->name }}</h4>
-                            <p class="text-sm text-gray-500">Loan #{{ $current_loan->id }}</p>
-                        </div>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">Active</span>
-                        <input type="hidden" value="{{ $current_loan->id }}" id="loan_id" name="loan_id">
-                    </div>
-                </div>
-
-                <div class="d-flex flex justify-content-between space-x-4">
-                    <div class="w-full">
-                        <label for="amount" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Payment Amount</label>
-                        <div class="mt-1 relative rounded-md shadow-sm">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <span class="text-gray-500 sm:text-sm">K</span>
-                            </div>
-                            <input type="text" id="amount" name="amount" class="form-input pl-8 block w-full" placeholder="0.00">
-                        </div>
-                        @error('amount')
-                            <span class="text-sm text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <div class="w-full">
-                        <label for="method" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Payment Method</label>
-                        <select id="method" name="method" class="form-input mt-1 block w-full">
-                            <option value="" disabled selected value="Unkown">         --choose--            </option>
-                            <option value="bank_transfer">Bank Transfer</option>
-                            <option value="credit_card">Credit Card</option>
-                            <option value="airtel_mobile_money">Mobile Money (Airtel)</option>
-                            <option value="mtn_mobile_money">Mobile Money (MTN)</option>
-                        </select>
-                        @error('method')
-                            <span class="text-sm text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
-
-                <div>
-                    <label for="payment_details" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Payment Details</label>
-                    <textarea id="payment_details" name="payment_details" class="form-input mt-1 block w-full" cols="5" rows="3" placeholder="Enter transaction reference number, sender details, or any other relevant information"></textarea>
-                    @error('payment_details')
-                        <span class="text-sm text-red-500">{{ $message }}</span>
-                    @enderror
-                </div>
-                <br>
-                <div class="flex justify-end space-x-4 pt-2">
-
-                    <button type="button" class="btn-outline" onclick="closeModal()">Cancel</button>
-                    &nbsp;
-                    <button type="submit" id="submitButton" class="btn-primary">
-                        <span class="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                            </svg>
-                            Submit Payment
-                        </span>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Transactions List -->
-
 
     <!-- Success message toast -->
     <div id="successMessage" class="success-toast">
@@ -639,7 +549,7 @@ function showSuccessMessage() {
 
 // Handle form submission with animation
 document.getElementById('paymentForm').addEventListener('submit', function(event) {
-    // event.preventDefault();
+    event.preventDefault();
 
     const submitButton = document.getElementById('submitButton');
     submitButton.disabled = true;
