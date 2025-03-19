@@ -30,7 +30,7 @@ class Transaction extends Model
     }
 
     public static function customer_transactions($user_id){
-        return Transaction::with('application')->where('user_id', $user_id)->get();
+        return Transaction::with('application.user')->where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
     }
     public static function hasTransaction($application_id){
         return Transaction::where('application_id', $application_id)->exists();

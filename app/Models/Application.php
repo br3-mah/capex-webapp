@@ -94,6 +94,12 @@ class Application extends Model
         return $uuid;
     }
 
+
+    public function getLoanNumberAttribute()
+    {
+        return str_pad($this->id, 6, '0', STR_PAD_LEFT);
+    }
+    
     public function getDoneByAttribute(){
         return User::where('id', $this->processed_by)->first();
     }

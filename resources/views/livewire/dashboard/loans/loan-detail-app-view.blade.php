@@ -13,11 +13,12 @@
         <div class="grid grid-cols-1 gap-4">
             <div class="bg-white rounded border-black/10 dark:bg-darklight dark:border-darkborder">
                 <div class="space-y-12">
-                    <div class="flex flex-wrap justify-between gap-4">
+                    <div class="flex flex-wrap justify-between gap-4 py-4">
                         <div class="flex items-center gap-2">
                             <img src="public/app/img/bills.jpg" class="w-24 h-24" alt="">
                             <div>
                                 <h3 class="text-xl font-bold dark:text-white">{{ $loan_product->name }} </h3>
+                                <h4 class="font-bold dark:text-purple">Loan #:{{ $loan->loan_number }} </h4>
                                 <p class="text-base text-muted dark:text-darkmuted">{{ $this->get_loan_category($loan->loan_child_type_id)->first()->name }}</p>
                                 <p class="text-base text-muted dark:text-darkmuted">{{ $this->get_loan_type($loan->loan_type_id)->first()->name }}</p>
                             </div>
@@ -41,27 +42,27 @@
                                 <p>Application Status:
                                     @if ($loan->status == 0)
                                         @if($loan->complete == 0)
-                                            <span class="font-bold text-warning p-2 rounded-xl">
+                                            <span class="p-2 font-bold text-warning rounded-xl">
                                                 Incomplete KYC
                                             </span>
                                         @else
-                                            <span class="font-bold text-warning p-2 rounded-xl">
+                                            <span class="p-2 font-bold text-warning rounded-xl">
                                                 Processing
                                             </span>
                                         @endif
                                     @endif
                                     @if ($loan->status == 1)
-                                        <span class="font-bold text-success p-2 rounded-xl">
+                                        <span class="p-2 font-bold text-success rounded-xl">
                                             Accepted
                                         </span>
                                     @endif
                                     @if ($loan->status == 2)
-                                        <span class="font-bold text-info p-2 rounded-xl">
+                                        <span class="p-2 font-bold text-info rounded-xl">
                                             Processing
                                         </span>
                                     @endif
                                     @if ($loan->status == 100)
-                                        <span class="font-bold text-muted bg-light p-2 rounded-xl">
+                                        <span class="p-2 font-bold text-muted bg-light rounded-xl">
                                             Unfinished (Please finish up loan application process wizard till final submission)
                                         </span>
                                     @endif
@@ -85,8 +86,9 @@
                     </div>
 
                     <div class="flex items-center justify-end gap-4">
+                        <img width="250" src="{{ asset('public/3d/1.png') }}" alt="">
                        @if ($loan->status != 2 && $loan->status != 1)
-                       <a href="{{ route('form') }}" class="transition-all duration-300 rounded-md btn bg-purple/20 text-purple hover:bg-purple hover:text-white">
+                       <a href="{{ route('form') }}" class="text-white transition-all duration-300 rounded-md btn bg-purple hover:bg-purple hover:text-white">
                             <span>Update Loan Application</span>
                         </a>
                        @endif
@@ -97,6 +99,7 @@
                         </a>
                        @endif
                     </div>
+
                 </div>
             </div>
         </div>

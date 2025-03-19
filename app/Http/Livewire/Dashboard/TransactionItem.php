@@ -15,7 +15,7 @@ class TransactionItem extends Component
                                 ->where('status', 1)
                                 ->where('closed', 0)
                                 ->first();
-        $this->transactions = Transaction::with('application.user')->orderBy('created_at', 'desc')->get();
+        $this->transactions = Transaction::customer_transactions(auth()->user()->id);
         return view('livewire.dashboard.transaction-item')
         ->layout('layouts.app');
     }
