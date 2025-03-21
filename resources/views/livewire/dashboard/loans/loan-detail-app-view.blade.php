@@ -76,7 +76,7 @@
                         </div>
                         <div class="max-w-[200px]">
                             <p class="text-muted">Repayment</p>
-                            <h3 class="mb-4 text-xl font-semibold dark:text-white">K {{ App\Models\Application::payback($loan->amount, $loan->repayment_plan, $loan->loan_product_id) }}</h3>
+                            <h3 class="mb-4 text-xl font-semibold dark:text-white">K {{ App\Models\Application::payback($loan->amount, $loan->repayment_plan, $loan->loan_product_id, $loan) }}</h3>
                             <div class="dark:text-darkmuted">
                                 <p>Added Interest: <b>{{ $this->get_loan_product($loan->loan_product_id)->def_loan_interest }} %</b> </p>
                                 <p></p>

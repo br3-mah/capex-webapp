@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 class Application extends Model
 {
     use HasFactory;
@@ -99,7 +100,7 @@ class Application extends Model
     {
         return str_pad($this->id, 6, '0', STR_PAD_LEFT);
     }
-    
+
     public function getDoneByAttribute(){
         return User::where('id', $this->processed_by)->first();
     }
@@ -172,23 +173,46 @@ class Application extends Model
         ->where('status', 1)->where('complete', 1)->first();
     }
 
-    // !important
-    public static function payback($principal, $duration, $product_id = null){
-        $product = LoanProduct::where('id', $product_id)->with([
-            'disbursed_by.disbursed_by',
-            'interest_methods.interest_method',
-            'interest_types.interest_type',
-            'loan_accounts.account_payment',
-            'loan_status.status',
-            'loan_decimal_places',
-            'service_fees.service_charge'
-            ])->first();
 
-        $rate = (float)$product->def_loan_interest / 100;
-        $interest = ($principal * $rate * $duration);
-        $payback = $principal + $interest;
-        return number_format($payback, 2, '.', '');
+    public static function payback($principal, $duration, $product_id = null, $loan = null)
+    {
+        if ($principal) {
+            // $apiUrl = config('services.api.payback_url'); // Store API URL in config/services.php
+            $apiUrl = 'http://localhost/capex-admin/api/payback'; // Store API URL in config/services.php
+
+            $response = Http::get($apiUrl, [
+                'principal' => $principal,
+                'duration' => $duration,
+                'product_id' => $product_id,
+            ]);
+
+            if ($response->successful()) {
+                return $response->json()['payback'] ?? 0;
+            }
+
+            return 0; // Handle API failure
+        }
+
+        return 0;
     }
+
+
+    // public static function payback($principal, $duration, $product_id = null){
+    //     $product = LoanProduct::where('id', $product_id)->with([
+    //         'disbursed_by.disbursed_by',
+    //         'interest_methods.interest_method',
+    //         'interest_types.interest_type',
+    //         'loan_accounts.account_payment',
+    //         'loan_status.status',
+    //         'loan_decimal_places',
+    //         'service_fees.service_charge'
+    //         ])->first();
+
+    //     $rate = (float)$product->def_loan_interest / 100;
+    //     $interest = ($principal * $rate * $duration);
+    //     $payback = $principal + $interest;
+    //     return number_format($payback, 2, '.', '');
+    // }
 
 
     public static function receiveAmount($principal, $duration, $product_id = null){
