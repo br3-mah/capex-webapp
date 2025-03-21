@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class Application extends Model
 {
@@ -188,7 +189,8 @@ class Application extends Model
     public static function payback($principal, $duration, $product_id = null, $loan = null)
     {
         if ($principal) {
-            $apiUrl = 'https://admin.capexfinancialservices.org/api/payback';
+            // $apiUrl = 'https://admin.capexfinancialservices.org/api/payback';
+            $apiUrl = 'http://localhost/capex-admin/api/payback';
 
             // Initialize cURL
             $ch = curl_init();
@@ -198,13 +200,14 @@ class Application extends Model
                 'principal' => $principal,
                 'duration' => $duration,
                 'product_id' => $product_id,
-                'loan' => $loan ?? null,
+                // 'loan' => $loan ,
             ]));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
             // Execute request and get response
             $response = curl_exec($ch);
 
+            Log::info($response);
             // Check for cURL errors
             if (curl_errno($ch)) {
                 error_log('cURL Error: ' . curl_error($ch)); // Log error
@@ -214,10 +217,10 @@ class Application extends Model
 
             // Close cURL
             curl_close($ch);
-
             // Decode JSON response
             $data = json_decode($response, true);
 
+            // dd($data['payback']);
             return $data['payback'] ?? 0;
         }
 
