@@ -189,8 +189,8 @@ class Application extends Model
     public static function payback($principal, $duration, $product_id = null, $loan = null)
     {
         if ($principal) {
-            // $apiUrl = 'https://admin.capexfinancialservices.org/api/payback';
-            $apiUrl = 'http://localhost/capex-admin/api/payback';
+            $apiUrl = 'https://admin.capexfinancialservices.org/api/payback';
+            // $apiUrl = 'http://localhost/capex-admin/api/payback';
 
             // Initialize cURL
             $ch = curl_init();
