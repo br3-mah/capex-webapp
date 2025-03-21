@@ -463,7 +463,7 @@
                             <h4 class="font-medium text-gray-900">{{ $current_loan->product_name->name }}</h4>
                             <p class="text-sm text-gray-500">Loan #{{ $current_loan->id }}</p>
                         </div>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">Active</span>
+                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">(Payingback:  | Paying Back {{ App\Models\Application::payback($current_loan->amount,$current_loan->repayment_plan,$current_loan->loan_product_id, $current_loan->amount) }}) Active</span>
                         <input type="hidden" value="{{ $current_loan->id }}" id="loan_id" name="loan_id">
                     </div>
                 </div>
