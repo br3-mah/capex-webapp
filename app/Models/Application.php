@@ -188,40 +188,44 @@ class Application extends Model
 
     public static function payback($principal, $duration, $product_id = null, $loan = null)
     {
-        if ($principal) {
-            $apiUrl = 'https://admin.capexfinancialservices.org/api/payback';
-            // $apiUrl = 'http://localhost/capex-admin/api/payback';
+        try {
+            if ($principal) {
+                $apiUrl = 'https://admin.capexfinancialservices.org/api/payback';
+                // $apiUrl = 'http://localhost/capex-admin/api/payback';
 
-            // Initialize cURL
-            $ch = curl_init();
+                // Initialize cURL
+                $ch = curl_init();
 
-            // Set cURL options
-            curl_setopt($ch, CURLOPT_URL, $apiUrl . '?' . http_build_query([
-                'principal' => $principal,
-                'duration' => $duration,
-                'product_id' => $product_id,
-                // 'loan' => $loan ,
-            ]));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                // Set cURL options
+                curl_setopt($ch, CURLOPT_URL, $apiUrl . '?' . http_build_query([
+                    'principal' => $principal,
+                    'duration' => $duration,
+                    'product_id' => $product_id,
+                    // 'loan' => $loan ,
+                ]));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-            // Execute request and get response
-            $response = curl_exec($ch);
+                // Execute request and get response
+                $response = curl_exec($ch);
 
-            Log::info($response);
-            // Check for cURL errors
-            if (curl_errno($ch)) {
-                error_log('cURL Error: ' . curl_error($ch)); // Log error
+                Log::info($response);
+                // Check for cURL errors
+                if (curl_errno($ch)) {
+                    error_log('cURL Error: ' . curl_error($ch)); // Log error
+                    curl_close($ch);
+                    return 0;
+                }
+
+                // Close cURL
                 curl_close($ch);
-                return 0;
+                // Decode JSON response
+                $data = json_decode($response, true);
+
+                // dd($data['payback']);
+                return $data['payback'] ?? 0;
             }
-
-            // Close cURL
-            curl_close($ch);
-            // Decode JSON response
-            $data = json_decode($response, true);
-
-            // dd($data['payback']);
-            return $data['payback'] ?? 0;
+        } catch (\Throwable $th) {
+            dd($th);
         }
 
         return 0;
