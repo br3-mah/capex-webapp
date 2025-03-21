@@ -188,26 +188,42 @@ class Application extends Model
     public static function payback($principal, $duration, $product_id = null, $loan = null)
     {
         if ($principal) {
-            // $apiUrl = config('services.api.payback_url'); // Store API URL in config/services.php
-            // $apiUrl = 'http://localhost/capex-admin/api/payback'; // Store API URL in config/services.php
-            $apiUrl = 'https://admin.capexfinancialservices.org/api/payback'; // Store API URL in config/services.php
+            $apiUrl = 'https://admin.capexfinancialservices.org/api/payback';
 
-            $response = Http::get($apiUrl, [
+            // Initialize cURL
+            $ch = curl_init();
+
+            // Set cURL options
+            curl_setopt($ch, CURLOPT_URL, $apiUrl . '?' . http_build_query([
                 'principal' => $principal,
                 'duration' => $duration,
                 'product_id' => $product_id,
-            ]);
+                'loan' => $loan ?? null,
+            ]));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-            if ($response->successful()) {
-                // dd($response->json()['payback']);
-                return $response->json()['payback'] ?? 0;
+            // Execute request and get response
+            $response = curl_exec($ch);
+
+            // Check for cURL errors
+            if (curl_errno($ch)) {
+                error_log('cURL Error: ' . curl_error($ch)); // Log error
+                curl_close($ch);
+                return 0;
             }
 
-            return 0; // Handle API failure
+            // Close cURL
+            curl_close($ch);
+
+            // Decode JSON response
+            $data = json_decode($response, true);
+
+            return $data['payback'] ?? 0;
         }
 
         return 0;
     }
+
 
 
     // public static function payback($principal, $duration, $product_id = null){
