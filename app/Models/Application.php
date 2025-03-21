@@ -178,7 +178,7 @@ class Application extends Model
     {
         if ($principal) {
             // $apiUrl = config('services.api.payback_url'); // Store API URL in config/services.php
-            $apiUrl = 'http://localhost/capex-admin/api/payback'; // Store API URL in config/services.php
+            $apiUrl = 'https://admin.capexfinancialservices.org/api/payback'; // Store API URL in config/services.php
 
             $response = Http::get($apiUrl, [
                 'principal' => $principal,
