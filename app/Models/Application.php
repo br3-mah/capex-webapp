@@ -190,10 +190,10 @@ class Application extends Model
     {
         try {
             if ($principal) {
-                $apiUrl = 'http://admin.capexfinancialservices.org/api/payback';
+                $apiUrl = 'https://admin.capexfinancialservices.org/api/payback';
                 // $apiUrl = 'http://localhost/capex-admin/api/payback';
 
-                // Initialize cURL
+                // Initialize cURL9g
                 $ch = curl_init();
 
                 // Set cURL options
@@ -208,7 +208,6 @@ class Application extends Model
                 // Execute request and get response
                 $response = curl_exec($ch);
 
-                Log::info($req);
                 // Check for cURL errors
                 if (curl_errno($ch)) {
                     error_log('cURL Error: ' . curl_error($ch)); // Log error
