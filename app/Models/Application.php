@@ -204,12 +204,12 @@ class Application extends Model
                     // 'loan' => $loan ,
                 ]));
 
-                Log::info($req);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
                 // Execute request and get response
                 $response = curl_exec($ch);
 
+                Log::info($response);
                 // Check for cURL errors
                 if (curl_errno($ch)) {
                     error_log('cURL Error: ' . curl_error($ch)); // Log error
