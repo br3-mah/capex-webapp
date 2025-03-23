@@ -203,6 +203,8 @@ class Application extends Model
                     'product_id' => $product_id,
                     // 'loan' => $loan ,
                 ]));
+
+                Log::info($req);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
                 // Execute request and get response
