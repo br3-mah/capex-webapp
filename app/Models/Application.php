@@ -190,43 +190,64 @@ class Application extends Model
     {
         try {
             if ($principal) {
+                // Change the URL or ensure proper DNS resolution
                 $apiUrl = 'https://admin.capexfinancialservices.org/api/payback';
-                // $apiUrl = 'http://localhost/capex-admin/api/payback';
 
-                // Initialize cURL9g
+                // Initialize cURL
                 $ch = curl_init();
 
                 // Set cURL options
-                $req = curl_setopt($ch, CURLOPT_URL, $apiUrl . '?' . http_build_query([
+                curl_setopt($ch, CURLOPT_URL, $apiUrl . '?' . http_build_query([
                     'principal' => $principal,
                     'duration' => $duration,
                     'product_id' => $product_id,
-                    // 'loan' => $loan ,
+                    // 'loan' => $loan,
                 ]));
 
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
+                // Add these options to help debug and handle SSL issues
+                curl_setopt($ch, CURLOPT_VERBOSE, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Only for testing
+                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);     // Only for testing
+
+                // Optional: Set timeout
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+
                 // Execute request and get response
                 $response = curl_exec($ch);
 
-                Log::info($response);
-                // Check for cURL errors
+                // Better error logging
                 if (curl_errno($ch)) {
-                    error_log('cURL Error: ' . curl_error($ch)); // Log error
+                    $error = 'cURL Error (' . curl_errno($ch) . '): ' . curl_error($ch);
+                    Log::error($error);
                     curl_close($ch);
                     return 0;
                 }
 
+                // Log only in development or if debugging
+                Log::info('Payback API Response: ' . $response);
+
                 // Close cURL
                 curl_close($ch);
+
                 // Decode JSON response
                 $data = json_decode($response, true);
 
-                // dd($data['payback']);
+                // Check for JSON decoding errors
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    Log::error('JSON decode error: ' . json_last_error_msg() . ' - Response: ' . $response);
+                    return 0;
+                }
+
                 return $data['payback'] ?? 0;
             }
         } catch (\Throwable $th) {
-            dd($th);
+            Log::error('Exception in payback function: ' . $th->getMessage());
+            // Don't use dd() in production code as it stops execution
+            // dd($th);
+            return 0;
         }
 
         return 0;
