@@ -190,8 +190,8 @@ class Application extends Model
     {
         try {
             if ($principal) {
-                //Accessing another subdomain server localhost
-                $apiUrl = 'https://127.0.0.53:53/api/payback';
+                // Change the URL or ensure proper DNS resolution
+                $apiUrl = 'https://admin.capexfinancialservices.org/api/payback';
 
                 // Initialize cURL
                 $ch = curl_init();
