@@ -218,19 +218,35 @@ trait LoanTrait
 
     public function getCurrentLoan()
     {
-        //Get a my loan that is not completed for application
+        //Get a loan that is not completed for application
         $running_loan = Application::with('loan_product')
             ->where('user_id', auth()->user()->id)
             ->where('complete', 0)
+            ->whereNot('status', 100)
             ->first();
 
+        // dd($running_loan);
         if($running_loan){
             return $running_loan;
         }else{
-            return Application::with('loan_product')
+            // dd('no loan');
+            $app = Application::with('loan_product')
             ->where('user_id', auth()->user()->id)
             ->where('complete', 1)
+            ->whereNot('closed', 1)
             ->first();
+
+            // dd($app);
+            if($app){
+                return $app;
+            }else{
+                // dd(auth()->user()->id);
+                return Application::with('loan_product')
+                ->where('user_id', auth()->user()->id)
+                ->where('complete', 0)
+                ->where('status', 100)
+                ->first();
+            }
         }
 
     }
@@ -243,6 +259,7 @@ trait LoanTrait
     public function createUpdateTemporalLoan($data)
     {
         $application = $this->getCurrentLoan();
+        // dd($application);
         $pl = $this->get_loan_product((int)$data['loan_type']);
         if ($application) {
             // Update the existing application

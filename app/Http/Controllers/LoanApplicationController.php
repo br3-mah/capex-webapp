@@ -443,6 +443,7 @@ class LoanApplicationController extends Controller
 
 
     public function continue_loan(Request $request){
+        // dd($request);
         try {
             $data = $request->toArray();
             $this->uploadCommonFiles($request);
@@ -462,7 +463,8 @@ class LoanApplicationController extends Controller
                 ];
                 $this->updateUser($personal);
             }
-
+            // dd($data);
+            // dd(isset($data['amount']) && isset($data['duration']) && isset($data['loan_package']));
             if (isset($data['amount']) && isset($data['duration']) && isset($data['loan_package'])) {
                 $this->createUpdateTemporalLoan($data);
             }

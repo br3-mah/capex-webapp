@@ -10,7 +10,7 @@
     </div>
     <!-- End Breadcrumb -->
     <div class="flex flex-col gap-4 ">
-        {{-- @dd($my_loan) --}}
+
         @if ($my_loan)
             @if ($my_loan->complete == 1)
                 @if ($my_loan->status == 1)
@@ -39,7 +39,7 @@
                     @include('livewire.dashboard.__parts._dashboard-pending')
                 @endif
             @else
-                @if ($my_loan->closed == 1)
+                @if ($my_loan->closed == null)
                     @include('livewire.dashboard.__parts._dashboard-new')
                 @else
                     @include('livewire.dashboard.__parts._dashboard-open')

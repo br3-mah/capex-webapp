@@ -191,6 +191,7 @@ class Application extends Model
         try {
             if ($principal) {
                 // Change the URL or ensure proper DNS resolution
+                // $apiUrl = 'http://localhost/capex-admin/api/payback';
                 $apiUrl = 'https://admin.capexfinancialservices.org/api/payback';
 
                 // Initialize cURL
