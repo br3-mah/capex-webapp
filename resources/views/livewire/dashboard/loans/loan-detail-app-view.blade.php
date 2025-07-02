@@ -1,108 +1,163 @@
+<div class="h-[calc(100vh-60px)] relative overflow-y-auto overflow-x-hidden p-4 space-y-4 detached-content">
+    <div class="mx-auto max-w-4xl">
+        <div class="p-6 bg-white rounded-xl border shadow-lg dark:bg-darklight border-black/10 dark:border-darkborder">
+            <!-- Tabs -->
+            <div x-data="{ tab: 'details' }">
+                <nav class="flex mb-6 space-x-4 border-b">
+                    <button 
+                        :class="tab === 'details' ? 'border-purple text-purple' : 'border-transparent text-muted dark:text-darkmuted'" 
+                        class="px-4 py-2 font-semibold border-b-2 transition-all focus:outline-none" 
+                        @click="tab = 'details'">
+                        <i class="mr-2 fas fa-info-circle"></i> Details
+                    </button>
+                    <button 
+                        :class="tab === 'statement' ? 'border-purple text-purple' : 'border-transparent text-muted dark:text-darkmuted'" 
+                        class="px-4 py-2 font-semibold border-b-2 transition-all focus:outline-none" 
+                        @click="tab = 'statement'">
+                        <i class="mr-2 fas fa-file-invoice-dollar"></i> Statement
+                    </button>
+                </nav>
 
-<div class="h-[calc(100vh-60px)]  relative overflow-y-auto overflow-x-hidden p-4 space-y-4 detached-content">
-    <div>
-        <nav class="w-full">
-            <ul class="space-y-2 detached-breadcrumb ">
-                <li class="text-xs dark:text-white/80">All Applications</li>
-                <li class="text-xl font-semibold text-black dark:text-white">Loan Application Details</li>
-            </ul>
-        </nav>
-    </div>
-
-    <div class="flex flex-col gap-4 min-h-[calc(100vh-212px)]">
-        <div class="grid grid-cols-1 gap-4">
-            <div class="bg-white rounded border-black/10 dark:bg-darklight dark:border-darkborder">
-                <div class="space-y-12">
-                    <div class="flex flex-wrap justify-between gap-4 py-4">
-                        <div class="flex items-center gap-2">
-                            <img src="public/app/img/bills.jpg" class="w-24 h-24" alt="">
+                <!-- Details Tab -->
+                <div x-show="tab === 'details'" class="relative pt-10 space-y-8">
+                    <div class="flex flex-wrap gap-6 justify-between items-center">
+                        <div class="flex gap-4 items-center">
+                            <img src="public/app/img/bills.jpg" class="w-5 h-5 rounded-lg shadow" alt="Loan Product">
                             <div>
-                                <h3 class="text-xl font-bold dark:text-white">{{ $loan_product->name }} </h3>
-                                <h4 class="font-bold dark:text-purple">Loan #:{{ $loan->loan_number }} </h4>
+                                <h3 class="flex gap-2 items-center mb-1 text-2xl font-bold dark:text-white">
+                                    <i class="fas fa-piggy-bank text-purple"></i> {{ $loan_product->name }}
+                                </h3>
+                                <h4 class="mb-1 font-bold text-purple dark:text-purple">Loan #: {{ $loan->loan_number }}</h4>
                                 <p class="text-base text-muted dark:text-darkmuted">{{ $this->get_loan_category($loan->loan_child_type_id)->first()->name }}</p>
                                 <p class="text-base text-muted dark:text-darkmuted">{{ $this->get_loan_type($loan->loan_type_id)->first()->name }}</p>
                             </div>
                         </div>
-                        <div>
-                            <p class="text-base max-w-[200px] text-muted dark:text-darkmuted">
-                                {{ $loan->created_at->toFormattedDateString() }} <br>
-                                {{ $loan->user->fname.' '.$loan->user->lname }} <br>
-                                {{ $loan->user->address }} <br>
-                                {{ $loan->user->phone }}
+                        {{-- <div class="bg-light/60 dark:bg-dark p-4 rounded-lg shadow min-w-[220px]">
+                            <p class="mb-1 text-base text-muted dark:text-darkmuted">
+                                <i class="mr-1 fas fa-calendar-alt"></i> {{ $loan->created_at->toFormattedDateString() }}
                             </p>
-                        </div>
+                            <p class="mb-1 text-base text-muted dark:text-darkmuted">
+                                <i class="mr-1 fas fa-user"></i> {{ $loan->user->fname.' '.$loan->user->lname }}
+                            </p>
+                            <p class="mb-1 text-base text-muted dark:text-darkmuted">
+                                <i class="mr-1 fas fa-map-marker-alt"></i> {{ $loan->user->address }}
+                            </p>
+                            <p class="text-base text-muted dark:text-darkmuted">
+                                <i class="mr-1 fas fa-phone"></i> {{ $loan->user->phone }}
+                            </p>
+                        </div> --}}
                     </div>
-                    <div class="flex flex-wrap justify-between gap-4 p-5 bg-light/50 dark:bg-dark rounded-2xl">
-                        <div class="">
-                            <p class="text-muted">Amount</p>
-                            <h3 class="mb-4 text-xl font-semibold dark:text-white">K {{ $loan->amount }}</h3>
-                            <div class="dark:text-darkmuted">
-                                <p>Date Applied:  <b>{{ $loan->created_at->toFormattedDateString() }}</b></p>
-                                <br>
+
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                        <div class="p-6 rounded-2xl shadow bg-light/50 dark:bg-dark">
+                            <p class="mb-1 text-muted">Amount</p>
+                            <h3 class="mb-4 text-2xl font-semibold dark:text-white">K {{ $loan->amount }}</h3>
+                            <div class="space-y-1 dark:text-darkmuted">
+                                <p>Date Applied: <b>{{ $loan->created_at->toFormattedDateString() }}</b></p>
                                 <p>Application Status:
                                     @if ($loan->status == 0)
                                         @if($loan->complete == 0)
-                                            <span class="p-2 font-bold text-warning rounded-xl">
-                                                Incomplete KYC
-                                            </span>
+                                            <span class="p-2 font-bold rounded-xl text-warning bg-warning/10">Incomplete KYC</span>
                                         @else
-                                            <span class="p-2 font-bold text-warning rounded-xl">
-                                                Processing
-                                            </span>
+                                            <span class="p-2 font-bold rounded-xl text-warning bg-warning/10">Processing</span>
                                         @endif
                                     @endif
                                     @if ($loan->status == 1)
-                                        <span class="p-2 font-bold text-success rounded-xl">
-                                            Accepted
-                                        </span>
+                                        <span class="p-2 font-bold rounded-xl text-success bg-success/10">Accepted</span>
                                     @endif
                                     @if ($loan->status == 2)
-                                        <span class="p-2 font-bold text-info rounded-xl">
-                                            Processing
-                                        </span>
+                                        <span class="p-2 font-bold rounded-xl text-info bg-info/10">Processing</span>
                                     @endif
                                     @if ($loan->status == 100)
-                                        <span class="p-2 font-bold text-muted bg-light rounded-xl">
-                                            Unfinished (Please finish up loan application process wizard till final submission)
-                                        </span>
+                                        <span class="p-2 font-bold rounded-xl text-muted bg-light">Unfinished (Please finish up loan application process wizard till final submission)</span>
                                     @endif
                                     @if ($loan->status == 3)
-                                        <span class="font-bold text-danger">
-                                            Loan Request Rejected.
-                                            {{ $loan_status }}
-                                        </span>
+                                        <span class="font-bold text-danger">Loan Request Rejected. {{ $loan_status }}</span>
                                     @endif
                                 </p>
                             </div>
                         </div>
-                        <div class="max-w-[200px]">
-                            <p class="text-muted">Repayment</p>
-                            <h3 class="mb-4 text-xl font-semibold dark:text-white">K {{ App\Models\Application::payback($loan->amount, $loan->repayment_plan, $loan->loan_product_id, $loan) }}</h3>
-                            <div class="dark:text-darkmuted">
-                                <p>Added Interest: <b>{{ $this->get_loan_product($loan->loan_product_id)->def_loan_interest }} %</b> </p>
-                                <p></p>
-                                <p>Duration: <b>{{ $loan->repayment_plan }} Month(s)</b> </p>
+                        <div class="p-6 rounded-2xl shadow bg-light/50 dark:bg-dark">
+                            <p class="mb-1 text-muted">Repayment</p>
+                            <h3 class="mb-4 text-2xl font-semibold dark:text-white">K {{ App\Models\Application::payback($loan->amount, $loan->repayment_plan, $loan->loan_product_id, $loan) }}</h3>
+                            <div class="space-y-1 dark:text-darkmuted">
+                                <p>Added Interest: <b>{{ $this->get_loan_product($loan->loan_product_id)->def_loan_interest }} %</b></p>
+                                <p>Duration: <b>{{ $loan->repayment_plan }} Month(s)</b></p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-end gap-4">
-                        <img width="250" src="{{ asset('public/3d/1.png') }}" alt="">
-                       @if ($loan->status != 2 && $loan->status != 1)
-                       <a href="{{ route('form') }}" class="text-white transition-all duration-300 rounded-md btn bg-purple hover:bg-purple hover:text-white">
-                            <span>Update Loan Application</span>
-                        </a>
-                       @endif
+                   <br>
 
-                       @if ($loan->status == 1)
-                       <a href="{{ route('transaction.item', ['view'=>'payments']) }}" class="transition-all duration-300 rounded-md btn bg-danger/20 text-danger hover:bg-danger hover:text-white">
-                            <span>Make Repayment</span>
-                        </a>
-                       @endif
+                    <!-- Footer Action Buttons -->
+                    <div class="px-0 pt-6 w-full">
+                        <div class="flex gap-4 justify-end pt-4 bg-white rounded-b-xl border-t dark:bg-darklight">
+                            @if ($loan->status != 2 && $loan->status != 1)
+                            <a href="{{ route('form') }}" class="px-6 py-2 font-semibold text-white rounded-md shadow transition-all duration-300 btn bg-purple hover:bg-purple/90 hover:text-white">
+                                <i class="mr-2 fas fa-edit"></i> Update Loan Application
+                            </a>
+                            @endif
+                            @if ($loan->status == 1)
+                            <a href="{{ route('transaction.item', ['view'=>'payments']) }}" class="px-6 py-2 font-semibold rounded-md shadow transition-all duration-300 btn bg-danger/20 text-danger hover:bg-danger hover:text-white">
+                                <i class="mr-2 fas fa-money-bill-wave"></i> Make Repayment
+                            </a>
+                            @endif
+                        </div>
                     </div>
+                </div>
 
+                <!-- Statement Tab -->
+                <div x-show="tab === 'statement'" class="space-y-8">
+                    <h3 class="flex gap-2 items-center mb-4 text-xl font-bold dark:text-white">
+                        <i class="fas fa-file-invoice-dollar text-purple"></i> Loan Statement
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <div class="table-responsive">
+                            <table class="table align-middle table-bordered table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Entry Date</th>
+                                        <th>Description</th>
+                                        <th class="text-danger">Debit (Loan, Charges)</th>
+                                        <th class="text-success">Credit (Payments, Adjustments)</th>
+                                        <th>Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($balance_statement as $entry)
+                                        <tr>
+                                            <td>E{{ $entry->id }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($entry->payment_date)->format('F j, Y') }}</td>
+                                            <td>{{ $entry->description }}</td>
+                                            <td class="text-danger fw-semibold">
+                                                {{ $entry->debit > 0 ? number_format($entry->debit, 2, '.', ',') : '-' }}
+                                            </td>
+                                            <td class="text-success fw-semibold">
+                                                {{ $entry->credit > 0 ? number_format($entry->credit, 2, '.', ',') : '-' }}
+                                            </td>
+                                            <td class="fw-bold text-primary">
+                                                {{ number_format($entry->balance_after_payment,2,'.',',') }}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editBalanceStatementModal-{{ $entry->id }}">
+                                                    Edit
+                                                </button>
+                                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteBalanceStatementModal-{{ $entry->id }}">
+                                                    Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-2 text-xs text-muted">* This is a sample statement. Replace with dynamic data as needed.</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!-- Alpine.js for tab switching (if not already included in your layout) -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
