@@ -16,6 +16,12 @@
                         @click="tab = 'statement'">
                         <i class="mr-2 fas fa-file-invoice-dollar"></i> Statement
                     </button>
+                    <button 
+                        :class="tab === 'repayments' ? 'border-purple text-purple' : 'border-transparent text-muted dark:text-darkmuted'" 
+                        class="px-4 py-2 font-semibold border-b-2 transition-all focus:outline-none" 
+                        @click="tab = 'repayments'">
+                        <i class="mr-2 fas fa-money-check-alt"></i> Recent Repayments
+                    </button>
                 </nav>
 
                 <!-- Details Tab -->
@@ -153,6 +159,49 @@
                             </table>
                         </div>
                         <div class="mt-2 text-xs text-muted">* This is a sample statement. Replace with dynamic data as needed.</div>
+                    </div>
+                </div>
+
+                <!-- Recent Repayments Tab -->
+                <div x-show="tab === 'repayments'" class="space-y-8">
+                    <h3 class="flex gap-2 items-center mb-4 text-xl font-bold dark:text-white">
+                        <i class="fas fa-money-check-alt text-purple"></i> Recent Repayments
+                    </h3>
+                    <div class="table-responsive">
+                        <table class="table align-middle table-bordered table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Payment Date</th>
+                                    <th scope="col">Installment Amount</th>
+                                    <th scope="col">Principal</th>
+                                    <th scope="col">Interest</th>
+                                    <th scope="col">Remaining Balance</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($repayment_schedule as $key => $installment)
+                                    <tr>
+                                        <td>{{ $key + 1}}</td>
+                                        <td>{{ \Carbon\Carbon::parse($installment->due_date)->format('d M, Y') }}</td>
+                                        <td class="fw-bold text-primary">{{ number_format($installment->amount, 2, '.', ',') }}</td>
+                                        <td>{{ number_format($loan->amount, 2, '.', ',') }}</td>
+                                        <td>{{ number_format($installment->interest, 2, '.', ',') }}</td>
+                                        <td class="text-danger fw-semibold">{{ number_format($installment->remaining_balance, 2, '.', ',') }}</td>
+                                        <td>
+                                            @if ($installment->status == 'Cleared')
+                                                <span class="badge bg-success">Cleared</span>
+                                            @elseif ($installment->status == 'Pending')
+                                                <span class="badge bg-warning text-dark">Pending</span>
+                                            @elseif ($installment->status == 'Overdue')
+                                                <span class="badge bg-danger">Overdue</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

@@ -19,6 +19,8 @@ class LoanDetailView extends Component
     use EmailTrait, WalletTrait, LoanTrait;
     public $loan, $user, $loan_id, $msg, $due_date, $reason, $loan_product;
     public $loan_stage;
+    public $repayment_schedule;
+
     public function mount($id)
     {
         /**
@@ -35,6 +37,7 @@ class LoanDetailView extends Component
         $this->loan_product = $this->get_loan_product($this->loan->loan_product_id);
         $loan_status = $this->get_current_loan_status($this->loan->id);
         $this->balance_statement = $this->paybackStatement($this->loan->id);
+        $this->repayment_schedule = $this->loanRepaymentSchedule($this->loan->id);
         return view('livewire.dashboard.loans.loan-detail-app-view', compact('loan_status'))
             ->layout('layouts.app');
     }
@@ -43,6 +46,11 @@ class LoanDetailView extends Component
     public function loanStatement($id)
     {
         return DB::select('SELECT * FROM balance_statements WHERE loan_id = ?', [$id]);
+    }    
+    
+    public function loanRepaymentSchedule($id)
+    {
+        return DB::select('SELECT * FROM loan_installments WHERE loan_id = ?', [$id]);
     }
 
     public function paybackStatement($loan_id)
@@ -69,5 +77,8 @@ class LoanDetailView extends Component
             return [];
         }
     }
+
+
+
 
 }
