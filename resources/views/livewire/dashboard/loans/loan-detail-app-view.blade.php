@@ -176,7 +176,7 @@
                 <!-- Recent Repayments Tab -->
                 <div x-show="tab === 'repayments'" class="space-y-8">
                     <h3 class="flex gap-2 items-center mb-4 text-xl font-bold dark:text-white">
-                        <i class="fas fa-money-check-alt text-purple"></i> Recent Repayments
+                        <i class="fas fa-money-check-alt text-purple"></i> Repayment Schedule
                     </h3>
                     <div class="flex justify-end mb-2">
                         <button id="download-repayments-btn"
