@@ -44,8 +44,9 @@ class LoanDetailView extends Component
 
     
     public function loanStatement($id)
-    {
-        return DB::select('SELECT * FROM balance_statements WHERE loan_id = ?', [$id]);
+    {       
+        $bal_statment = DB::select('SELECT * FROM balance_statements WHERE loan_id = ?', [$id]);
+        return $bal_statment;
     }    
     
     public function loanRepaymentSchedule($id)
@@ -58,20 +59,23 @@ class LoanDetailView extends Component
         try {
             $schedule = $this->loanStatement($loan_id);
             $statement = [];
+
             foreach ($schedule as $i => $entry) {
+                // dd($entry); // Optionally remove or comment out debug
                 $statement[] = (object) [
-                    'id' => $entry['id'],
-                    'payment_date' => $entry['payment_date'],
-                    'description' => $entry['description'],
-                    'debit' => $entry['debit'], // No new loan charges
-                    'credit' => $entry['credit'], // Total installment paid
+                    'id' => $entry->id,
+                    'payment_date' => $entry->payment_date,
+                    'description' => $entry->description,
+                    'debit' => $entry->debit, // No new loan charges
+                    'credit' => $entry->credit, // Total installment paid
                     'principal_paid' => 0,
                     'interest_paid' => 0,
-                    'balance_after_payment' => $entry['balance_after_payment'],
-                    'payment_method' => $entry['payment_method'], // Example, can be dynamic
+                    'balance_after_payment' => $entry->balance_after_payment,
+                    'payment_method' => $entry->payment_method, // Example, can be dynamic
                 ];
             }
-
+            // dd($statement); // Optionally remove or comment out debug
+        
             return $statement;
         } catch (\Throwable $th) {
             return [];

@@ -1,3 +1,6 @@
+<!-- Tailwind CSS Play CDN (JIT mode) -->
+<script src="https://cdn.tailwindcss.com"></script>
+
 <div class="h-[calc(100vh-60px)] relative overflow-y-auto overflow-x-hidden p-4 space-y-4 detached-content">
     <div class="mx-auto max-w-4xl">
         <div class="p-6 bg-white rounded-xl border shadow-lg dark:bg-darklight border-black/10 dark:border-darkborder">
@@ -117,16 +120,32 @@
                     <h3 class="flex gap-2 items-center mb-4 text-xl font-bold dark:text-white">
                         <i class="fas fa-file-invoice-dollar text-purple"></i> Loan Statement
                     </h3>
+                    <div class="flex justify-end mb-2">
+                        <button id="download-balance-btn"
+                            class="flex gap-2 items-center px-4 py-2 font-semibold text-white bg-gradient-to-r from-blue-900 rounded-lg shadow-lg transition-all duration-200 to-blue-950 hover:from-blue-800 hover:to-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900"
+                            onclick="downloadBalanceStatementTable()"
+                            type="button"
+                            style="min-width: 220px;"
+                        >
+                            <span id="download-balance-btn-text"><i class="fas fa-download"></i> Download Balance Statement CSV</span>
+                            <span id="download-balance-btn-spinner" class="hidden ml-1 animate-spin">
+                                <i class="w-4 h-4 text-xs fas fa-spinner"></i>
+                            </span>
+                            <span id="download-balance-btn-success" class="hidden text-green-300">
+                                <i class="fas fa-check-circle"></i>
+                            </span>
+                        </button>
+                    </div>
                     <div class="overflow-x-auto">
                         <div class="table-responsive">
-                            <table class="table align-middle table-bordered table-hover">
+                            <table id="balance-statement-table" class="table align-middle table-bordered table-hover">
                                 <thead class="table-light">
                                     <tr>
                                         <th>#</th>
                                         <th>Entry Date</th>
                                         <th>Description</th>
-                                        <th class="text-danger">Debit (Loan, Charges)</th>
-                                        <th class="text-success">Credit (Payments, Adjustments)</th>
+                                        <th class="text-danger">Debit <small>(Loan, Charges)</small> </th>
+                                        <th class="text-success">Credit <small>(Payments, Adjustments)</small></th>
                                         <th>Balance</th>
                                     </tr>
                                 </thead>
@@ -145,14 +164,6 @@
                                             <td class="fw-bold text-primary">
                                                 {{ number_format($entry->balance_after_payment,2,'.',',') }}
                                             </td>
-                                            <td>
-                                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editBalanceStatementModal-{{ $entry->id }}">
-                                                    Edit
-                                                </button>
-                                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteBalanceStatementModal-{{ $entry->id }}">
-                                                    Delete
-                                                </button>
-                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -167,8 +178,24 @@
                     <h3 class="flex gap-2 items-center mb-4 text-xl font-bold dark:text-white">
                         <i class="fas fa-money-check-alt text-purple"></i> Recent Repayments
                     </h3>
+                    <div class="flex justify-end mb-2">
+                        <button id="download-repayments-btn"
+                            class="flex gap-2 items-center px-4 py-2 font-semibold text-white bg-gradient-to-r from-blue-900 rounded-lg shadow-lg transition-all duration-200 to-blue-950 hover:from-blue-800 hover:to-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900"
+                            onclick="downloadRepaymentsTable()"
+                            type="button"
+                            style="min-width: 220px;"
+                        >
+                            <span id="download-repayments-btn-text"><i class="fas fa-download"></i> Download Repayments CSV</span>
+                            <span id="download-repayments-btn-spinner" class="hidden ml-1 animate-spin">
+                                <i class="w-4 h-4 text-xs fas fa-spinner"></i>
+                            </span>
+                            <span id="download-repayments-btn-success" class="hidden text-green-300">
+                                <i class="fas fa-check-circle"></i>
+                            </span>
+                        </button>
+                    </div>
                     <div class="table-responsive">
-                        <table class="table align-middle table-bordered table-hover">
+                        <table class="table align-middle table-bordered table-hover" id="repayments-table">
                             <thead class="table-light">
                                 <tr>
                                     <th scope="col">#</th>
@@ -210,3 +237,100 @@
 </div>
 <!-- Alpine.js for tab switching (if not already included in your layout) -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+<script>
+function prependCsvHeader(csvArray) {
+    const header = [
+        'Capex  Finance Limited',
+        'Lusaka, Zambia',
+        ''
+    ];
+    return header.concat(csvArray);
+}
+
+function downloadRepaymentsTable() {
+    var btn = document.getElementById('download-repayments-btn');
+    var btnText = document.getElementById('download-repayments-btn-text');
+    var btnSpinner = document.getElementById('download-repayments-btn-spinner');
+    var btnSuccess = document.getElementById('download-repayments-btn-success');
+
+    btnText.classList.add('hidden');
+    btnSpinner.classList.remove('hidden');
+    btnSuccess.classList.add('hidden');
+    btn.disabled = true;
+
+    setTimeout(function() {
+        var table = document.getElementById('repayments-table');
+        var rows = table.querySelectorAll('tr');
+        var csv = [];
+        for (var i = 0; i < rows.length; i++) {
+            var row = [], cols = rows[i].querySelectorAll('th, td');
+            for (var j = 0; j < cols.length; j++) {
+                var text = cols[j].innerText.replace(/"/g, '""');
+                row.push('"' + text + '"');
+            }
+            csv.push(row.join(','));
+        }
+        csv = prependCsvHeader(csv);
+        var csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
+        var downloadLink = document.createElement('a');
+        downloadLink.download = 'repayments.csv';
+        downloadLink.href = window.URL.createObjectURL(csvFile);
+        downloadLink.style.display = 'none';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        btnSpinner.classList.add('hidden');
+        btnSuccess.classList.remove('hidden');
+        setTimeout(function() {
+            btnText.classList.remove('hidden');
+            btnSuccess.classList.add('hidden');
+            btn.disabled = false;
+        }, 1200);
+    }, 600);
+}
+
+function downloadBalanceStatementTable() {
+    var btn = document.getElementById('download-balance-btn');
+    var btnText = document.getElementById('download-balance-btn-text');
+    var btnSpinner = document.getElementById('download-balance-btn-spinner');
+    var btnSuccess = document.getElementById('download-balance-btn-success');
+
+    btnText.classList.add('hidden');
+    btnSpinner.classList.remove('hidden');
+    btnSuccess.classList.add('hidden');
+    btn.disabled = true;
+
+    setTimeout(function() {
+        var table = document.getElementById('balance-statement-table');
+        var rows = table.querySelectorAll('tr');
+        var csv = [];
+        for (var i = 0; i < rows.length; i++) {
+            var row = [], cols = rows[i].querySelectorAll('th, td');
+            for (var j = 0; j < cols.length; j++) {
+                var text = cols[j].innerText.replace(/"/g, '""');
+                row.push('"' + text + '"');
+            }
+            csv.push(row.join(','));
+        }
+        csv = prependCsvHeader(csv);
+        var csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
+        var downloadLink = document.createElement('a');
+        downloadLink.download = 'balance_statement.csv';
+        downloadLink.href = window.URL.createObjectURL(csvFile);
+        downloadLink.style.display = 'none';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        btnSpinner.classList.add('hidden');
+        btnSuccess.classList.remove('hidden');
+        setTimeout(function() {
+            btnText.classList.remove('hidden');
+            btnSuccess.classList.add('hidden');
+            btn.disabled = false;
+        }, 1200);
+    }, 600);
+}
+</script>
